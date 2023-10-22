@@ -10,11 +10,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <>
-      <ThemeProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ThemeProvider>
+    <ThemeProvider>
+      <BrowserRouter basename="/okouio/admin-portal">
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
   </>
 );
 

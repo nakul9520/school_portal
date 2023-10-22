@@ -2,17 +2,9 @@ import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React from "react";
 import { imageObj } from "services/images";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 
 const Login = () => {
-  const schema = Yup.object().shape({
-    schoolName: Yup.string()
-      .min(8, "school name should be at least 8 characters long")
-      .required("school name cannot be empty"),
-    password: Yup.string()
-      .min(8, "Password should be at least 8 characters long")
-      .required("Password cannot be empty"),
-  });
+
   const formik = useFormik({
     initialValues: {
       schoolName: "",

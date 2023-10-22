@@ -2,8 +2,7 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // @mui
-import { Avatar, Box, Drawer, Link, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Box, Drawer, Link } from "@mui/material";
 
 // hooks
 import useResponsive from "components/hooks/useResponsive";
@@ -17,13 +16,7 @@ import navConfig from "./config";
 
 // ----------------------------------------------------------------------
 
-const NAV_WIDTH = 280;
-
-const StyledAccount = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  padding: theme.spacing(2, 1),
-}));
+const NAV_WIDTH = 281;
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +39,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
   const renderContent = (
     <Scrollbar
+    className="scrollbar-none"
       sx={{
         height: 1,
         "& .simplebar-content": {
@@ -82,6 +76,7 @@ export default function Nav({ openNav, onCloseNav }) {
           PaperProps={{
             sx: {
               width: NAV_WIDTH,
+              borderRight: "none",
             },
           }}
         >
@@ -97,6 +92,7 @@ export default function Nav({ openNav, onCloseNav }) {
           PaperProps={{
             sx: {
               width: NAV_WIDTH,
+              borderRight: "none",
             },
           }}
         >

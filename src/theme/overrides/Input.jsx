@@ -38,7 +38,8 @@ export default function Input(theme) {
     MuiFilledInput: {
       styleOverrides: {
         root: {
-          backgroundColor: alpha(theme.palette.grey[500], 0.12),
+          backgroundColor: alpha(theme.palette.grey[100], 0.7),
+          borderRadius: 0,
           "&:hover": {
             backgroundColor: alpha(theme.palette.grey[500], 0.16),
           },
@@ -59,7 +60,8 @@ export default function Input(theme) {
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          backgroundColor: theme.palette.primary.lighter,
+          backgroundColor: alpha(theme.palette.grey[100], 0.7),
+          borderRadius: 0,
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: alpha(theme.palette.grey[500], 0.32),
           },
