@@ -72,7 +72,7 @@ export default function Header({ onOpenNav }) {
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" className="gap-4">
-          <Stack direction="row" alignItems="center">
+          <Stack direction="row" alignItems="center" className="gap-2">
             <Badge variant="dot" overlap="circular" color="info">
               <Iconify icon="clarity:email-solid" color="text.secondary" />
             </Badge>

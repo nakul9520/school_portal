@@ -7,6 +7,7 @@ import { styled } from "@mui/material/styles";
 // components
 import { filter, get } from "lodash";
 import { useLocation } from "react-router-dom";
+import navConfig from "../nav/config";
 // import PathBreadcrumbs from "../../../components/common/breadcrumbs/PathBreadcrumbs";
 
 // ----------------------------------------------------------------------
@@ -31,19 +32,7 @@ SubHeader.propTypes = {
 export default function SubHeader({ onOpenNav }) {
   const location = useLocation();
 
-  const headingList = [
-    { path: "/dashboard/app", label: "Dashboard" },
-    { path: "/dashboard/pinup-board", label: "Pin Up Board" },
-
-    { path: "/dashboard/settings", label: "Settings" },
-    { path: "/dashboard/settings/notification", label: "Settings" },
-    { path: "/dashboard/settings/change-password", label: "Settings" },
-    { path: "/dashboard/settings/faq", label: "Settings" },
-    { path: "/dashboard/settings/terms-and-condition", label: "Settings" },
-    { path: "/dashboard/settings/privacy-policy", label: "Settings" },
-    { path: "/dashboard/settings/support", label: "Settings" },
-  ];
-  const headingContent = filter(headingList, (item) => {
+  const headingContent = filter(navConfig, (item) => {
     return item.path === location.pathname;
   });
 
@@ -51,7 +40,7 @@ export default function SubHeader({ onOpenNav }) {
     <StyledToolbar>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="body2" color="text.contrastText">
-          {get(headingContent, "[0].label", "")}
+          {get(headingContent, "[0].title", "")}
         </Typography>
       </Box>
       <Box sx={{ flexGrow: 1 }} />

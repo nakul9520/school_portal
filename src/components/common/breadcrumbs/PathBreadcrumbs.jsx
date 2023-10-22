@@ -20,7 +20,7 @@ const PathBreadcrumbs = () => {
   const navigate = useNavigate();
   const pathnames = location.pathname.split("/").filter((x) => x);
 
-  const hidePathsList = [{ path: "/dashboard/app" }];
+  const hidePathsList = [{ path: "/dashboard/school" }];
   const hideBreadcrumb = some(hidePathsList, (item) => {
     return item.path === location.pathname;
   });

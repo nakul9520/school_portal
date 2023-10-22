@@ -11,11 +11,11 @@ import {
 } from "@mui/material";
 import Iconify from "components/common/iconify/Iconify";
 import React from "react";
-import ClassDataTable from "./ClassDataTable";
+import SchoolDataTable from "./SchoolDataTable";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 
-const Class = () => {
+const Dashboard = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   return (
@@ -33,7 +33,7 @@ const Class = () => {
           spacing={1}
         >
           <Typography variant="subtitle2" color="text.secondary">
-          Sınıf
+            okul
           </Typography>
 
           <Stack
@@ -106,7 +106,7 @@ const Class = () => {
           />
         </Stack>
 
-        <ClassDataTable />
+        <SchoolDataTable />
 
         <Stack
           direction="row"
@@ -120,13 +120,13 @@ const Class = () => {
             variant="contained"
             color="secondary"
             className="rounded-0"
-            onClick={() => navigate("/dashboard/add-class")}
+            onClick={() => navigate("/dashboard/add-school")}
           >
-            Sınıf Ekle
+            Okul Ekle
           </Button>
 
-          <Button variant="contained" className="rounded-0">
-          Toplu Sınıf Ekle
+          <Button variant="contained" className="rounded-0" onClick={()=>navigate("/dashboard/mass-school")}>
+            Toplu Okul Ekle
           </Button>
         </Stack>
         <Stack
@@ -150,4 +150,4 @@ const Class = () => {
   );
 };
 
-export default Class;
+export default Dashboard;

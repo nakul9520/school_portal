@@ -1,10 +1,13 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React from "react";
-import { imageObj } from "services/images";
+
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
+
+import { imageObj } from "services/images";
 
 const Login = () => {
-
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       schoolName: "",
@@ -17,6 +20,7 @@ const Login = () => {
     // validationSchema: schema,
     onSubmit: (values) => {
       console.log("values", values);
+      navigate("/dashboard/school");
     },
   });
 
@@ -46,9 +50,7 @@ const Login = () => {
             </Box>
           </Grid>
           <Grid item xs={6} className="h-100 align-item-center">
-            <Box
-             className="blue_bg"
-            >
+            <Box className="blue_bg">
               <form onSubmit={formik.handleSubmit} className="login_form h-100">
                 <Grid
                   container

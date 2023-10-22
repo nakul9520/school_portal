@@ -99,7 +99,6 @@ const SchoolDataTable = () => {
                 <StyledTableCell align="left">
                   {row.licenseExpirationDate}
                 </StyledTableCell>
-                {/* <StyledTableCell align="left">{row.transactions}</StyledTableCell> */}
                 <StyledTableCell
                   align="left"
                   className="d-flex align-items-center"
