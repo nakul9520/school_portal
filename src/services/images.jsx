@@ -1,60 +1,6 @@
-export const imageBasePath = "/okouio/admin-portal/assets/";
+import { imageBasePath } from "./constant";
 
 export const imageObj = {
   logo: `${imageBasePath}images/logo white.svg`,
   mainbg: `${imageBasePath}images/main-bg.png`,
-  Whitelogo: `${imageBasePath}logo/white-logo.svg`,
-
-  notificationbadgeIcon: `${imageBasePath}/icons/navbar/notification_badge.svg`,
-  notificationbellIcon: `${imageBasePath}/icons/navbar/notification_bell.svg`,
-
-  leftHexagone: `${imageBasePath}/images/left-hexagon.svg`,
-  rightHexagone: `${imageBasePath}/images/right-hexagon.svg`,
-  badgeLight: `${imageBasePath}/images/badge-light.png`,
-
-  userAvatar: `${imageBasePath}/images/user.png`,
-  callUserAvatar: `${imageBasePath}/images/call-user.png`,
-  userBigAvatar: `${imageBasePath}/images/big-user-avatar.png`,
-  memberAvatar: `${imageBasePath}/images/avatar.png`,
-  caseImg: `${imageBasePath}/images/case-img.png`,
-  caseImg01: `${imageBasePath}/images/case-img01.png`,
-
-  uploadIcon: `${imageBasePath}icons/ic_upload.svg`,
-  googleMapIcon: `${imageBasePath}icons/google-map.svg`,
-  officerBadgeIcon: `${imageBasePath}icons/officer-badge.svg`,
-  locationIcon: `${imageBasePath}icons/location.svg`,
-  phoneNumberIcon: `${imageBasePath}icons/phone-number.svg`,
-  emailIcon: `${imageBasePath}icons/email.svg`,
-  callIcon: `${imageBasePath}icons/call-calling.svg`,
-  vedioCalIcon: `${imageBasePath}icons/video-call.svg`,
-  messageIcon: `${imageBasePath}icons/message.svg`,
-  fileIcon: `${imageBasePath}icons/file.svg`,
-  documentIcon: `${imageBasePath}icons/document-icon.svg`,
-
-  workspceAdduserIcon: `${imageBasePath}icons/workspce-add-user-icon.svg`,
-  workspceContactIcon: `${imageBasePath}icons/workspce-contact-icon.svg`,
-  joinChatIcon: `${imageBasePath}icons/join-chat-icon.svg`,
-  pdfIcon: `${imageBasePath}icons/pdf-icon.svg`,
-
-  sortModifiedIcon: `${imageBasePath}icons/sort-modified.svg`,
-  sortNameIcon: `${imageBasePath}icons/sort-name.svg`,
-  sortSizeIcon: `${imageBasePath}icons/sort-size.svg`,
-  sortTypeIcon: `${imageBasePath}icons/sort-type.svg`,
-  accessUserIcon: `${imageBasePath}icons/access-user-icon.svg`,
-  copyIcon: `${imageBasePath}icons/copy-icon.svg`,
-  deleteIcon: `${imageBasePath}icons/delete-icon.svg`,
-  locateIcon: `${imageBasePath}icons/locate-icon.svg`,
-  moveIcon: `${imageBasePath}icons/move-icon.svg`,
-  renameIcon: `${imageBasePath}icons/rename-icon.svg`,
-  shareFileIcon: `${imageBasePath}icons/share-file-icon.svg`,
-  folderIcon: `${imageBasePath}icons/folder-icon.svg`,
-  imageIcon: `${imageBasePath}icons/image-icon.svg`,
-  videoIcon: `${imageBasePath}icons/video-icon.svg`,
-  addUserIcon: `${imageBasePath}icons/add-user-icon.svg`,
-
-  addChatUserIcon: `${imageBasePath}icons/add-user-icon.svg`,
-  downloadIcon: `${imageBasePath}icons/download-icon.svg`,
-  chatVideoIcon: `${imageBasePath}icons/chat-video-call.svg`,
-  chatCallIcon: `${imageBasePath}icons/chat-call.svg`,
-  deleteChatIcon: `${imageBasePath}icons/delete-chat-icon.svg`,
 };
