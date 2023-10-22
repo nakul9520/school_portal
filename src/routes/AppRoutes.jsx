@@ -11,7 +11,12 @@ import Dashboard from "components/dashboard/app/Dashboard";
 import DashboardLayout from "../layout/dashboard/DashboardLayout";
 import Class from "components/dashboard/class/Class";
 import AddSchoolForm from "components/dashboard/app/AddSchoolForm";
+
 import Login from "components/auth/Login";
+import AddClassForm from "components/dashboard/class/AddClassForm";
+import Teacher from "components/dashboard/teacher/Teacher";
+import AddTeacherForm from "components/dashboard/teacher/AddTeacherForm";
+
 // private
 // const DashboardLayout = Loadable(
 //   lazy(() => import("layout/dashboard/DashboardLayout"))
@@ -22,14 +27,19 @@ const AppRoutes = () => {
     <>
       <Routes>
         {/* <Route path="/dashboard" element={<PrivateLayout />}> */}
-          <Route path="/" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route element={<Navigate to="/dashboard/app" />} index />
           <Route path="/dashboard/app" element={<Dashboard />} />
           <Route path="/dashboard/add-school" element={<AddSchoolForm />} />
+
           <Route path="/dashboard/class" element={<Class />} />
+          <Route path="/dashboard/add-class" element={<AddClassForm />} />
+
+          <Route path="/dashboard/teacher" element={<Teacher />} />
+          <Route path="/dashboard/add-teacher" element={<AddTeacherForm />} />
         </Route>
-        {/* </Route> */}  
+        {/* </Route> */}
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>
