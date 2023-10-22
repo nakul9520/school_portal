@@ -1,0 +1,1 @@
+export const imageBasePath = "/okouio/admin-portal/assets/";

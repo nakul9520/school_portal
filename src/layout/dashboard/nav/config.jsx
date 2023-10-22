@@ -1,48 +1,78 @@
 // component
 import SvgColor from "components/common/svg-color/SvgColor";
-import { imageBasePath } from "services/images";
+import { imageBasePath } from "services/constant";
 
 // ----------------------------------------------------------------------
 
 const icon = (name) => (
   <SvgColor
     src={`${imageBasePath}icons/navbar/${name}.svg`}
-    sx={{ width: 1, height: 1 }}
+    sx={{ width: 0.8, height: 0.8 }}
   />
 );
 
 const navConfig = [
   {
-    title: "Okul",
-    path: "/dashboard/app", //when you change link update missing and wanted short details page
+    title: "School",
+    path: "/dashboard/school", //when you change link update missing and wanted short details page
     icon: icon("school"),
     children: [
       {
         title: "Pin Up Board",
-        path: "/dashboard/app",
+        path: "/dashboard/school",
         icon: icon("school"),
       },
     ],
   },
   {
-    title: "Sınıf",
+    title: "Class",
     path: "/dashboard/class",
-    icon: icon("ic_chats"),
+    icon: icon("class"),
   },
   {
-    title: "Schedule",
-    path: "/dashboard/schedule",
-    icon: icon("ic_schedule"),
+    title: "Teacher",
+    path: "/dashboard/teacher",
+    icon: icon("teachers"),
   },
   {
-    title: "Profile",
-    path: "/dashboard/profile",
-    icon: icon("ic_profile"),
+    title: "Student",
+    path: "/dashboard/student",
+    icon: icon("students"),
   },
   {
-    title: "Settings",
-    path: "/dashboard/settings",
-    icon: icon("ic_settings"),
+    title: "Username And Groups",
+    path: "/dashboard/username-and-groups",
+    icon: icon("groups"),
+  },
+  {
+    title: "Reports",
+    path: "/dashboard/reports",
+    icon: icon("reports"),
+  },
+  {
+    title: "Leveling",
+    path: "/dashboard/leveling",
+    icon: icon("leveling"),
+  },
+  {
+    title: "Assignment",
+    path: "/dashboard/assignment",
+    icon: icon("assignment"),
+  },
+  {
+    title: "Contents",
+    path: "/dashboard/contents",
+    icon: icon("contents"),
+  },
+  {
+    title: "System Settings",
+    path: "/dashboard/system-settings",
+    icon: icon("system-settings"),
+  },
+  {
+    title: "Dramatization",
+    path: "/dashboard/dramatization",
+    icon: icon("dramatization"),
   },
 ];
 
