@@ -7,31 +7,31 @@ import {
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 
 const AddSchoolForm = () => {
   const theme = useTheme();
 
-  const schema = Yup.object().shape({
-    schoolName: Yup.string()
-      .min(8, "school name should be at least 8 characters long")
-      .required("school name cannot be empty"),
-    schoolAdministrator: Yup.string()
-      .min(8, "school Administrator should be at least 8 characters long")
-      .required("school administrator cannot be empty"),
-    email: Yup.string()
-      .email("Please enter valid email")
-      .required("Email cannot be empty"),
-    password: Yup.string()
-      .min(8, "Password should be at least 8 characters long")
-      .required("Password cannot be empty"),
-    activationdate: Yup.string()
-      .min(8, "school Administrator should be at least 8 characters long")
-      .required("school administrator cannot be empty"),
-    lcensedate: Yup.string()
-      .min(8, "school Administrator should be at least 8 characters long")
-      .required("school administrator cannot be empty"),
-  });
+  // const schema = Yup.object().shape({
+  //   schoolName: Yup.string()
+  //     .min(8, "school name should be at least 8 characters long")
+  //     .required("school name cannot be empty"),
+  //   schoolAdministrator: Yup.string()
+  //     .min(8, "school Administrator should be at least 8 characters long")
+  //     .required("school administrator cannot be empty"),
+  //   email: Yup.string()
+  //     .email("Please enter valid email")
+  //     .required("Email cannot be empty"),
+  //   password: Yup.string()
+  //     .min(8, "Password should be at least 8 characters long")
+  //     .required("Password cannot be empty"),
+  //   activationdate: Yup.string()
+  //     .min(8, "school Administrator should be at least 8 characters long")
+  //     .required("school administrator cannot be empty"),
+  //   lcensedate: Yup.string()
+  //     .min(8, "school Administrator should be at least 8 characters long")
+  //     .required("school administrator cannot be empty"),
+  // });
 
   const formik = useFormik({
     initialValues: {
@@ -109,6 +109,7 @@ const AddSchoolForm = () => {
                 onBlur={formik.handleBlur}
                 fullWidth
                 type="schoolAdministrator"
+                
                 error={
                   formik.errors.schoolAdministrator &&
                   formik.touched.schoolAdministrator

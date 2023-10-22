@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Checkbox,
+  IconButton,
   InputAdornment,
   Pagination,
   Stack,
@@ -31,11 +32,7 @@ const Dashboard = () => {
           alignItems="center"
           spacing={1}
         >
-          <Typography
-            variant="body2"
-            color="secondary.disabled"
-            className="ms-4"
-          >
+          <Typography variant="subtitle2" color="text.secondary">
             okul
           </Typography>
 
@@ -43,13 +40,13 @@ const Dashboard = () => {
             direction="row"
             justifyContent="flex-end"
             alignItems="center"
-            spacing={1}
+            className="gap-2"
           >
-            <Button variant="contained" color="success" className="rounded-0">
+            <Button variant="contained" color="success">
               Excel
             </Button>
 
-            <Button variant="contained" color="error" className="rounded-0">
+            <Button variant="contained" color="error">
               PDF
             </Button>
           </Stack>
@@ -59,48 +56,54 @@ const Dashboard = () => {
           direction="row"
           justifyContent="space-between"
           alignItems="center"
-          spacing={1}
+          className="gap-2"
           mt={2}
         >
           <Stack
             direction="row"
             justifyContent="flex-end"
             alignItems="center"
-            spacing={1}
+            className="gap-2"
           >
-            <Typography
-              variant="body2"
-              color="secondary.disabled"
-              className="ms-4"
-            >
+            <Typography variant="caption" color="text.secondary">
               Sayfada Göster
             </Typography>
-            <Box className="d-flex align-items-center border table_show_page_check">
+            <Box className="d-flex align-items-center border">
               <TextField
                 variant="outlined"
                 size="small"
                 placeholder="10"
-                sx={{ width: "50px" }}
+                sx={{
+                  width: "50px",
+                  ".MuiInputBase-root": {
+                    backgroundColor: "transparent",
+                    ".MuiOutlinedInput-notchedOutline": {
+                      border: "none",
+                    },
+                  },
+                }}
               />
-              <Checkbox />
+              <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}>
+                <Checkbox />
+              </Box>
             </Box>
           </Stack>
 
-          <Box>
-            <TextField
-              variant="standard"
-              placeholder="Arama…"
-              className="header_search"
-              size="small"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="start">
-                    <Iconify icon="iconamoon:search-light" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
+          <TextField
+            variant="standard"
+            placeholder="Arama…"
+            className="header_search"
+            size="small"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  <IconButton sx={{ color: "text.secondary" }}>
+                    <Iconify icon="iconamoon:search-light" width={20} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
         </Stack>
 
         <SchoolDataTable />

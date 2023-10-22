@@ -90,7 +90,7 @@ const palette = {
     paper: "#ffffff",
     default: GREY[100],
     neutral: GREY[200],
-    bgBody: "#F8F8F8",
+    tableBgBody: "#DDDFE1",
   },
   action: {
     active: GREY[600],

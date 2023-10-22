@@ -7,8 +7,8 @@ export default function Button(theme) {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: "10px",
-          fontWeight: 500,
+          borderRadius: "0",
+          fontWeight: 400,
           textWrap: "nowrap",
           letterSpacing: 0.5,
           "&:hover": {

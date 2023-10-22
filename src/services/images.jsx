@@ -1,4 +1,4 @@
-export const imageBasePath = "/assets/";
+export const imageBasePath = "/okouio/admin-portal/assets/";
 
 export const imageObj = {
   logo: `${imageBasePath}images/logo white.svg`,
