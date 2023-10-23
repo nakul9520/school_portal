@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 
 import { imageObj } from "services/images";
+import { StyledTextField } from "styles/ComponentStyle";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,15 +37,15 @@ const Login = () => {
           height: "100vh",
         }}
       >
-        <Grid container sx={{}} className="h-100 align-items-center">
+        <Grid container className="h-100 align-items-center">
           <Grid item xs={6}>
             <Box className="d-flex align-items-center justify-content-center flex-column">
-              <Box component="img" src={imageObj.logo} />
-              <Typography
-                variant="h3"
-                color="primary.main"
-                className="fw-bolder"
-              >
+              <Box
+                component="img"
+                src={imageObj.logo}
+                sx={{ maxWidth: 380, mb: 2 }}
+              />
+              <Typography variant="h3" color="primary" className="fw-bolder">
                 Superadmin Dashboard
               </Typography>
             </Box>
@@ -67,8 +68,11 @@ const Login = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         placeholder="Kullanıcı Adı"
+                        sx={StyledTextField}
+                        InputProps={{
+                          autoComplete: "new-password", // Try using this for login-related fields
+                        }}
                         fullWidth
-                        type="schoolName"
                         error={
                           formik.errors.schoolName && formik.touched.schoolName
                             ? true
@@ -90,6 +94,7 @@ const Login = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         placeholder="Şifre"
+                        sx={StyledTextField}
                         fullWidth
                         type="password"
                         error={
