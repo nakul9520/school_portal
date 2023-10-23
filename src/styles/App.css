@@ -88,20 +88,6 @@ input[type="number"] {
   align-items: center;
 }
 
-.login_form_input .MuiInputBase-root {
-  background-color: #183887;
-  border: 13px solid #a9277c;
-  border-radius: 50px;
-}
-
-.login_form_input .MuiInputBase-input::placeholder,
-.login_form_input .MuiInputBase-input {
-  color: #fff;
-  font-size: 30px;
-  font-weight: 800;
-  text-align: center;
-}
-
 .login_form button {
   border: 13px solid #a9277c;
   background-color: #fff;

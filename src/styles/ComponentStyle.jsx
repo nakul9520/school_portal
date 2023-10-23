@@ -37,3 +37,30 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export const StyledInput = styled(IconButton)(({ theme }) => ({
   backgroundColor: theme.palette.background.tableBgBody,
 }));
+
+export const StyledTextField = {
+  "& .MuiInputBase-input": { textAlign: "center" },
+  "& .MuiOutlinedInput-root": {
+    ".MuiInputBase-input-MuiOutlinedInput-input": {
+      textAlign: "center",
+    },
+    backgroundColor: "primary.main",
+    color: "primary.contrastText",
+    fontSize: 35,
+    fontWeight: "bold",
+    borderRadius: 10,
+    padding: "0 20px",
+    "&.Mui-focused fieldset": {
+      border: (theme) => `10px solid ${theme.palette.secondary.main}`,
+    },
+    "&:hover fieldset": {
+      border: (theme) => `10px solid ${theme.palette.secondary.main}`,
+    },
+    "& .Mui-focused fieldset": {
+      border: (theme) => `10px solid ${theme.palette.secondary.main}`,
+    },
+    "& .MuiOutlinedInput-notchedOutline": {
+      border: (theme) => `10px solid ${theme.palette.secondary.main}`,
+    },
+  },
+};
