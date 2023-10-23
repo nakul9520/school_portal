@@ -3,12 +3,21 @@ import * as React from "react";
 import { Breadcrumbs, Link, Stack, Typography } from "@mui/material";
 
 import { some } from "lodash";
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
-
-import Iconify from "../iconify/Iconify";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 
 const breadcrumbNameMap = {
   "/dashboard": "Dashboard",
+  "/dashboard/school": "Okul",
+  "/dashboard/class": "Sınıf",
+  "/dashboard/teacher": "Öğretmen",
+  "/dashboard/student": "Öğrenci",
+  "/dashboard/username-and-groups": "Kullanıcı Adı ve Gruplar",
+  "/dashboard/reports": "Raporlar",
+  "/dashboard/leveling": "Seviyelendirme",
+  "/dashboard/assignment": "Görevlendirme",
+  "/dashboard/contents": "İçerik",
+  "/dashboard/system-settings": "Sistem Ayarları",
+  "/dashboard/dramatization": "Oyunlaştırma",
 };
 
 const LinkRouter = (props) => (
@@ -17,38 +26,24 @@ const LinkRouter = (props) => (
 
 const PathBreadcrumbs = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const pathnames = location.pathname.split("/").filter((x) => x);
 
-  const hidePathsList = [{ path: "/dashboard/school" }];
+  const hidePathsList = [];
   const hideBreadcrumb = some(hidePathsList, (item) => {
     return item.path === location.pathname;
   });
   return (
     <>
       {!hideBreadcrumb ? (
-        <Stack direction="row" className="align-items-center gap-2 my-3">
-          <Iconify
-            icon="eva:arrow-left-fill"
-            width="28px"
-            className="cursor-pointer"
-            onClick={() => navigate(-1)}
-          />
-
-          <Breadcrumbs
-            aria-label="breadcrumb"
-            separator={
-              <Iconify icon="eva:arrow-ios-forward-fill" width="12px" />
-            }
-            maxItems={2}
-          >
+        <Stack direction="row" className="align-items-center gap-2 my-2">
+          <Breadcrumbs aria-label="breadcrumb" separator="-" maxItems={2}>
             {pathnames.map((value, index) => {
               const last = Boolean(index === pathnames.length - 1);
               const to = `/${pathnames.slice(0, index + 1).join("/")}`;
               return last ? (
                 <Typography
                   variant="caption"
-                  color="text.primary"
+                  color="text.contrastText"
                   key={to}
                   className="fw-bold"
                 >
@@ -57,7 +52,7 @@ const PathBreadcrumbs = () => {
               ) : (
                 <LinkRouter
                   className="text-decoration-none"
-                  color="text.secondary"
+                  color="text.contrastText"
                   to={to}
                   key={to}
                 >

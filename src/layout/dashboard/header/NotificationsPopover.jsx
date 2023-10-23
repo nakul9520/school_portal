@@ -37,18 +37,15 @@ export default function NotificationsPopover() {
 
   return (
     <>
-      <Badge badgeContent={notificationData.notify_unread_count} color="error">
-        <IconButton
-          ref={anchorRef}
-          color={open ? "primary" : "default"}
-          onClick={handleOpen}
-         
-        >
-             <Badge variant="dot" overlap="circular"  color="info">
-            <Iconify icon="tabler:bell-filled" color="text.secondary" />
-          </Badge>
-        </IconButton>
-      </Badge>
+      <IconButton
+        ref={anchorRef}
+        color={open ? "primary" : "default"}
+        onClick={handleOpen}
+      >
+        <Badge variant="dot" overlap="circular" color="slateblue">
+          <Iconify icon="tabler:bell-filled" color="text.secondary" />
+        </Badge>
+      </IconButton>
 
       <MenuPopover
         open={open}

@@ -46,21 +46,21 @@ export const StyledTextField = {
     },
     backgroundColor: "primary.main",
     color: "primary.contrastText",
-    fontSize: 35,
-    fontWeight: "bold",
+    fontSize: 28,
+    fontWeight: 700,
     borderRadius: 10,
     padding: "0 20px",
     "&.Mui-focused fieldset": {
-      border: (theme) => `10px solid ${theme.palette.secondary.main}`,
+      border: (theme) => `8px solid ${theme.palette.secondary.main}`,
     },
     "&:hover fieldset": {
-      border: (theme) => `10px solid ${theme.palette.secondary.main}`,
+      border: (theme) => `8px solid ${theme.palette.secondary.main}`,
     },
     "& .Mui-focused fieldset": {
-      border: (theme) => `10px solid ${theme.palette.secondary.main}`,
+      border: (theme) => `8px solid ${theme.palette.secondary.main}`,
     },
     "& .MuiOutlinedInput-notchedOutline": {
-      border: (theme) => `10px solid ${theme.palette.secondary.main}`,
+      border: (theme) => `8px solid ${theme.palette.secondary.main}`,
     },
   },
 };

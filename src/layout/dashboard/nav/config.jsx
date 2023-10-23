@@ -13,7 +13,7 @@ const icon = (name) => (
 
 const navConfig = [
   {
-    title: "School",
+    title: "Okul",
     path: "/dashboard/school", //when you change link update missing and wanted short details page
     icon: icon("school"),
     children: [
@@ -25,52 +25,53 @@ const navConfig = [
     ],
   },
   {
-    title: "Class",
+    title: "Sınıf",
     path: "/dashboard/class",
     icon: icon("class"),
   },
   {
-    title: "Teacher",
+    title: "Öğretmen",
     path: "/dashboard/teacher",
     icon: icon("teachers"),
   },
   {
-    title: "Student",
+    title: "Öğrenci",
     path: "/dashboard/student",
     icon: icon("students"),
+    divider: true,
   },
   {
-    title: "Username And Groups",
+    title: "Kullanıcı Adı ve Gruplar",
     path: "/dashboard/username-and-groups",
     icon: icon("groups"),
   },
   {
-    title: "Reports",
+    title: "Raporlar",
     path: "/dashboard/reports",
     icon: icon("reports"),
   },
   {
-    title: "Leveling",
+    title: "Seviyelendirme",
     path: "/dashboard/leveling",
     icon: icon("leveling"),
   },
   {
-    title: "Assignment",
+    title: "Görevlendirme",
     path: "/dashboard/assignment",
     icon: icon("assignment"),
   },
   {
-    title: "Contents",
+    title: "İçerik",
     path: "/dashboard/contents",
     icon: icon("contents"),
   },
   {
-    title: "System Settings",
+    title: "Sistem Ayarları",
     path: "/dashboard/system-settings",
     icon: icon("system-settings"),
   },
   {
-    title: "Dramatization",
+    title: "Oyunlaştırma",
     path: "/dashboard/dramatization",
     icon: icon("dramatization"),
   },
