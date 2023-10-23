@@ -12,8 +12,7 @@ export const StyledNavItem = styled((props) => (
   position: "relative",
   textTransform: "capitalize",
   color: theme.palette.text.secondary,
-  borderRadius: "6px 0 0 6px",
-  fontWeight: 700,
+  fontWeight: 400,
 }));
 
 export const StyledNavItemIcon = styled(ListItemIcon)({

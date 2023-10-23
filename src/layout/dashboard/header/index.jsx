@@ -24,7 +24,7 @@ import SubHeader from "./SubHeader";
 
 const NAV_WIDTH = 280;
 
-const HEADER_MOBILE = 64;
+const HEADER_MOBILE = 40;
 
 const HEADER_DESKTOP = 80;
 
@@ -73,7 +73,7 @@ export default function Header({ onOpenNav }) {
 
         <Stack direction="row" alignItems="center" className="gap-4">
           <Stack direction="row" alignItems="center" className="gap-2">
-            <Badge variant="dot" overlap="circular" color="info">
+            <Badge variant="dot" overlap="circular" color="slateblue">
               <Iconify icon="clarity:email-solid" color="text.secondary" />
             </Badge>
 
@@ -82,11 +82,10 @@ export default function Header({ onOpenNav }) {
           <Stack direction="row" alignItems="center" className="gap-2">
             <Avatar
               sx={{
-                backgroundColor: "info.main",
+                backgroundColor: "slateblue.main",
                 border: (theme) => `2px solid ${theme.palette.text.secondary}`,
               }}
             >
-              {" "}
               j
             </Avatar>
             <Box>

@@ -38,8 +38,11 @@ const Login = () => {
         }}
       >
         <Grid container className="h-100 align-items-center">
-          <Grid item xs={6}>
-            <Box className="d-flex align-items-center justify-content-center flex-column">
+          <Grid item xs={12} md={6}>
+            <Box
+              className="d-flex align-items-center justify-content-center flex-column"
+              sx={{ py: 10 }}
+            >
               <Box
                 component="img"
                 src={imageObj.logo}
@@ -50,7 +53,7 @@ const Login = () => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={6} className="h-100 align-item-center">
+          <Grid item xs={12} md={6} className="h-100 align-item-center">
             <Box className="blue_bg">
               <form onSubmit={formik.handleSubmit} className="login_form h-100">
                 <Grid
@@ -61,66 +64,60 @@ const Login = () => {
                   className="justify-content-center"
                 >
                   <Grid item xs={8}>
-                    <Box className="login_form_input">
-                      <TextField
-                        name="schoolName"
-                        value={formik.values.schoolName}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        placeholder="Kullanıcı Adı"
-                        sx={StyledTextField}
-                        InputProps={{
-                          autoComplete: "new-password", // Try using this for login-related fields
-                        }}
-                        fullWidth
-                        error={
-                          formik.errors.schoolName && formik.touched.schoolName
-                            ? true
-                            : false
-                        }
-                        helperText={
-                          formik.errors.schoolName && formik.touched.schoolName
-                            ? formik.errors.schoolName
-                            : null
-                        }
-                      />
-                    </Box>
+                    <TextField
+                      name="schoolName"
+                      value={formik.values.schoolName}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      placeholder="Kullanıcı Adı"
+                      sx={StyledTextField}
+                      InputProps={{
+                        autoComplete: "new-password", // Try using this for login-related fields
+                      }}
+                      fullWidth
+                      error={
+                        formik.errors.schoolName && formik.touched.schoolName
+                          ? true
+                          : false
+                      }
+                      helperText={
+                        formik.errors.schoolName && formik.touched.schoolName
+                          ? formik.errors.schoolName
+                          : null
+                      }
+                    />
                   </Grid>
                   <Grid item xs={8}>
-                    <Box className="login_form_input">
-                      <TextField
-                        name="password"
-                        value={formik.values.password}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        placeholder="Şifre"
-                        sx={StyledTextField}
-                        fullWidth
-                        type="password"
-                        error={
-                          formik.errors.password && formik.touched.password
-                            ? true
-                            : false
-                        }
-                        helperText={
-                          formik.errors.password && formik.touched.password
-                            ? formik.errors.password
-                            : null
-                        }
-                      />
-                    </Box>
+                    <TextField
+                      name="password"
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      placeholder="Şifre"
+                      sx={StyledTextField}
+                      fullWidth
+                      type="password"
+                      error={
+                        formik.errors.password && formik.touched.password
+                          ? true
+                          : false
+                      }
+                      helperText={
+                        formik.errors.password && formik.touched.password
+                          ? formik.errors.password
+                          : null
+                      }
+                    />
                   </Grid>
-                  <Grid item xs={12}>
-                    <Box className="text-center mt-3">
-                      <Button
-                        variant="contained"
-                        type="submit"
-                        color="secondary"
-                        className="w-25"
-                      >
-                        Giriş
-                      </Button>
-                    </Box>
+                  <Grid item xs={12} className="text-center">
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      color="secondary"
+                      className="my-3"
+                    >
+                      Giriş
+                    </Button>
                   </Grid>
                 </Grid>
               </form>

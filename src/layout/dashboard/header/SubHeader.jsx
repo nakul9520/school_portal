@@ -8,17 +8,16 @@ import { styled } from "@mui/material/styles";
 import { filter, get } from "lodash";
 import { useLocation } from "react-router-dom";
 import navConfig from "../nav/config";
-// import PathBreadcrumbs from "../../../components/common/breadcrumbs/PathBreadcrumbs";
+import PathBreadcrumbs from "../../../components/common/breadcrumbs/PathBreadcrumbs";
 
 // ----------------------------------------------------------------------
 
-const HEADER_DESKTOP = 40;
+const SUB_HEADER_DESKTOP = 40;
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
-  minHeight: HEADER_DESKTOP,
-  [theme.breakpoints.up("lg")]: {
-    minHeight: HEADER_DESKTOP,
+  [theme.breakpoints.up("xs")]: {
+    minHeight: SUB_HEADER_DESKTOP,
     padding: theme.spacing(0, 3),
   },
 }));
@@ -44,8 +43,7 @@ export default function SubHeader({ onOpenNav }) {
         </Typography>
       </Box>
       <Box sx={{ flexGrow: 1 }} />
-      {/* <PathBreadcrumbs /> */}
-      DashBoard/okul
+      <PathBreadcrumbs />
     </StyledToolbar>
   );
 }

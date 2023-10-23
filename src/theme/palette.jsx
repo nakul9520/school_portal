@@ -34,12 +34,20 @@ const SECONDARY = {
   contrastText: "#ffffff",
 };
 
-const INFO = {
+const SLATE_BLUE = {
   lighter: "#E8E0FE",
   light: "#B6A1FB",
   main: "#7F63F4",
   dark: "#4531AF",
   darker: "#1E1375",
+  contrastText: "#ffffff",
+};
+const INFO = {
+  lighter: "#DCFAFD",
+  light: "#96E2F8",
+  main: "#50B3E8",
+  dark: "#286AA7",
+  darker: "#0F356F",
   contrastText: "#ffffff",
 };
 
@@ -74,6 +82,7 @@ const palette = {
   common: { black: "#000", white: "#ffffff" },
   primary: PRIMARY,
   secondary: SECONDARY,
+  slateblue: SLATE_BLUE,
   info: INFO,
   success: SUCCESS,
   warning: WARNING,
