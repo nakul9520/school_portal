@@ -12,18 +12,17 @@ import {
   StyledTableRow,
 } from "styles/ComponentStyle";
 
-const ClassDataTable = () => {
+const StudentDataTable = () => {
   const rows = [
     {
       order: 1,
-      className: "class 1",
-      Teacher1: "Teacher 1",
-      email01: "123@gmail.com",
-      code01: "12345",
-      Teacher2: "Teacher 1",
-      email02: "123@gmail.com",
-      code02: "12345",
-      numberofStudents: "12",
+      schoolName: "school 1",
+      Class: "class 1",
+      studentName: "Student 1",
+      UserName: "Username 1",
+      password: "12345",
+      activationDate: "01.01.2023",
+      licenseExpirationDate: "31.12.2023",
       Status: "200 days left",
       transactions: [
         <Iconify icon="el:edit" />,
@@ -33,30 +32,29 @@ const ClassDataTable = () => {
     },
     {
       order: 2,
-      className: "class 2",
-      Teacher1: "Teacher 2",
-      email01: "123@gmail.com",
-      code01: "12345",
-      Teacher2: "Teacher 2",
-      email02: "123@gmail.com",
-      code02: "12345",
-      numberofStudents: "14",
+      schoolName: "school 2",
+      Class: "class 2",
+      studentName: "Student 2",
+      UserName: "Username 2",
+      password: "12345",
+      activationDate: "01.01.2023",
+      licenseExpirationDate: "31.12.2023",
       Status: "Expired",
       transactions: [
         <Iconify icon="el:edit" />,
         <Iconify icon="mdi:checkbox-outline" />,
         <Iconify icon="uiw:delete" />,
       ],
-    }, {
+    },
+    {
       order: 3,
-      className: "class 3",
-      Teacher1: "Teacher 3",
-      email01: "123@gmail.com",
-      code01: "12345",
-      Teacher2: "Teacher 3",
-      email02: "123@gmail.com",
-      code02: "12345",
-      numberofStudents: "16",
+      schoolName: "school 3",
+      Class: "class 3",
+      studentName: "Student 3",
+      UserName: "Username 3",
+      password: "12345",
+      activationDate: "01.01.2023",
+      licenseExpirationDate: "31.12.2023",
       Status: "121 days left",
       transactions: [
         <Iconify icon="el:edit" />,
@@ -73,14 +71,15 @@ const ClassDataTable = () => {
           <TableHead>
             <TableRow>
               <StyledTableCell align="left">Sıra</StyledTableCell>
-              <StyledTableCell align="left">Sınıf Adı</StyledTableCell>
-              <StyledTableCell align="left">Öğretmen 1</StyledTableCell>
-              <StyledTableCell align="left">Ö1 E-mail</StyledTableCell>
-              <StyledTableCell align="left">Ö1 Şifre</StyledTableCell>
-              <StyledTableCell align="left">Öğretmen 2</StyledTableCell>
-              <StyledTableCell align="left">Ö2 E-mail</StyledTableCell>
-              <StyledTableCell align="left">Ö2 Şifre</StyledTableCell>
-              <StyledTableCell align="left">Öğrenci Sayısı</StyledTableCell>
+              <StyledTableCell align="left">Okul Adı</StyledTableCell>
+              <StyledTableCell align="left">Sınıf</StyledTableCell>
+              <StyledTableCell align="left">Öğrenci Adı </StyledTableCell>
+              <StyledTableCell align="left">Kullanıcı Adı</StyledTableCell>
+              <StyledTableCell align="left">Şifre</StyledTableCell>
+              <StyledTableCell align="left">Aktivasyon Tarihi</StyledTableCell>
+              <StyledTableCell align="left">
+                Lisans Sonlanma Tarihi
+              </StyledTableCell>
               <StyledTableCell align="left">Durumu</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
@@ -89,15 +88,18 @@ const ClassDataTable = () => {
             {rows.map((row, index) => (
               <StyledTableRow key={index}>
                 <StyledTableCell scope="row">{row.order}</StyledTableCell>
-                <StyledTableCell align="left">{row.className}</StyledTableCell>
-                <StyledTableCell align="left">{row.Teacher1}</StyledTableCell>
-                <StyledTableCell align="left">{row.email01}</StyledTableCell>
-                <StyledTableCell align="left">{row.code01}</StyledTableCell>
-                <StyledTableCell align="left">{row.Teacher2}</StyledTableCell>
-                <StyledTableCell align="left">{row.email02}</StyledTableCell>
-                <StyledTableCell align="left">{row.code02}</StyledTableCell>
+                <StyledTableCell align="left">{row.schoolName}</StyledTableCell>
+                <StyledTableCell align="left">{row.Class}</StyledTableCell>
                 <StyledTableCell align="left">
-                  {row.numberofStudents}
+                  {row.studentName}
+                </StyledTableCell>
+                <StyledTableCell align="left">{row.UserName}</StyledTableCell>
+                <StyledTableCell align="left">{row.password}</StyledTableCell>
+                <StyledTableCell align="left">
+                  {row.activationDate}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  {row.licenseExpirationDate}
                 </StyledTableCell>
                 <StyledTableCell align="left">{row.Status}</StyledTableCell>
 
@@ -120,4 +122,4 @@ const ClassDataTable = () => {
   );
 };
 
-export default ClassDataTable;
+export default StudentDataTable;

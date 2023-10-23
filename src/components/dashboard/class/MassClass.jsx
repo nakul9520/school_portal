@@ -9,14 +9,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Iconify from "components/common/iconify/Iconify";
-import React from "react";
-import TeacherDataTable from "./TeacherDataTable";
-import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import Iconify from "components/common/iconify/Iconify";
+import MassClassTable from "./MassClassTable";
 
-const Teacher = () => {
-  const navigate = useNavigate();
+const MassClass = () => {
   const theme = useTheme();
   return (
     <>
@@ -33,7 +30,7 @@ const Teacher = () => {
           spacing={1}
         >
           <Typography variant="subtitle2" color="text.secondary">
-            Öğretmen
+            Toplu Sınıf Ekle
           </Typography>
 
           <Stack
@@ -106,27 +103,35 @@ const Teacher = () => {
           />
         </Stack>
 
-        <TeacherDataTable />
+        <MassClassTable />
 
         <Stack
           direction="row"
-          justifyContent="flex-end"
+          justifyContent="space-between"
           alignItems="center"
           spacing={1}
           mt={3}
           className="table_bottom_tabs"
         >
-          <Button
-            variant="contained"
-            color="secondary"
-            className="rounded-0"
-            onClick={() => navigate("/dashboard/add-teacher")}
-          >
-            Öğretmen Ekle
-          </Button>
+          <Stack direction="row" alignItems="center" className="gap-2">
+            <Button
+              variant="contained"
+              color="info"
+              startIcon={<Iconify icon="ph:arrow-up" />}
+            >
+              Toplu Formu Yükle
+            </Button>
 
-          <Button variant="contained" className="rounded-0">
-            Toplu Öğretmen Ekle
+            <Button
+              variant="contained"
+              color="success"
+              startIcon={<Iconify icon="ph:arrow-down" />}
+            >
+              Toplu Formu İndir
+            </Button>
+          </Stack>
+          <Button variant="contained" color="primary">
+            Kaydet
           </Button>
         </Stack>
         <Stack
@@ -150,4 +155,4 @@ const Teacher = () => {
   );
 };
 
-export default Teacher;
+export default MassClass;
