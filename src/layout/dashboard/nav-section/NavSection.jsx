@@ -57,7 +57,7 @@ NavItem.propTypes = {
 };
 
 function NavItem({ item }) {
-  const { title, path, icon, info } = item;
+  const { title, path, icon } = item;
 
   return (
     <StyledNavItem
@@ -83,8 +83,6 @@ function NavItem({ item }) {
       <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
 
       <ListItemText disableTypography primary={title} />
-
-      {info && info}
     </StyledNavItem>
   );
 }
