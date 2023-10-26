@@ -1,16 +1,25 @@
-import { Box, Stack } from "@mui/material";
+import {
+  Box,
+  FormControlLabel,
+  FormGroup,
+  IconButton,
+  Stack,
+} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import MenuPopover from "components/common/MenuPopover";
 
 import Iconify from "components/common/iconify/Iconify";
+import { useRef, useState } from "react";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
+import CMCheckBox from "theme/overrides/CMCheckBox";
 
 const StudentDataTable = () => {
   const rows = [
@@ -64,6 +73,17 @@ const StudentDataTable = () => {
     },
   ];
 
+  const anchorRef = useRef(null);
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <>
       <TableContainer component={Paper} className="rounded-0 mt-3">
@@ -71,8 +91,84 @@ const StudentDataTable = () => {
           <TableHead>
             <TableRow>
               <StyledTableCell align="left">Sıra</StyledTableCell>
-              <StyledTableCell align="left">Okul Adı</StyledTableCell>
-              <StyledTableCell align="left">Sınıf</StyledTableCell>
+              <StyledTableCell align="left">
+                Okul Adı
+                <IconButton ref={anchorRef} onClick={handleOpen}>
+                  <Iconify icon="ep:arrow-down" color="text.secondary" />
+                </IconButton>
+                <MenuPopover
+                  open={open}
+                  onClose={handleClose}
+                  anchorEl={anchorRef.current}
+                  sx={{ width: 130 }}
+                >
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="Tümünü Seç"
+                    />
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="School 1"
+                    />
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="School 2"
+                    />
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="School 3"
+                    />
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="School 4"
+                    />
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="School 5"
+                    />
+                  </FormGroup>
+                </MenuPopover>
+              </StyledTableCell>
+              <StyledTableCell align="left">
+                Sınıf
+                <IconButton ref={anchorRef} onClick={handleOpen}>
+                  <Iconify icon="ep:arrow-down" color="text.secondary" />
+                </IconButton>
+                <MenuPopover
+                  open={open}
+                  onClose={handleClose}
+                  anchorEl={anchorRef.current}
+                  sx={{ width: 130 }}
+                >
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="Tümünü Seç"
+                    />
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="School 1"
+                    />
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="School 2"
+                    />
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="School 3"
+                    />
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="School 4"
+                    />
+                    <FormControlLabel
+                      control={<CMCheckBox />}
+                      label="School 5"
+                    />
+                  </FormGroup>
+                </MenuPopover>
+              </StyledTableCell>
               <StyledTableCell align="left">Öğrenci Adı </StyledTableCell>
               <StyledTableCell align="left">Kullanıcı Adı</StyledTableCell>
               <StyledTableCell align="left">Şifre</StyledTableCell>

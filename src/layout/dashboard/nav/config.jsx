@@ -16,13 +16,6 @@ const navConfig = [
     title: "Okul",
     path: "/dashboard/school", //when you change link update missing and wanted short details page
     icon: icon("school"),
-    children: [
-      {
-        title: "Pin Up Board",
-        path: "/dashboard/school",
-        icon: icon("school"),
-      },
-    ],
   },
   {
     title: "Sınıf",
@@ -49,6 +42,13 @@ const navConfig = [
     title: "Raporlar",
     path: "/dashboard/reports",
     icon: icon("reports"),
+    // children: [
+    //   {
+    //     title: "Pin Up Board",
+    //     path: "/dashboard/reports",
+    //     icon: icon("reports"),
+    //   },
+    // ],
   },
   {
     title: "Seviyelendirme",

@@ -1386,7 +1386,7 @@
   object-fit: n;
 }
 .object-position-top {
-  object-position: top center; 
+  object-position: top center;
 }
 .border {
   border: 1px solid #e9ebec !important;
@@ -1548,7 +1548,6 @@
   font-weight: 700 !important;
 }
 
-
 .lh-1 {
   line-height: 1 !important;
 }
@@ -1638,4 +1637,29 @@
 .disabled {
   opacity: 0.9;
   pointer-events: none;
+}
+
+.sainsbury {
+  background-color: #67b695;
+}
+.sea-sparkle {
+  background-color: #419b9f;
+}
+.sweet-midori {
+  background-color: #a9c353;
+}
+.blue-jeans {
+  background-color: #50b3e8;
+}
+.highlighter-orange {
+  background-color: #f3913d;
+}
+.deep-purple {
+  background-color: #a52c67;
+}
+.safflower-red {
+  background-color: #da393e;
+}
+.yellow-stagshorn {
+  background-color: #fbd85a;
 }

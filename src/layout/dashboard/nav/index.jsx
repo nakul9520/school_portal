@@ -39,7 +39,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
   const renderContent = (
     <Scrollbar
-    className="scrollbar-none"
+      className="scrollbar-none"
       sx={{
         height: 1,
         "& .simplebar-content": {
@@ -77,7 +77,7 @@ export default function Nav({ openNav, onCloseNav }) {
             sx: {
               width: NAV_WIDTH,
               borderRight: "none",
-              boxShadow: (theme)=>theme.shadows[9]
+              boxShadow: (theme) => theme.shadows[9],
             },
           }}
         >
