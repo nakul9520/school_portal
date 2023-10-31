@@ -29,7 +29,7 @@ import {
 import CMCheckBox from "theme/overrides/CMCheckBox";
 import { useTheme } from "@mui/material/styles";
 
-const BookReportTable = () => {
+const SchoolReports = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const anchorRef = useRef(null);
@@ -45,28 +45,19 @@ const BookReportTable = () => {
   };
   const rows = [
     {
-      pypTheme: "PYP Theme 1",
+      school: "school 1",
       class: "class 1",
-      generalTheme: "Pop theme 1",
-      achievements: "Objective 1",
-      series: "Book Series 1",
-      book: "Book 1",
+      studentName: "student 1",
     },
     {
-      pypTheme: "PYP Theme 2",
+      school: "school 2",
       class: "class 2",
-      generalTheme: "Pop theme 2",
-      achievements: "Objective 2",
-      series: "Book Series 2",
-      book: "Book 2",
+      studentName: "student 2",
     },
     {
-      pypTheme: "PYP Theme 3",
+      school: "school 3",
       class: "class 3",
-      generalTheme: "Pop theme 3",
-      achievements: "Objective 3",
-      series: "Book Series 3",
-      book: "Book 3",
+      studentName: "student 3",
     },
   ];
 
@@ -85,7 +76,7 @@ const BookReportTable = () => {
           spacing={1}
         >
           <Typography variant="subtitle2" color="text.secondary">
-            Kitap Raporları
+            Okul Raporları
           </Typography>
 
           <Box className="table_bottom_tabs">
@@ -93,7 +84,7 @@ const BookReportTable = () => {
               variant="contained"
               color="secondary"
               className="rounded-0"
-              onClick={() => navigate("/dashboard/totalbook-reports")}
+              onClick={() => navigate("/dashboard/reports/get-school-reports")}
             >
               Rapor Al
             </Button>
@@ -159,6 +150,45 @@ const BookReportTable = () => {
             <TableHead>
               <TableRow>
                 <StyledTableCell align="left">
+                  Okul
+                  <IconButton ref={anchorRef} onClick={handleOpen}>
+                    <Iconify icon="ep:arrow-down" color="text.secondary" />
+                  </IconButton>
+                  <MenuPopover
+                    open={open}
+                    onClose={handleClose}
+                    anchorEl={anchorRef.current}
+                    sx={{ width: 130 }}
+                  >
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="Tümünü Seç"
+                      />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="School 1"
+                      />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="School 2"
+                      />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="School 3"
+                      />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="School 4"
+                      />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="School 5"
+                      />
+                    </FormGroup>
+                  </MenuPopover>
+                </StyledTableCell>
+                <StyledTableCell align="left">
                   Sınıf
                   <IconButton ref={anchorRef} onClick={handleOpen}>
                     <Iconify icon="ep:arrow-down" color="text.secondary" />
@@ -178,11 +208,27 @@ const BookReportTable = () => {
                         control={<CMCheckBox />}
                         label="School 1"
                       />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="School 2"
+                      />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="School 3"
+                      />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="School 4"
+                      />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="School 5"
+                      />
                     </FormGroup>
                   </MenuPopover>
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  PYP Theme
+                  Öğrenci Adı
                   <IconButton ref={anchorRef} onClick={handleOpen}>
                     <Iconify icon="ep:arrow-down" color="text.secondary" />
                   </IconButton>
@@ -201,97 +247,21 @@ const BookReportTable = () => {
                         control={<CMCheckBox />}
                         label="School 1"
                       />
-                    </FormGroup>
-                  </MenuPopover>
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  Genel Tema
-                  <IconButton ref={anchorRef} onClick={handleOpen}>
-                    <Iconify icon="ep:arrow-down" color="text.secondary" />
-                  </IconButton>
-                  <MenuPopover
-                    open={open}
-                    onClose={handleClose}
-                    anchorEl={anchorRef.current}
-                    sx={{ width: 130 }}
-                  >
-                    <FormGroup>
                       <FormControlLabel
                         control={<CMCheckBox />}
-                        label="Tümünü Seç"
+                        label="School 2"
                       />
                       <FormControlLabel
                         control={<CMCheckBox />}
-                        label="School 1"
-                      />
-                    </FormGroup>
-                  </MenuPopover>
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  Kazanımlar
-                  <IconButton ref={anchorRef} onClick={handleOpen}>
-                    <Iconify icon="ep:arrow-down" color="text.secondary" />
-                  </IconButton>
-                  <MenuPopover
-                    open={open}
-                    onClose={handleClose}
-                    anchorEl={anchorRef.current}
-                    sx={{ width: 130 }}
-                  >
-                    <FormGroup>
-                      <FormControlLabel
-                        control={<CMCheckBox />}
-                        label="Tümünü Seç"
+                        label="School 3"
                       />
                       <FormControlLabel
                         control={<CMCheckBox />}
-                        label="School 1"
-                      />
-                    </FormGroup>
-                  </MenuPopover>
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  Seriler
-                  <IconButton ref={anchorRef} onClick={handleOpen}>
-                    <Iconify icon="ep:arrow-down" color="text.secondary" />
-                  </IconButton>
-                  <MenuPopover
-                    open={open}
-                    onClose={handleClose}
-                    anchorEl={anchorRef.current}
-                    sx={{ width: 130 }}
-                  >
-                    <FormGroup>
-                      <FormControlLabel
-                        control={<CMCheckBox />}
-                        label="Tümünü Seç"
+                        label="School 4"
                       />
                       <FormControlLabel
                         control={<CMCheckBox />}
-                        label="School 1"
-                      />
-                    </FormGroup>
-                  </MenuPopover>
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  Kitap
-                  <IconButton ref={anchorRef} onClick={handleOpen}>
-                    <Iconify icon="ep:arrow-down" color="text.secondary" />
-                  </IconButton>
-                  <MenuPopover
-                    open={open}
-                    onClose={handleClose}
-                    anchorEl={anchorRef.current}
-                    sx={{ width: 130 }}
-                  >
-                    <FormGroup>
-                      <FormControlLabel
-                        control={<CMCheckBox />}
-                        label="Tümünü Seç"
-                      />
-                      <FormControlLabel
-                        control={<CMCheckBox />}
-                        label="School 1"
+                        label="School 5"
                       />
                     </FormGroup>
                   </MenuPopover>
@@ -301,16 +271,11 @@ const BookReportTable = () => {
             <TableBody>
               {rows.map((row, index) => (
                 <StyledTableRow key={index}>
-                  <StyledTableCell align="left">{row.pypTheme}</StyledTableCell>
+                  <StyledTableCell align="left">{row.school}</StyledTableCell>
                   <StyledTableCell scope="row">{row.class}</StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.generalTheme}
+                    {row.studentName}
                   </StyledTableCell>
-                  <StyledTableCell scope="row">
-                    {row.achievements}
-                  </StyledTableCell>
-                  <StyledTableCell scope="row">{row.series}</StyledTableCell>
-                  <StyledTableCell scope="row">{row.book}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -338,4 +303,4 @@ const BookReportTable = () => {
   );
 };
 
-export default BookReportTable;
+export default SchoolReports;

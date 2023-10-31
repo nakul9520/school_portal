@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 // @mui
 import { Box, Drawer, Link } from "@mui/material";
 
@@ -9,10 +10,11 @@ import useResponsive from "components/hooks/useResponsive";
 
 // components
 //
-import Scrollbar from "components/common/scrollbar/Scrollbar";
 import { imageObj } from "services/images";
 import NavSection from "../nav-section/NavSection";
 import navConfig from "./config";
+import { getProfileInfo } from "redux/store/slice/auth/authSlice";
+import { getSession } from "services/utiles";
 
 // ----------------------------------------------------------------------
 
@@ -27,8 +29,11 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
   const isDesktop = useResponsive("up", "lg");
-  const HEADER_DESKTOP = 80;
+  const HEADER_DESKTOP = 60;
+
+  const {id} = getSession();
 
   useEffect(() => {
     if (openNav) {
@@ -38,19 +43,9 @@ export default function Nav({ openNav, onCloseNav }) {
   }, [pathname]);
 
   const renderContent = (
-    <Scrollbar
-      className="scrollbar-none"
-      sx={{
-        height: 1,
-        "& .simplebar-content": {
-          height: 1,
-          display: "flex",
-          flexDirection: "column",
-        },
-      }}
-    >
+    <>
       <Box
-        sx={{ height: HEADER_DESKTOP, backgroundColor: "primary.main" }}
+        sx={{ minHeight: HEADER_DESKTOP, backgroundColor: "primary.main" }}
         className="d-flex align-items-center justify-content-center"
       >
         <Link underline="none">
@@ -58,8 +53,12 @@ export default function Nav({ openNav, onCloseNav }) {
         </Link>
       </Box>
       <NavSection data={navConfig} />
-    </Scrollbar>
+    </>
   );
+
+  useEffect(() => {
+    dispatch(getProfileInfo({id}));
+  }, [dispatch, id]);
 
   return (
     <Box
@@ -78,6 +77,9 @@ export default function Nav({ openNav, onCloseNav }) {
               width: NAV_WIDTH,
               borderRight: "none",
               boxShadow: (theme) => theme.shadows[9],
+              "&::-webkit-scrollbar": {
+                display: "none",
+              },
             },
           }}
         >
@@ -94,6 +96,9 @@ export default function Nav({ openNav, onCloseNav }) {
             sx: {
               width: NAV_WIDTH,
               borderRight: "none",
+              "&::-webkit-scrollbar": {
+                display: "none",
+              },
             },
           }}
         >

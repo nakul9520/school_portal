@@ -1,0 +1,56 @@
+import { Box, Grid } from "@mui/material";
+
+const SystemSetting = () => {
+  return (
+    <>
+      <Grid
+        container
+        spacing={2}
+        justifyContent={{ xs: "center", sm: "start" }}
+      >
+        <Grid item xs={10} sm={5} md={4} lg={2}>
+          <Box
+            className="common_multi_box"
+            sx={{ backgroundColor: "mint.main" }}
+          >
+            Edit
+          </Box>
+        </Grid>
+        <Grid item xs={10} sm={5} md={4} lg={2}>
+          <Box
+            className="common_multi_box"
+            sx={{ backgroundColor: "sainsbury.main" }}
+          >
+            Delete
+          </Box>
+        </Grid>
+        <Grid item xs={10} sm={5} md={4} lg={2}>
+          <Box
+            className="common_multi_box "
+            sx={{ backgroundColor: "success.main" }}
+          >
+            New Super Admin
+          </Box>
+        </Grid>
+        <Grid item xs={10} sm={5} md={4} lg={2}>
+          <Box
+            className="common_multi_box "
+            sx={{ backgroundColor: "info.main" }}
+          >
+            Edit Super Admin Password
+          </Box>
+        </Grid>
+        <Grid item xs={10} sm={5} md={4} lg={2}>
+          <Box
+            className="common_multi_box "
+            sx={{ backgroundColor: "warning.main" }}
+          >
+            Get System Backup
+          </Box>
+        </Grid>
+      </Grid>
+    </>
+  );
+};
+
+export default SystemSetting;

@@ -11,6 +11,7 @@ import {
   StyledTableRow,
 } from "styles/ComponentStyle";
 import { useTheme } from "@mui/material/styles";
+import Iconify from "components/common/iconify";
 
 const LibraryCategories = () => {
   const theme = useTheme();
@@ -45,28 +46,33 @@ const LibraryCategories = () => {
           Kitaplık Kategorileri
         </Typography>
 
-        <Stack direction="row" alignItems="center" className="gap-1" mt={2}>
-          <Box className="table_bottom_tabs text-right mt-3">
+        <Stack
+          direction="row"
+          alignItems="center"
+          className="gap-2 flex-wrap"
+          mt={2}
+        >
+          <Box className="table_bottom_tabs text-right">
             <Button variant="contained" color="primary" className="rounded-0">
               Sınıf Düzeyi Ekle/Çıkar
             </Button>
           </Box>
-          <Box className="table_bottom_tabs text-right mt-3">
+          <Box className="table_bottom_tabs text-right">
             <Button variant="contained" color="secondary" className="rounded-0">
               PYP Temaları Ekle/Çıkar
             </Button>
           </Box>
-          <Box className="table_bottom_tabs text-right mt-3">
+          <Box className="table_bottom_tabs text-right">
             <Button variant="contained" color="primary" className="rounded-0">
               Genel Temalar Ekle/Çıkar
             </Button>
           </Box>
-          <Box className="table_bottom_tabs text-right mt-3">
+          <Box className="table_bottom_tabs text-right">
             <Button variant="contained" color="secondary" className="rounded-0">
               Kazanımlar Ekle/Çıkar
             </Button>
           </Box>
-          <Box className="table_bottom_tabs text-right mt-3">
+          <Box className="table_bottom_tabs text-right">
             <Button variant="contained" color="primary" className="rounded-0">
               Seriler Ekle/Çıkar
             </Button>
@@ -86,16 +92,13 @@ const LibraryCategories = () => {
                   className="d-flex align-items-center justify-content-between"
                 >
                   Remove
-                  <Box className="table_bottom_tabs text-right">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className="rounded-0"
-                      disabled
-                    >
-                      Ekle
-                    </Button>
-                  </Box>
+                  <Button
+                    variant="contained"
+                    startIcon={<Iconify icon="bi:plus" />}
+                    color="primary"
+                  >
+                    Ekle
+                  </Button>
                 </StyledTableCell>
               </TableRow>
             </TableHead>

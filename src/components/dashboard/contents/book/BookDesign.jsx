@@ -2,8 +2,6 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControlLabel,
-  FormGroup,
   IconButton,
   InputAdornment,
   Pagination,
@@ -16,10 +14,8 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import MenuPopover from "components/common/MenuPopover";
 
 import Iconify from "components/common/iconify/Iconify";
-import { useRef, useState } from "react";
 import {
   StyledTable,
   StyledTableCell,
@@ -27,29 +23,24 @@ import {
 } from "styles/ComponentStyle";
 import CMCheckBox from "theme/overrides/CMCheckBox";
 import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
-const BooksSelect = () => {
+const BookDesign = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
-  const anchorRef = useRef(null);
 
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   const rows = [
     {
-      books: "Book 1",
+      order: 1,
     },
     {
-      books: "Book 2",
+      order: 2,
     },
     {
-      books: "Book 3",
+      order: 3,
+    },
+    {
+      order: 4,
     },
   ];
 
@@ -61,9 +52,24 @@ const BooksSelect = () => {
           boxShadow: theme.shadows[3],
         }}
       >
-        <Typography variant="subtitle2" color="text.secondary">
-          Seviyelendirme
-        </Typography>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          className="gap-2"
+        >
+          <Typography variant="subtitle2" color="text.secondary">
+            Kitap Tasarımı
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Iconify icon="bi:plus" />}
+            onClick={() => navigate("/dashboard/contents/add-book-topic")}
+          >
+            Kitap Ekle
+          </Button>
+        </Stack>
 
         <Stack
           direction="row"
@@ -123,53 +129,28 @@ const BooksSelect = () => {
           <StyledTable stickyHeader>
             <TableHead>
               <TableRow>
-                <StyledTableCell align="left">
-                  Kitaplar
-                  <IconButton ref={anchorRef} onClick={handleOpen}>
-                    <Iconify icon="ep:arrow-down" color="text.secondary" />
-                  </IconButton>
-                  <MenuPopover
-                    open={open}
-                    onClose={handleClose}
-                    anchorEl={anchorRef.current}
-                    sx={{ width: 130 }}
-                  >
-                    <FormGroup>
-                      <FormControlLabel
-                        control={<CMCheckBox />}
-                        label="Tümünü Seç"
-                      />
-                      <FormControlLabel
-                        control={<CMCheckBox />}
-                        label="School 1"
-                      />
-                    </FormGroup>
-                  </MenuPopover>
-                </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  className="d-flex align-items-center justify-content-between"
-                >
-                  Seç{" "}
-                  <Box className="table_bottom_tabs text-right">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className="rounded-0"
-                      disabled
-                    >
-                      Tümünü Seç
-                    </Button>
-                  </Box>
-                </StyledTableCell>
+                <StyledTableCell align="left">Sıra</StyledTableCell>
+                <StyledTableCell>Kitap Adı </StyledTableCell>
+                <StyledTableCell>Seviyesi </StyledTableCell>
+                <StyledTableCell>PYP Teması </StyledTableCell>
+                <StyledTableCell>Genel Teması </StyledTableCell>
+                <StyledTableCell>Kazanımlar</StyledTableCell>
+                <StyledTableCell>Seriler</StyledTableCell>
+                <StyledTableCell>Seç</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row, index) => (
                 <StyledTableRow key={index}>
-                  <StyledTableCell align="left">{row.books}</StyledTableCell>
-                  <StyledTableCell scope="row">
-                    <CMCheckBox />{" "}
+                  <StyledTableCell align="left">{row.order}</StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left">
+                    <CMCheckBox />
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
@@ -193,14 +174,31 @@ const BooksSelect = () => {
           </Typography>
           <Pagination count={10} />
         </Stack>
-        <Box className="table_bottom_tabs text-right mt-3">
-          <Button variant="contained" color="primary" className="rounded-0">
-            Kaydet
-          </Button>
-        </Box>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          className="gap-2"
+          mt={2}
+        >
+          <Stack direction="row" alignItems="center" className="gap-2">
+            <Button variant="contained" color="primary" className="rounded-0">
+              Pdf
+            </Button>
+            <Button variant="contained" color="secondary" className="rounded-0">
+              Print
+            </Button>
+          </Stack>
+
+          <Box className="table_bottom_tabs text-right mt-3">
+            <Button variant="contained" color="primary" className="rounded-0">
+              Kaydet
+            </Button>
+          </Box>
+        </Stack>
       </Box>
     </>
   );
 };
 
-export default BooksSelect;
+export default BookDesign;

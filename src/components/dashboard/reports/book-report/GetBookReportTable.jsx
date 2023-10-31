@@ -2,8 +2,6 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControlLabel,
-  FormGroup,
   IconButton,
   InputAdornment,
   Pagination,
@@ -16,50 +14,55 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import MenuPopover from "components/common/MenuPopover";
 
 import Iconify from "components/common/iconify/Iconify";
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import CMCheckBox from "theme/overrides/CMCheckBox";
 import { useTheme } from "@mui/material/styles";
 
-const SchoolReportDataTable = () => {
+const GetBookReportTable = () => {
   const rows = [
     {
       order: 1,
-      schoolName: "school 1",
-      Class: "class 1",
-      studentName: "Student 1",
-      numberofBooksRead: "3",
-      totalReadingTime: "02hrs 10m 30s",
-      totalListeningTime: "02hrs 10m 30s",
-      numberofActivitiesCompleted: "12",
+      numberofSchool: "school 1",
+      numberofClass: "class 1",
+      pypTheme: "Theme 1",
+      generalTheme: "Theme 1",
+      achievements: "Objective 1",
+      Series: "Series 1",
+      book: "Book 1",
+      totalNumberofReads: "2",
+      totalNumberofListening: "2",
+      numberofActivitiesCompleted: "2",
     },
     {
       order: 2,
-      schoolName: "school 1",
-      Class: "class 1",
-      studentName: "Student 1",
-      numberofBooksRead: "7",
-      totalReadingTime: "02hrs 10m 30s",
-      totalListeningTime: "02hrs 10m 30s",
-      numberofActivitiesCompleted: "34",
+      numberofSchool: "school 2",
+      numberofClass: "class 2",
+      pypTheme: "Theme 2",
+      generalTheme: "Theme 2",
+      achievements: "Objective 2",
+      Series: "Series 2",
+      book: "Book 2",
+      totalNumberofReads: "5",
+      totalNumberofListening: "5",
+      numberofActivitiesCompleted: "5",
     },
     {
       order: 3,
-      schoolName: "school 1",
-      Class: "class 1",
-      studentName: "Student 1",
-      numberofBooksRead: "21",
-      totalReadingTime: "02hrs 10m 30s",
-      totalListeningTime: "02hrs 10m 30s",
-      numberofActivitiesCompleted: "65",
+      numberofSchool: "school 3",
+      numberofClass: "class 3",
+      pypTheme: "Theme 3",
+      generalTheme: "Theme 3",
+      achievements: "Objective 3",
+      Series: "Series 3",
+      book: "Book 3",
+      totalNumberofReads: "7",
+      totalNumberofListening: "7",
+      numberofActivitiesCompleted: "7",
     },
   ];
   const theme = useTheme();
@@ -79,7 +82,7 @@ const SchoolReportDataTable = () => {
           spacing={1}
         >
           <Typography variant="subtitle2" color="text.secondary">
-            Okul Raporları
+            Kitap Raporları
           </Typography>
 
           <Stack
@@ -157,17 +160,18 @@ const SchoolReportDataTable = () => {
             <TableHead>
               <TableRow>
                 <StyledTableCell align="left">Sıra</StyledTableCell>
-                <StyledTableCell align="left">Okul</StyledTableCell>
-                <StyledTableCell align="left">Sınıf</StyledTableCell>
-                <StyledTableCell align="left">Öğrenci </StyledTableCell>
+                <StyledTableCell align="left">Okul Sayısı</StyledTableCell>
+                <StyledTableCell align="left">Sınıf Sayısı</StyledTableCell>
+                <StyledTableCell align="left">PYP Teması </StyledTableCell>
+                <StyledTableCell align="left">Genel Tema</StyledTableCell>
+                <StyledTableCell align="left">Kazanımlar</StyledTableCell>
+                <StyledTableCell align="left">Seriler</StyledTableCell>
+                <StyledTableCell align="left">Kitap</StyledTableCell>
                 <StyledTableCell align="left">
-                  Okunan Kitap Sayısı
+                  Toplam Okunma Sayısı
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  Toplam Okuma Süresi
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  Toplam Dinleme Süresi
+                  Toplam Dinleme Sayısı
                 </StyledTableCell>
                 <StyledTableCell align="left">
                   Tamamlanan Etkinlik Sayısı
@@ -179,20 +183,25 @@ const SchoolReportDataTable = () => {
                 <StyledTableRow key={index}>
                   <StyledTableCell scope="row">{row.order}</StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.schoolName}
-                  </StyledTableCell>
-                  <StyledTableCell align="left">{row.Class}</StyledTableCell>
-                  <StyledTableCell align="left">
-                    {row.studentName}
+                    {row.numberofSchool}
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.numberofBooksRead}
+                    {row.numberofClass}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">{row.pypTheme}</StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.generalTheme}
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.totalReadingTime}
+                    {row.achievements}
                   </StyledTableCell>
+                  <StyledTableCell align="left">{row.Series}</StyledTableCell>{" "}
+                  <StyledTableCell align="left">{row.book}</StyledTableCell>{" "}
                   <StyledTableCell align="left">
-                    {row.totalListeningTime}
+                    {row.totalNumberofReads}
+                  </StyledTableCell>{" "}
+                  <StyledTableCell align="left">
+                    {row.totalNumberofListening}
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {row.numberofActivitiesCompleted}
@@ -211,10 +220,13 @@ const SchoolReportDataTable = () => {
                 <StyledTableCell align="left"></StyledTableCell>
                 <StyledTableCell align="left"></StyledTableCell>
                 <StyledTableCell align="left"></StyledTableCell>
-                <StyledTableCell align="left">40</StyledTableCell>
-                <StyledTableCell align="left">10hrs 52m 30s</StyledTableCell>
-                <StyledTableCell align="left">10hrs 52m 30s</StyledTableCell>
-                <StyledTableCell align="left">105</StyledTableCell>
+                <StyledTableCell align="left"></StyledTableCell>
+                <StyledTableCell align="left"></StyledTableCell>
+                <StyledTableCell align="left"></StyledTableCell>
+                <StyledTableCell align="left"></StyledTableCell>
+                <StyledTableCell align="left">15</StyledTableCell>
+                <StyledTableCell align="left">15</StyledTableCell>
+                <StyledTableCell align="left">15</StyledTableCell>
               </StyledTableRow>
             </TableBody>
           </StyledTable>
@@ -241,4 +253,4 @@ const SchoolReportDataTable = () => {
   );
 };
 
-export default SchoolReportDataTable;
+export default GetBookReportTable;

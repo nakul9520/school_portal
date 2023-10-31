@@ -1,6 +1,7 @@
+import React from "react";
 import { Outlet } from "react-router-dom";
 
-const Reports = () => {
+const Contents = () => {
   return (
     <>
       <Outlet />
@@ -8,4 +9,4 @@ const Reports = () => {
   );
 };
 
-export default Reports;
+export default Contents;

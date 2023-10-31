@@ -1,9 +1,12 @@
-import { Box, Stack } from "@mui/material";
+import {
+  Box,
+  Stack,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import Paper from "@mui/material/Paper";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 
 import Iconify from "components/common/iconify/Iconify";
 import {

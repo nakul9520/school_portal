@@ -30,7 +30,7 @@ const MassStudent = () => {
           spacing={1}
         >
           <Typography variant="subtitle2" color="text.secondary">
-            Toplu Öğretmen Ekle
+            Toplu Öğrenci Ekle
           </Typography>
 
           <Stack

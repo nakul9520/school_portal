@@ -12,7 +12,9 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
 // utils
+import { useSelector } from "react-redux";
 
 // components
 import Iconify from "../../../components/common/iconify/Iconify";
@@ -26,7 +28,7 @@ const NAV_WIDTH = 280;
 
 const HEADER_MOBILE = 40;
 
-const HEADER_DESKTOP = 80;
+const HEADER_DESKTOP = 60;
 
 const StyledRoot = styled(AppBar)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -39,6 +41,7 @@ const StyledRoot = styled(AppBar)(({ theme }) => ({
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   minHeight: HEADER_MOBILE,
+  padding: theme.spacing(1, 1),
   [theme.breakpoints.up("lg")]: {
     minHeight: HEADER_DESKTOP,
     padding: theme.spacing(0, 3),
@@ -52,6 +55,8 @@ Header.propTypes = {
 };
 
 export default function Header({ onOpenNav }) {
+  const { profileInfo } = useSelector((state) => state.auth);
+
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -71,7 +76,7 @@ export default function Header({ onOpenNav }) {
         </Box>
         <Box sx={{ flexGrow: 1 }} />
 
-        <Stack direction="row" alignItems="center" className="gap-4">
+        <Stack direction="row" alignItems="center" className="gap-2">
           <Stack direction="row" alignItems="center" className="gap-2">
             <Badge variant="dot" overlap="circular" color="slateblue">
               <Iconify icon="clarity:email-solid" color="text.secondary" />
@@ -85,19 +90,18 @@ export default function Header({ onOpenNav }) {
                 backgroundColor: "slateblue.main",
                 border: (theme) => `2px solid ${theme.palette.text.secondary}`,
               }}
-            >
-              j
-            </Avatar>
+              src={profileInfo.profileUrl}
+            />
+
             <Box>
               <Typography variant="body1" className="text-capitalize">
-                Kutluhan Yıldız
+                {profileInfo.name}
               </Typography>
             </Box>
           </Stack>
           <IconButton
             onClick={onOpenNav}
             sx={{
-              mr: 1,
               color: "text.primary",
               display: { lg: "none" },
             }}
