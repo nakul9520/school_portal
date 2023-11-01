@@ -15,8 +15,7 @@ const navConfig = [
   {
     id: 1,
     title: "Okul",
-    path: "/dashboard/school", //when you change link update missing and wanted short details page
-    icon: icon("school"),
+    path: "/dashboard/school",
   },
   { id: 2, title: "Sınıf", path: "/dashboard/class", icon: icon("class") },
   {

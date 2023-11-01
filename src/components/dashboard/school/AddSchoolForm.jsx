@@ -1,53 +1,46 @@
-import React from "react";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useFormik } from "formik";
-// import * as Yup from "yup";
+import { MobileDatePicker } from "@mui/x-date-pickers";
+import { Formik } from "formik";
+import moment from "moment";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { addEditSchool } from "redux/store/slice/dashboard/userSlice";
+import { addEditSchoolValidation } from "services/validations";
 
 const AddSchoolForm = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const dispatch = useDispatch();
+  const schoolData = state ?? {};
 
-  // const schema = Yup.object().shape({
-  //   schoolName: Yup.string()
-  //     .min(8, "school name should be at least 8 characters long")
-  //     .required("school name cannot be empty"),
-  //   schoolAdministrator: Yup.string()
-  //     .min(8, "school Administrator should be at least 8 characters long")
-  //     .required("school administrator cannot be empty"),
-  //   email: Yup.string()
-  //     .email("Please enter valid email")
-  //     .required("Email cannot be empty"),
-  //   password: Yup.string()
-  //     .min(8, "Password should be at least 8 characters long")
-  //     .required("Password cannot be empty"),
-  //   activationdate: Yup.string()
-  //     .min(8, "school Administrator should be at least 8 characters long")
-  //     .required("school administrator cannot be empty"),
-  //   lcensedate: Yup.string()
-  //     .min(8, "school Administrator should be at least 8 characters long")
-  //     .required("school administrator cannot be empty"),
-  // });
+  console.log("schoolData", schoolData);
 
-  const formik = useFormik({
-    initialValues: {
-      schoolName: "",
-      schoolAdministrator: "",
-      email: "",
-      password: "",
-      activationdate: "",
-      lcensedate: "",
-    },
-    // validationSchema: schema,
-    onSubmit: (values) => {
-      console.log("values", values);
-    },
-  });
+  const handleAddEdit = (values, action) => {
+    const data = {
+      ...values,
+      id: schoolData.id ? schoolData.id : "",
+      activation_date: moment(values.activation_date).format("YYYY-MM-DD"),
+      expired_at: moment(values.expired_at).format("YYYY-MM-DD"),
+    };
+    dispatch(addEditSchool(data))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          console.log(result);
+          toast.success(result.message);
+          navigate("/dashboard/school");
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
 
+    console.log("data", data);
+  };
   return (
     <>
       <Box
@@ -61,211 +54,196 @@ const AddSchoolForm = () => {
           Okul Ekle
         </Typography>
 
-        <form onSubmit={formik.handleSubmit} className="h-100">
-          <Box className="custom_form border">
-            {/* <Grid container spacing={2} sx={{ my: 3 }}>
-            <Grid item xs={12}> */}
-            <Box className="custom_form_row d-flex align-items-center border-bottom">
-              <Typography
-                variant="body2"
-                color="secondary.disabled"
-                className="ms-4 w-25"
-              >
-                Okul Adı
-              </Typography>
-              <TextField
-                name="schoolName"
-                value={formik.values.schoolName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                fullWidth
-                type="schoolName"
-                error={
-                  formik.errors.schoolName && formik.touched.schoolName
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.errors.schoolName && formik.touched.schoolName
-                    ? formik.errors.schoolName
-                    : null
-                }
-              />
-            </Box>
-            {/* </Grid>
-            <Grid item xs={12}> */}
-            <Box className="custom_form_row d-flex align-items-center border-bottom">
-              <Typography
-                variant="body2"
-                color="secondary.disabled"
-                className="ms-4 w-25"
-              >
-                Okul Yöneticisi
-              </Typography>
-              <TextField
-                name="schoolAdministrator"
-                value={formik.values.schoolAdministrator}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                fullWidth
-                type="schoolAdministrator"
-                
-                error={
-                  formik.errors.schoolAdministrator &&
-                  formik.touched.schoolAdministrator
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.errors.schoolAdministrator &&
-                  formik.touched.schoolAdministrator
-                    ? formik.errors.schoolAdministrator
-                    : null
-                }
-              />
-            </Box>
-            {/* </Grid>
-          </Grid> */}
-            <Box className="custom_form_row d-flex align-items-center border-bottom">
-              <Typography
-                variant="body2"
-                color="secondary.disabled"
-                className="ms-4 w-25"
-              >
-                Email
-              </Typography>
-              <TextField
-                name="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                fullWidth
-                type="email"
-                error={
-                  formik.errors.email && formik.touched.email ? true : false
-                }
-                helperText={
-                  formik.errors.email && formik.touched.email
-                    ? formik.errors.email
-                    : null
-                }
-              />
-            </Box>{" "}
-            <Box className="custom_form_row d-flex align-items-center border-bottom">
-              <Typography
-                variant="body2"
-                color="secondary.disabled"
-                className="ms-4 w-25"
-              >
-                Kullanıcı Adı
-              </Typography>
-              <TextField
-                name="username"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                fullWidth
-                type="username"
-                error={
-                  formik.errors.username && formik.touched.username
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.errors.username && formik.touched.username
-                    ? formik.errors.username
-                    : null
-                }
-              />
-            </Box>
-            <Box className="custom_form_row d-flex align-items-center border-bottom">
-              <Typography
-                variant="body2"
-                color="secondary.disabled"
-                className="ms-4 w-25"
-              >
-                Şifre
-              </Typography>
-              <TextField
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                fullWidth
-                type="password"
-                error={
-                  formik.errors.password && formik.touched.password
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.errors.password && formik.touched.password
-                    ? formik.errors.password
-                    : null
-                }
-              />
-            </Box>
-            <Box className="custom_form_row d-flex align-items-center border-bottom">
-              <Typography
-                variant="body2"
-                color="secondary.disabled"
-                className="ms-4 w-25"
-              >
-                Aktivasyon Tarihi
-              </Typography>
-              <TextField
-                name="activationdate"
-                value={formik.values.activationdate}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                fullWidth
-                type="activationdate"
-                error={
-                  formik.errors.activationdate && formik.touched.activationdate
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.errors.activationdate && formik.touched.activationdate
-                    ? formik.errors.activationdate
-                    : null
-                }
-              />
-            </Box>
-            <Box className="custom_form_row d-flex align-items-center border-bottom">
-              <Typography
-                variant="body2"
-                color="secondary.disabled"
-                className="ms-4 w-25"
-              >
-                Lisans Sonlanma Tarihi
-              </Typography>
-              <TextField
-                name="lcensedate"
-                value={formik.values.lcensedate}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                fullWidth
-                type="lcensedate"
-                error={
-                  formik.errors.lcensedate && formik.touched.lcensedate
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.errors.lcensedate && formik.touched.lcensedate
-                    ? formik.errors.lcensedate
-                    : null
-                }
-              />
-            </Box>
-          </Box>
-          <Box className="text-right mt-3">
-            <Button variant="contained" type="submit" color="primary" className="rounded-0">
-              Kaydet
-            </Button>
-          </Box>
-        </form>
+        <Formik
+          initialValues={{
+            school_name: schoolData.school_name ?? "",
+            user_name: schoolData.user_name ?? "",
+            school_admin: schoolData.school_admin ?? "",
+            school_email: schoolData.school_email ?? "",
+            school_code: schoolData.school_code ?? "",
+            activation_date:
+              moment(schoolData.activation_date) ?? moment("2022-04-17"),
+            expired_at: moment(schoolData.expired_at) ?? moment("2022-04-17"),
+          }}
+          validationSchema={addEditSchoolValidation}
+          onSubmit={(value, action) => {
+            handleAddEdit(value, action);
+          }}
+        >
+          {({
+            values,
+            handleSubmit,
+            handleChange,
+            setFieldValue,
+            handleBlur,
+            errors,
+            touched,
+          }) => (
+            <form onSubmit={handleSubmit} className="h-100">
+              <Box className="custom_form border">
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
+                    Okul Adı
+                  </Typography>
+                  <TextField
+                    name="school_name"
+                    value={values.school_name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    fullWidth
+                    type="school_name"
+                    error={
+                      errors.school_name && touched.school_name ? true : false
+                    }
+                    helperText={
+                      errors.school_name && touched.school_name
+                        ? errors.school_name
+                        : null
+                    }
+                  />
+                </Box>
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
+                    Okul Yöneticisi
+                  </Typography>
+                  <TextField
+                    name="school_admin"
+                    value={values.school_admin}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    fullWidth
+                    type="school_admin"
+                    error={
+                      errors.school_admin && touched.school_admin ? true : false
+                    }
+                    helperText={
+                      errors.school_admin && touched.school_admin
+                        ? errors.school_admin
+                        : null
+                    }
+                  />
+                </Box>
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
+                    Email
+                  </Typography>
+                  <TextField
+                    name="school_email"
+                    value={values.school_email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    fullWidth
+                    type="school_email"
+                    error={
+                      errors.school_email && touched.school_email ? true : false
+                    }
+                    helperText={
+                      errors.school_email && touched.school_email
+                        ? errors.school_email
+                        : null
+                    }
+                  />
+                </Box>{" "}
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
+                    Kullanıcı Adı
+                  </Typography>
+                  <TextField
+                    name="user_name"
+                    value={values.user_name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    fullWidth
+                    type="user_name"
+                    error={errors.user_name && touched.user_name ? true : false}
+                    helperText={
+                      errors.user_name && touched.user_name
+                        ? errors.user_name
+                        : null
+                    }
+                  />
+                </Box>
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
+                    Şifre
+                  </Typography>
+                  <TextField
+                    name="school_code"
+                    value={values.school_code}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    fullWidth
+                    type="school_code"
+                    error={
+                      errors.school_code && touched.school_code ? true : false
+                    }
+                    helperText={
+                      errors.school_code && touched.school_code
+                        ? errors.school_code
+                        : null
+                    }
+                  />
+                </Box>
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
+                    Aktivasyon Tarihi
+                  </Typography>
+                  <MobileDatePicker
+                    value={values.activation_date}
+                    onChange={(newValue) => setFieldValue(newValue)}
+                  />
+                </Box>
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
+                    Lisans Sonlanma Tarihi
+                  </Typography>
+                  <MobileDatePicker
+                    value={values.expired_at}
+                    onChange={(newValue) => setFieldValue(newValue)}
+                  />
+                </Box>
+              </Box>
+              <Box className="text-right mt-3">
+                <Button
+                  variant="contained"
+                  type="submit"
+                  color="primary"
+                  className="rounded-0"
+                >
+                  Kaydet
+                </Button>
+              </Box>
+            </form>
+          )}
+        </Formik>
       </Box>
     </>
   );

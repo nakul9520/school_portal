@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Box,
@@ -18,10 +18,20 @@ import { useTheme } from "@mui/material/styles";
 
 import Iconify from "components/common/iconify/Iconify";
 import SchoolDataTable from "./SchoolDataTable";
+import { useDispatch } from "react-redux";
+import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const theme = useTheme();
+
+  const [filterData, setFilterData] = useState({ search: "", page: 1 });
+
+  useEffect(() => {
+    dispatch(getSchoolList(filterData));
+  }, [dispatch, filterData]);
+
   return (
     <>
       <Box

@@ -97,6 +97,7 @@ export default function Header({ onOpenNav }) {
               <Typography variant="body1" className="text-capitalize">
                 {profileInfo.name}
               </Typography>
+              
             </Box>
           </Stack>
           <IconButton

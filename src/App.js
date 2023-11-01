@@ -8,11 +8,19 @@ import ScrollToTop from "./components/common/ScrollToTop";
 import AppRoutes from "./routes/AppRoutes";
 import { ToastContainer } from "react-toastify";
 
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+
+//css
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <>
       <ScrollToTop />
-      <AppRoutes />
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <AppRoutes />
+      </LocalizationProvider>
       <ToastContainer
         position="top-right"
         autoClose={5000}
