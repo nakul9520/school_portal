@@ -18,31 +18,43 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import MenuPopover from "components/common/MenuPopover";
 
+import { useTheme } from "@mui/material/styles";
 import Iconify from "components/common/iconify/Iconify";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
 import CMCheckBox from "theme/overrides/CMCheckBox";
-import { useTheme } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
 
 const LevelingUp = () => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const anchorRef = useRef(null);
+  const [anchorEl, setAnchorEl] = useState({
+    school: null,
+    class: null,
+    branch: null,
+    level: null,
+  });
 
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
+  const handleClick = (event, fieldName) => {
+    setAnchorEl((prevstate) => ({
+      ...prevstate,
+      [fieldName]: event.currentTarget,
+    }));
+  };
+  const handleClose = (fieldName) => {
+    setAnchorEl((prevstate) => ({
+      ...prevstate,
+      [fieldName]: null,
+    }));
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
   const rows = [
     {
       school: "school 1",
@@ -136,37 +148,49 @@ const LevelingUp = () => {
               <TableRow>
                 <StyledTableCell align="left">
                   Okul
-                  <IconButton ref={anchorRef} onClick={handleOpen}>
+                  <IconButton
+                    onClick={(e) => {
+                      handleClick(e, "school");
+                    }}
+                  >
                     <Iconify icon="ep:arrow-down" color="text.secondary" />
                   </IconButton>
                   <MenuPopover
-                    open={open}
-                    onClose={handleClose}
-                    anchorEl={anchorRef.current}
-                    sx={{ width: 130 }}
+                    open={Boolean(anchorEl.school)}
+                    onClose={() => handleClose("school")}
+                    anchorEl={anchorEl.school}
+                    sx={{ width: 180, padding: 1 }}
                   >
-                    <FormGroup>
+                    <FormGroup className="">
                       <FormControlLabel
                         control={<CMCheckBox />}
                         label="Tümünü Seç"
                       />
                       <FormControlLabel
                         control={<CMCheckBox />}
-                        label="School 1"
+                        label={
+                          <Typography variant="body2" color="text.secondary">
+                            School 1
+                          </Typography>
+                        }
                       />
                     </FormGroup>
                   </MenuPopover>
                 </StyledTableCell>
                 <StyledTableCell align="left">
                   Sınıf
-                  <IconButton ref={anchorRef} onClick={handleOpen}>
+                  <IconButton
+                    onClick={(e) => {
+                      handleClick(e, "class");
+                    }}
+                  >
                     <Iconify icon="ep:arrow-down" color="text.secondary" />
                   </IconButton>
                   <MenuPopover
-                    open={open}
-                    onClose={handleClose}
-                    anchorEl={anchorRef.current}
-                    sx={{ width: 130 }}
+                    open={Boolean(anchorEl.class)}
+                    onClose={() => handleClose("class")}
+                    anchorEl={anchorEl.class}
+                    sx={{ width: 180, padding: 1 }}
                   >
                     <FormGroup>
                       <FormControlLabel
@@ -183,14 +207,18 @@ const LevelingUp = () => {
 
                 <StyledTableCell align="left">
                   Şube
-                  <IconButton ref={anchorRef} onClick={handleOpen}>
+                  <IconButton
+                    onClick={(e) => {
+                      handleClick(e, "branch");
+                    }}
+                  >
                     <Iconify icon="ep:arrow-down" color="text.secondary" />
                   </IconButton>
                   <MenuPopover
-                    open={open}
-                    onClose={handleClose}
-                    anchorEl={anchorRef.current}
-                    sx={{ width: 130 }}
+                    open={Boolean(anchorEl.branch)}
+                    onClose={() => handleClose("branch")}
+                    anchorEl={anchorEl.branch}
+                    sx={{ width: 180, padding: 1 }}
                   >
                     <FormGroup>
                       <FormControlLabel
@@ -206,14 +234,18 @@ const LevelingUp = () => {
                 </StyledTableCell>
                 <StyledTableCell align="left">
                   Seviye
-                  <IconButton ref={anchorRef} onClick={handleOpen}>
+                  <IconButton
+                    onClick={(e) => {
+                      handleClick(e, "level");
+                    }}
+                  >
                     <Iconify icon="ep:arrow-down" color="text.secondary" />
                   </IconButton>
                   <MenuPopover
-                    open={open}
-                    onClose={handleClose}
-                    anchorEl={anchorRef.current}
-                    sx={{ width: 130 }}
+                    open={Boolean(anchorEl.level)}
+                    onClose={() => handleClose("level")}
+                    anchorEl={anchorEl.level}
+                    sx={{ width: 180, padding: 1 }}
                   >
                     <FormGroup>
                       <FormControlLabel
@@ -263,7 +295,7 @@ const LevelingUp = () => {
             variant="contained"
             color="success"
             className="rounded-0"
-            onClick={() => navigate("/dashboard/level-book-select")}
+            onClick={() => navigate("/dashboard/leveling/book-select")}
           >
             Göster
           </Button>

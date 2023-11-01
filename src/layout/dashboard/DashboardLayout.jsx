@@ -9,7 +9,7 @@ import Nav from "./nav";
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 109;
-const APP_BAR_DESKTOP = 120;
+const APP_BAR_DESKTOP = 100;
 
 const StyledRoot = styled("div")({
   display: "flex",

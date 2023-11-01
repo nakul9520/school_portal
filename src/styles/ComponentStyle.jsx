@@ -1,5 +1,5 @@
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import { styled } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 import TableRow from "@mui/material/TableRow";
 import Table from "@mui/material/Table";
 import { IconButton } from "@mui/material";
@@ -26,7 +26,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.background.tableBgBody,
+    backgroundColor: alpha(theme.palette.primary.main, 0.1),
   },
   // hide last border
   "&:last-child td, &:last-child th": {

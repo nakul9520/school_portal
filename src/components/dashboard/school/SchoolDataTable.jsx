@@ -1,11 +1,21 @@
-import { Box, Stack } from "@mui/material";
+import {
+  Box,
+  LinearProgress,
+  Stack,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import Paper from "@mui/material/Paper";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 
 import Iconify from "components/common/iconify/Iconify";
+import { isEmpty } from "lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
+import { deleteSchool } from "redux/store/slice/dashboard/userSlice";
 import {
   StyledTable,
   StyledTableCell,
@@ -13,54 +23,27 @@ import {
 } from "styles/ComponentStyle";
 
 const SchoolDataTable = () => {
-  const rows = [
-    {
-      order: 1,
-      schoolName: "school 1",
-      schoolAdministrator: "Admin 1",
-      email: "123@gmail.com",
-      userName: "Admin 1",
-      password: "12345",
-      activationDate: "01.01.2023",
-      licenseExpirationDate: "31.12.2023",
-      transactions: [
-        <Iconify icon="el:edit" />,
-        <Iconify icon="mdi:checkbox-outline" />,
-        <Iconify icon="uiw:delete" />,
-      ],
-    },
-    {
-      order: 2,
-      schoolName: "school 2",
-      schoolAdministrator: "Admin 2",
-      email: "123@gmail.com",
-      userName: "Admin 2",
-      password: "12345",
-      activationDate: "01.01.2023",
-      licenseExpirationDate: "31.12.2023",
-      transactions: [
-        <Iconify icon="el:edit" />,
-        <Iconify icon="mdi:checkbox-outline" />,
-        <Iconify icon="uiw:delete" />,
-      ],
-    },
-    {
-      order: 3,
-      schoolName: "school 3",
-      schoolAdministrator: "Admin 3",
-      email: "123@gmail.com",
-      userName: "Admin 3",
-      password: "12345",
-      activationDate: "01.01.2023",
-      licenseExpirationDate: "31.12.2023",
-      transactions: [
-        <Iconify icon="el:edit" />,
-        <Iconify icon="mdi:checkbox-outline" />,
-        <Iconify icon="uiw:delete" />,
-      ],
-    },
-  ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { schoolListInfo, loading } = useSelector((state) => state.users);
+  const schoolList = schoolListInfo.data ?? [];
+  // console.log("schoolList", schoolList);
 
+  const handleDelete = (id) => {
+    dispatch(deleteSchool({ id: [id] }))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          console.log(result);
+          toast.success(result.message);
+          dispatch(getSchoolList({ search: "", page: 1 }));
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
+  };
   return (
     <>
       <TableContainer component={Paper} className="rounded-0 mt-3">
@@ -82,36 +65,64 @@ const SchoolDataTable = () => {
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows.map((row, index) => (
-              <StyledTableRow key={index}>
-                <StyledTableCell scope="row">{row.order}</StyledTableCell>
-                <StyledTableCell align="left">{row.schoolName}</StyledTableCell>
-                <StyledTableCell align="left">
-                  {row.schoolAdministrator}
-                </StyledTableCell>
-                <StyledTableCell align="left">{row.email}</StyledTableCell>
-                <StyledTableCell align="left">{row.userName}</StyledTableCell>
-                <StyledTableCell align="left">{row.password}</StyledTableCell>
-                <StyledTableCell align="left">
-                  {row.activationDate}
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  {row.licenseExpirationDate}
-                </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  className="d-flex align-items-center"
-                >
-                  <Stack direction="row" className="align-items-center  gap-2">
-                    {row.transactions.map((iconRow, subIndex) => (
-                      <Box key={subIndex}> {iconRow}</Box>
-                    ))}
-                  </Stack>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
+          {!loading ? (
+            <TableBody>
+              {isEmpty(schoolList)
+                ? null
+                : schoolList.map((row, index) => (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell scope="row">{row.id}</StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row.school_name}
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {" "}
+                        {row.school_admin}
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row.school_email}
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row.user_name}
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row.school_code}
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row.activation_date}
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row.expired_at}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="left"
+                        className="d-flex align-items-center"
+                      >
+                        <Stack
+                          direction="row"
+                          className="align-items-center  gap-2"
+                        >
+                          <Box
+                            onClick={() =>
+                              navigate("/dashboard/add-school", { state: row })
+                            }
+                          >
+                            <Iconify icon="el:edit" />
+                          </Box>
+                          <Box>
+                            <Iconify icon="mdi:checkbox-outline" />
+                          </Box>
+                          <Box onClick={() => handleDelete(row.id)}>
+                            <Iconify icon="uiw:delete" />
+                          </Box>
+                        </Stack>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+            </TableBody>
+          ) : (
+            <LinearProgress />
+          )}
         </StyledTable>
       </TableContainer>
     </>
