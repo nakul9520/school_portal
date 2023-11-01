@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Box,
   Button,
@@ -9,11 +11,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Iconify from "components/common/iconify/Iconify";
-import React from "react";
-import StudentDataTable from "./StudentDataTable";
-import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+
+import { useNavigate } from "react-router-dom";
+
+
+import Iconify from "components/common/iconify/Iconify";
+import StudentDataTable from "./StudentDataTable";
 
 const Student = () => {
   const navigate = useNavigate();

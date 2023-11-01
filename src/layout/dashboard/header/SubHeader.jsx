@@ -1,14 +1,15 @@
 import PropTypes from "prop-types";
+
 // @mui
 import { Box, Toolbar, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
 // utils
+import { useLocation } from "react-router-dom";
 
 // components
-import { filter, get } from "lodash";
-import { useLocation } from "react-router-dom";
+import PathBreadcrumbs from "components/common/breadcrumbs/PathBreadcrumbs";
 import navConfig from "../nav/config";
-import PathBreadcrumbs from "../../../components/common/breadcrumbs/PathBreadcrumbs";
 
 // ----------------------------------------------------------------------
 
@@ -31,15 +32,26 @@ SubHeader.propTypes = {
 export default function SubHeader({ onOpenNav }) {
   const location = useLocation();
 
-  const headingContent = filter(navConfig, (item) => {
-    return item.path === location.pathname;
-  });
+  const findNavItem = (items, pathname) => {
+    for (const item of items) {
+      if (item.path === pathname) {
+        return item; // Found a matching item at the current level
+      } else if (item.children) {
+        const childMatch = findNavItem(item.children, pathname);
+        if (childMatch) {
+          return childMatch; // Found a matching item among the children
+        }
+      }
+    }
+    return null; // No matching item found
+  };
 
+  const headingContent = findNavItem(navConfig, location.pathname);
   return (
     <StyledToolbar>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="body2" color="text.contrastText">
-          {get(headingContent, "[0].title", "")}
+          {headingContent.title}
         </Typography>
       </Box>
       <Box sx={{ flexGrow: 1 }} />

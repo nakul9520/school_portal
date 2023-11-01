@@ -8,23 +8,24 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 const breadcrumbNameMap = {
   "/dashboard": "Dashboard",
 
-  "/dashboard/school": "Okul",
-  "/dashboard/add-school": "Okul",
-  "/dashboard/mass-school": "Okul",
-
-  "/dashboard/class": "Sınıf",
-  "/dashboard/add-class": "Sınıf",
-  "/dashboard/mass-class": "Sınıf",
-
-  "/dashboard/teacher": "Öğretmen",
-  "/dashboard/add-teacher": "Öğretmen",
-  "/dashboard/mass-teacher": "Öğretmen",
-
-  "/dashboard/student": "Öğrenci",
-  "/dashboard/add-student": "Öğrenci",
-  "/dashboard/mass-student": "Öğrenci",
-
   "/dashboard/username-and-groups": "Kullanıcı Adı ve Gruplar",
+  
+  "/dashboard/username-and-groups/school": "Okul",
+  "/dashboard/username-and-groups/add-school": "Okul",
+  "/dashboard/username-and-groups/mass-school": "Okul",
+
+  "/dashboard/username-and-groups/class": "Sınıf",
+  "/dashboard/username-and-groups/add-class": "Sınıf",
+  "/dashboard/username-and-groups/mass-class": "Sınıf",
+
+  "/dashboard/username-and-groups/teacher": "Öğretmen",
+  "/dashboard/username-and-groups/add-teacher": "Öğretmen",
+  "/dashboard/username-and-groups/mass-teacher": "Öğretmen",
+
+  "/dashboard/username-and-groups/student": "Öğrenci",
+  "/dashboard/username-and-groups/add-student": "Öğrenci",
+  "/dashboard/username-and-groups/mass-student": "Öğrenci",
+
 
   "/dashboard/reports": "Raporlar",
   "/dashboard/reports/school-reports": "Okul Raporlar",

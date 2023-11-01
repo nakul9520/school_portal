@@ -10,7 +10,7 @@ const PublicRoute = () => {
   return (
     <>
       {authToken ? (
-        <Navigate to="/dashboard/school" state={{ from: location }} replace />
+        <Navigate to="/dashboard/username-and-groups/school" state={{ from: location }} replace />
       ) : (
         <Outlet />
       )}

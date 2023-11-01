@@ -9,21 +9,22 @@ import Login from "components/auth/Login";
 import DashboardLayout from "../layout/dashboard/DashboardLayout";
 
 import { Typography } from "@mui/material";
-import AddSchoolForm from "components/dashboard/school/AddSchoolForm";
-import Dashboard from "components/dashboard/school/Dashboard";
-import MassSchool from "components/dashboard/school/MassSchool";
 
-import AddClassForm from "components/dashboard/class/AddClassForm";
-import Class from "components/dashboard/class/Class";
-import MassClass from "components/dashboard/class/MassClass";
+import Dashboard from "components/dashboard/username-and-groups/school/Dashboard";
+import AddSchoolForm from "components/dashboard/username-and-groups/school/AddSchoolForm";
+import MassSchool from "components/dashboard/username-and-groups/school/MassSchool";
 
-import AddTeacherForm from "components/dashboard/teacher/AddTeacherForm";
-import MassTeacher from "components/dashboard/teacher/MassTeacher";
-import Teacher from "components/dashboard/teacher/Teacher";
+import AddClassForm from "components/dashboard/username-and-groups/class/AddClassForm";
+import Class from "components/dashboard/username-and-groups/class/Class";
+import MassClass from "components/dashboard/username-and-groups/class/MassClass";
 
-import AddStudentForm from "components/dashboard/student/AddStudentForm";
-import MassStudent from "components/dashboard/student/MassStudent";
-import Student from "components/dashboard/student/Student";
+import AddTeacherForm from "components/dashboard/username-and-groups/teacher/AddTeacherForm";
+import MassTeacher from "components/dashboard/username-and-groups/teacher/MassTeacher";
+import Teacher from "components/dashboard/username-and-groups/teacher/Teacher";
+
+import AddStudentForm from "components/dashboard/username-and-groups/student/AddStudentForm";
+import MassStudent from "components/dashboard/username-and-groups/student/MassStudent";
+import Student from "components/dashboard/username-and-groups/student/Student";
 
 import Reports from "components/dashboard/reports/Reports";
 
@@ -50,6 +51,7 @@ import GetSystemReportTable from "components/dashboard/reports/system-report/Get
 import SystemReports from "components/dashboard/reports/system-report/SystemReports";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
+import UsersAndGroups from "components/dashboard/username-and-groups/UsersAndGroups";
 
 // private
 // const DashboardLayout = Loadable(
@@ -62,29 +64,77 @@ const AppRoutes = () => {
       <Routes>
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route element={<Navigate to="/dashboard/school" />} index />
-            {/* School */}
-            <Route path="/dashboard/school" element={<Dashboard />} />
-            <Route path="/dashboard/mass-school" element={<MassSchool />} />
-            <Route path="/dashboard/add-school" element={<AddSchoolForm />} />
-            {/* Class */}
-            <Route path="/dashboard/class" element={<Class />} />
-            <Route path="/dashboard/add-class" element={<AddClassForm />} />
-            <Route path="/dashboard/mass-class" element={<MassClass />} />
-            {/* Teacher's */}
-            <Route path="/dashboard/teacher" element={<Teacher />} />
-            <Route path="/dashboard/add-teacher" element={<AddTeacherForm />} />
-            <Route path="/dashboard/mass-teacher" element={<MassTeacher />} />
-            {/* Student */}
-            <Route path="/dashboard/student" element={<Student />} />
-            <Route path="/dashboard/add-student" element={<AddStudentForm />} />
-            <Route path="/dashboard/mass-student" element={<MassStudent />} />
+            <Route
+              element={<Navigate to="/dashboard/username-and-groups" />}
+              index
+            />
+
+            {/* User & Groups */}
             <Route
               path="/dashboard/username-and-groups"
-              element={
-                <Typography variant="h5">Username And Groups</Typography>
-              }
-            />
+              element={<UsersAndGroups />}
+            >
+              <Route
+                element={
+                  <Navigate to="/dashboard/username-and-groups/school" />
+                }
+                index
+              />
+              {/* school */}
+              <Route
+                path="/dashboard/username-and-groups/school"
+                element={<Dashboard />}
+              />
+              <Route
+                path="/dashboard/username-and-groups/mass-school"
+                element={<MassSchool />}
+              />
+              <Route
+                path="/dashboard/username-and-groups/add-school"
+                element={<AddSchoolForm />}
+              />
+
+              {/* Class */}
+              <Route
+                path="/dashboard/username-and-groups/class"
+                element={<Class />}
+              />
+              <Route
+                path="/dashboard/username-and-groups/add-class"
+                element={<AddClassForm />}
+              />
+              <Route
+                path="/dashboard/username-and-groups/mass-class"
+                element={<MassClass />}
+              />
+              {/* Teacher's */}
+              <Route
+                path="/dashboard/username-and-groups/teacher"
+                element={<Teacher />}
+              />
+              <Route
+                path="/dashboard/username-and-groups/add-teacher"
+                element={<AddTeacherForm />}
+              />
+              <Route
+                path="/dashboard/username-and-groups/mass-teacher"
+                element={<MassTeacher />}
+              />
+              {/* Student */}
+              <Route
+                path="/dashboard/username-and-groups/student"
+                element={<Student />}
+              />
+              <Route
+                path="/dashboard/username-and-groups/add-student"
+                element={<AddStudentForm />}
+              />
+              <Route
+                path="/dashboard/username-and-groups/mass-student"
+                element={<MassStudent />}
+              />
+            </Route>
+
             {/* Reports */}
             <Route path="/dashboard/reports" element={<Reports />}>
               <Route

@@ -1,3 +1,5 @@
+import { useRef, useState } from "react";
+
 import {
   Box,
   FormControlLabel,
@@ -10,16 +12,15 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import MenuPopover from "components/common/MenuPopover";
 
+import MenuPopover from "components/common/MenuPopover";
 import Iconify from "components/common/iconify/Iconify";
-import { useRef, useState } from "react";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import CMCheckBox from "theme/overrides/CMCheckBox";
+import CMCheckBox from "components/common/CMCheckBox";
 
 const StudentDataTable = () => {
   const rows = [

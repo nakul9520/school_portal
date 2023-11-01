@@ -14,28 +14,35 @@ const icon = (name) => (
 const navConfig = [
   {
     id: 1,
-    title: "Okul",
-    path: "/dashboard/school",
-  },
-  { id: 2, title: "Sınıf", path: "/dashboard/class", icon: icon("class") },
-  {
-    id: 3,
-    title: "Öğretmen",
-    path: "/dashboard/teacher",
-    icon: icon("teachers"),
-  },
-  {
-    id: 4,
-    title: "Öğrenci",
-    path: "/dashboard/student",
-    icon: icon("students"),
-    divider: true,
-  },
-  {
-    id: 5,
     title: "Kullanıcı Adı ve Gruplar",
-    path: "/dashboard/username-and-groups",
     icon: icon("groups"),
+    path: "/dashboard/username-and-groups",
+    type: "collapse",
+    children: [
+      {
+        id: 1.1,
+        title: "Okul",
+        path: "/dashboard/username-and-groups/school",
+      },
+      {
+        id: 1.2,
+        title: "Sınıf",
+        path: "/dashboard/username-and-groups/class",
+        // icon: icon("class"),
+      },
+      {
+        id: 1.3,
+        title: "Öğretmen",
+        path: "/dashboard/username-and-groups/teacher",
+        // icon: icon("teachers"),
+      },
+      {
+        id: 1.4,
+        title: "Öğrenci",
+        path: "/dashboard/username-and-groups/student",
+        // icon: icon("students"),
+      },
+    ],
   },
   {
     id: 6,
