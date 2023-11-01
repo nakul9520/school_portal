@@ -7,16 +7,42 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 
 const breadcrumbNameMap = {
   "/dashboard": "Dashboard",
-  "/dashboard/school": "Okul",
-  "/dashboard/class": "Sınıf",
-  "/dashboard/teacher": "Öğretmen",
-  "/dashboard/student": "Öğrenci",
+
   "/dashboard/username-and-groups": "Kullanıcı Adı ve Gruplar",
+  
+  "/dashboard/username-and-groups/school": "Okul",
+  "/dashboard/username-and-groups/add-school": "Okul",
+  "/dashboard/username-and-groups/mass-school": "Okul",
+
+  "/dashboard/username-and-groups/class": "Sınıf",
+  "/dashboard/username-and-groups/add-class": "Sınıf",
+  "/dashboard/username-and-groups/mass-class": "Sınıf",
+
+  "/dashboard/username-and-groups/teacher": "Öğretmen",
+  "/dashboard/username-and-groups/add-teacher": "Öğretmen",
+  "/dashboard/username-and-groups/mass-teacher": "Öğretmen",
+
+  "/dashboard/username-and-groups/student": "Öğrenci",
+  "/dashboard/username-and-groups/add-student": "Öğrenci",
+  "/dashboard/username-and-groups/mass-student": "Öğrenci",
+
+
   "/dashboard/reports": "Raporlar",
+  "/dashboard/reports/school-reports": "Okul Raporlar",
+  "/dashboard/reports/get-school-reports": "Okul Raporlar",
+  "/dashboard/reports/book-reports": "Kitap Raporlar",
+  "/dashboard/reports/get-book-reports": "Kitap Raporlar",
+  "/dashboard/reports/system-reports": "Sistem Raporlar",
+  "/dashboard/reports/get-system-reports": "Sistem Raporlar",
+
   "/dashboard/leveling": "Seviyelendirme",
+
   "/dashboard/assignment": "Görevlendirme",
+
   "/dashboard/contents": "İçerik",
+
   "/dashboard/system-settings": "Sistem Ayarları",
+
   "/dashboard/dramatization": "Oyunlaştırma",
 };
 
@@ -36,7 +62,7 @@ const PathBreadcrumbs = () => {
     <>
       {!hideBreadcrumb ? (
         <Stack direction="row" className="align-items-center gap-2 my-2">
-          <Breadcrumbs aria-label="breadcrumb" separator="-" maxItems={2}>
+          <Breadcrumbs aria-label="breadcrumb" separator="-">
             {pathnames.map((value, index) => {
               const last = Boolean(index === pathnames.length - 1);
               const to = `/${pathnames.slice(0, index + 1).join("/")}`;

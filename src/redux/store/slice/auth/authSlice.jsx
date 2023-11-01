@@ -1,0 +1,78 @@
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import Api from "services/Api";
+
+import AxiosDefault from "services/AxiosDefault";
+
+const initialState = {
+  profileInfo: {},
+  loading: false,
+};
+
+export const postLogin = createAsyncThunk("auth/postLogin", async (data) => {
+  try {
+    const response = await AxiosDefault({
+      method: "POST",
+      url: Api.ADMIN_LOGIN,
+      data: data,
+    });
+    return response.data;
+  } catch (err) {
+    return {
+      status: err.response.data.status,
+      message: err.response.data.message,
+    };
+  }
+});
+export const getProfileInfo = createAsyncThunk(
+  "auth/getProfileInfo",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.GET_PROFILE,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+const authSlice = createSlice({
+  name: "auth",
+  initialState,
+  reducers: {
+    logout: (state) => {
+      state = {};
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(postLogin.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(postLogin.fulfilled, (state, { payload }) => {
+        state.loading = false;
+      })
+      .addCase(postLogin.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getProfileInfo.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getProfileInfo.fulfilled, (state, { payload }) => {
+        state.profileInfo = payload.data??{};
+        state.loading = false;
+      })
+      .addCase(getProfileInfo.rejected, (state) => {
+        state.loading = false;
+      });
+  },
+});
+
+export const { logout } = authSlice.actions;
+export default authSlice.reducer;

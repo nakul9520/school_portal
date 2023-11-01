@@ -1,12 +1,9 @@
-import React from "react";
-// import SchoolReportTable from "./school-report/SchoolReportsTable";
-import BookReportTable from "./book-report/BookReportTable";
+import { Outlet } from "react-router-dom";
 
 const Reports = () => {
   return (
     <>
-     {/* <SchoolReportTable /> */}
-     <BookReportTable />
+      <Outlet />
     </>
   );
 };

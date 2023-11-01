@@ -42,6 +42,22 @@ const SLATE_BLUE = {
   darker: "#1E1375",
   contrastText: "#ffffff",
 };
+const SAINS_BURY = {
+  lighter: "#DCFAF1",
+  light: "#91E2D8",
+  main: "#419B9F",
+  dark: "#206172",
+  darker: "#0C344C",
+  contrastText: "#ffffff",
+};
+const MINT = {
+  lighter: "#E5FBE9",
+  light: "#ACE9C3",
+  main: "#67B695",
+  dark: "#338371",
+  darker: "#135756",
+  contrastText: "#ffffff",
+};
 const INFO = {
   lighter: "#DCFAFD",
   light: "#96E2F8",
@@ -66,7 +82,7 @@ const WARNING = {
   main: "#F3913D",
   dark: "#AE511E",
   darker: "#74250B",
-  contrastText: GREY[800],
+  contrastText: "#ffffff",
 };
 
 const ERROR = {
@@ -83,6 +99,8 @@ const palette = {
   primary: PRIMARY,
   secondary: SECONDARY,
   slateblue: SLATE_BLUE,
+  sainsbury: SAINS_BURY,
+  mint: MINT,
   info: INFO,
   success: SUCCESS,
   warning: WARNING,

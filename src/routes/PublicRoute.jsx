@@ -1,21 +1,16 @@
 import React from "react";
 
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-
-import { getSession } from "services/service";
+import { getSession } from "services/utiles";
 
 const PublicRoute = () => {
   const location = useLocation();
-  const { Authorization, setPassword } = getSession() ?? "";
+  const { authToken } = getSession();
   console.log("PublicRoute");
   return (
     <>
-      {Authorization ? (
-        setPassword === "false" ? (
-          <Navigate to="/create-password" state={{ from: location }} replace />
-        ) : (
-          <Navigate to="/dashboard" state={{ from: location }} replace />
-        )
+      {authToken ? (
+        <Navigate to="/dashboard/username-and-groups/school" state={{ from: location }} replace />
       ) : (
         <Outlet />
       )}

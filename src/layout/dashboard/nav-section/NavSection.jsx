@@ -1,17 +1,18 @@
 import PropTypes from "prop-types";
-import { NavLink as RouterLink } from "react-router-dom";
+import { NavLink as RouterLink, useLocation } from "react-router-dom";
 // @mui
 import {
   Box,
+  Collapse,
   Divider,
   List,
   ListItemText,
   Typography,
-  alpha,
 } from "@mui/material";
 //
-import { StyledNavItem, StyledNavItemIcon } from "./styles";
 import { useTheme } from "@emotion/react";
+import React, { useEffect, useState } from "react";
+import { StyledNavItem, StyledNavItemIcon } from "./styles";
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +21,12 @@ NavSection.propTypes = {
 };
 
 export default function NavSection({ data = [], ...other }) {
+  const [open, setOpen] = useState(0);
+
+  const handleToggle = (id) => {
+    setOpen((preId) => (preId === id ? 0 : id));
+  };
+
   const theme = useTheme();
   return (
     <Box {...other} className="h-100">
@@ -40,10 +47,21 @@ export default function NavSection({ data = [], ...other }) {
       </Box>
       <List disablePadding sx={{ pt: 4, px: 0 }} className="h-100">
         {data.map((item) => (
-          <>
-            <NavItem key={item.title} item={item} />
+          <React.Fragment key={item.id}>
+            <NavItem item={item} handleToggle={() => handleToggle(item.id)} />
             {item.divider ? <Divider className="my-3" /> : null}
-          </>
+            {item.type === "collapse" && (
+              <Collapse in={open === item.id}>
+                {item.children.map((childItem, index) => (
+                  <NavItem
+                    key={index}
+                    item={childItem}
+                    handleToggle={handleToggle}
+                  />
+                ))}
+              </Collapse>
+            )}
+          </React.Fragment>
         ))}
       </List>
     </Box>
@@ -56,29 +74,56 @@ NavItem.propTypes = {
   item: PropTypes.object,
 };
 
-function NavItem({ item }) {
+function NavItem({ item, handleToggle }) {
   const { title, path, icon } = item;
+  const { pathname } = useLocation();
+
+  const [pathStatus, setPathStatus] = useState(1);
+
+  useEffect(() => {
+    const pathStatusMappings = {
+      "/dashboard/username-and-groups": 1,
+      "/dashboard/username-and-groups/school": 1.1,
+      "/dashboard/username-and-groups/class": 1.2,
+      "/dashboard/username-and-groups/teacher": 1.3,
+      "/dashboard/username-and-groups/student": 1.4,
+      "/dashboard/reports": 6,
+      "/dashboard/reports/school-reports": 6.1,
+      "/dashboard/reports/book-reports": 6.2,
+      "/dashboard/reports/system-reports": 6.3,
+      "/dashboard/leveling": 7,
+      "/dashboard/assignment": 8,
+      "/dashboard/contents/platform-design": 9.1,
+      "/dashboard/contents/library-categories": 9.2,
+      "/dashboard/contents/book-design": 9.3,
+      "/dashboard/system-settings": 10,
+      "/dashboard/dramatization": 11,
+    };
+    // Find the parent id of the current pathname
+    let parentItem = null;
+    for (const path in pathStatusMappings) {
+      if (pathname === path) {
+        parentItem = pathStatusMappings[path];
+        break;
+      } else if (
+        Array.isArray(pathStatusMappings[path]) &&
+        pathStatusMappings[path].includes(pathname)
+      ) {
+        parentItem = pathStatusMappings[path][0];
+        break;
+      }
+    }
+    if (parentItem) {
+      setPathStatus(parentItem);
+    }
+  }, [pathname]);
 
   return (
     <StyledNavItem
       component={RouterLink}
+      onClick={handleToggle}
       to={path}
-      sx={{
-        "&.active": {
-          color: "text.primary",
-          backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
-          fontWeight: "fontWeightBold",
-          "&::before": {
-            content: "''",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "5px",
-            height: "100%",
-            background: (theme) => theme.palette.primary.main,
-          },
-        },
-      }}
+      selected={item.id === pathStatus}
     >
       <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
 

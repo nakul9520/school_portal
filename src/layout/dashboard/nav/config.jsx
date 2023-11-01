@@ -13,64 +13,105 @@ const icon = (name) => (
 
 const navConfig = [
   {
-    title: "Okul",
-    path: "/dashboard/school", //when you change link update missing and wanted short details page
-    icon: icon("school"),
-  },
-  {
-    title: "Sınıf",
-    path: "/dashboard/class",
-    icon: icon("class"),
-  },
-  {
-    title: "Öğretmen",
-    path: "/dashboard/teacher",
-    icon: icon("teachers"),
-  },
-  {
-    title: "Öğrenci",
-    path: "/dashboard/student",
-    icon: icon("students"),
-    divider: true,
-  },
-  {
+    id: 1,
     title: "Kullanıcı Adı ve Gruplar",
-    path: "/dashboard/username-and-groups",
     icon: icon("groups"),
+    // path: "/dashboard/username-and-groups",
+    type: "collapse",
+    children: [
+      {
+        id: 1.1,
+        title: "Okul",
+        path: "/dashboard/username-and-groups/school",
+      },
+      {
+        id: 1.2,
+        title: "Sınıf",
+        path: "/dashboard/username-and-groups/class",
+        // icon: icon("class"),
+      },
+      {
+        id: 1.3,
+        title: "Öğretmen",
+        path: "/dashboard/username-and-groups/teacher",
+        // icon: icon("teachers"),
+      },
+      {
+        id: 1.4,
+        title: "Öğrenci",
+        path: "/dashboard/username-and-groups/student",
+        // icon: icon("students"),
+      },
+    ],
   },
   {
+    id: 2,
     title: "Raporlar",
-    path: "/dashboard/reports",
     icon: icon("reports"),
-    // children: [
-    //   {
-    //     title: "Pin Up Board",
-    //     path: "/dashboard/reports",
-    //     icon: icon("reports"),
-    //   },
-    // ],
+    // path: "/dashboard/reports",
+    type: "collapse",
+    children: [
+      {
+        id: 2.1,
+        title: "Okul Raporları",
+        path: "/dashboard/reports/school-reports",
+      },
+      {
+        id: 2.2,
+        title: "Kitap Raporları",
+        path: "/dashboard/reports/book-reports",
+      },
+      {
+        id: 2.3,
+        title: "Sistem Raporları",
+        path: "/dashboard/reports/system-reports",
+      },
+    ],
   },
   {
+    id: 3,
     title: "Seviyelendirme",
     path: "/dashboard/leveling",
     icon: icon("leveling"),
   },
   {
+    id: 4,
     title: "Görevlendirme",
     path: "/dashboard/assignment",
     icon: icon("assignment"),
   },
   {
+    id: 5,
     title: "İçerik",
     path: "/dashboard/contents",
     icon: icon("contents"),
+    type: "collapse",
+    children: [
+      {
+        id: 5.1,
+        title: "Platform Tasarımı",
+        path: "/dashboard/contents/platform-design",
+      },
+      {
+        id: 5.2,
+        title: "Kitaplık Kategorileri",
+        path: "/dashboard/contents/library-categories",
+      },
+      {
+        id: 5.3,
+        title: "Kitap Tasarımı",
+        path: "/dashboard/contents/book-design",
+      },
+    ],
   },
   {
+    id: 6,
     title: "Sistem Ayarları",
     path: "/dashboard/system-settings",
     icon: icon("system-settings"),
   },
   {
+    id: 7,
     title: "Oyunlaştırma",
     path: "/dashboard/dramatization",
     icon: icon("dramatization"),

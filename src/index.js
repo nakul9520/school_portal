@@ -5,16 +5,20 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import ThemeProvider from "./theme";
+import { Provider } from "react-redux";
+import store from "redux/store/Store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <>
-    <ThemeProvider>
-      <BrowserRouter basename="/okouio/admin-portal">
-        <App />
-      </BrowserRouter>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider>
+        <BrowserRouter basename="/okouio/admin-portal">
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
   </>
 );
 
