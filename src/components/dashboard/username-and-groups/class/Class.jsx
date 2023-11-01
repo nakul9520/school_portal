@@ -10,14 +10,52 @@ import {
   Typography,
 } from "@mui/material";
 import Iconify from "components/common/iconify/Iconify";
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ClassDataTable from "./ClassDataTable";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { useDispatch } from "react-redux";
+import { debounce, get } from "lodash";
+import { getClassList } from "redux/store/slice/dashboard/userSlice";
 
 const Class = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const theme = useTheme();
+
+  const [filterOptions, setFilterOptions] = useState({
+    search: "",
+    page: 1,
+    per_page: 10,
+  });
+
+  const getClassListData = useCallback(
+    async (data) => {
+      const payload = {
+        search: get(data, "search", ""),
+        per_page: get(data, "per_page", 10),
+        page: get(data, "page", 1),
+      };
+
+      dispatch(getClassList(payload));
+    },
+    [dispatch]
+  );
+
+  const debounceFn = useMemo(
+    () => debounce(getClassListData, 1000),
+    [getClassListData]
+  );
+
+  useEffect(() => {
+    const payload = {
+      search: "",
+      page: 1,
+      per_page: 10,
+    };
+    debounceFn(payload);
+  }, [debounceFn, dispatch]);
+
   return (
     <>
       <Box
@@ -91,6 +129,13 @@ const Class = () => {
 
           <TextField
             variant="standard"
+            onChange={(e) => {
+              setFilterOptions({ ...filterOptions, search: e.target.value });
+              getClassListData({
+                ...filterOptions,
+                search: e.target.value,
+              });
+            }}
             placeholder="Arama…"
             className="header_search"
             size="small"
@@ -120,7 +165,7 @@ const Class = () => {
             variant="contained"
             color="secondary"
             className="rounded-0"
-            onClick={() => navigate("/dashboard/add-class")}
+            onClick={() => navigate("/dashboard/username-and-groups/add-class")}
           >
             Sınıf Ekle
           </Button>
@@ -128,7 +173,7 @@ const Class = () => {
           <Button
             variant="contained"
             className="rounded-0"
-            onClick={() => navigate("/dashboard/mass-class")}
+            onClick={() => navigate("/dashboard/username-and-groups/mass-class")}
           >
             Toplu Sınıf Ekle
           </Button>

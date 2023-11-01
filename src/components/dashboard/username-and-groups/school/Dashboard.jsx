@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   Box,
@@ -20,17 +20,45 @@ import Iconify from "components/common/iconify/Iconify";
 import SchoolDataTable from "./SchoolDataTable";
 import { useDispatch } from "react-redux";
 import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
+import { debounce, get } from "lodash";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  const [filterData, setFilterData] = useState({ search: "", page: 1 });
+  const [filterOptions, setFilterOptions] = useState({
+    search: "",
+    page: 1,
+    per_page: 10,
+  });
+
+  const getSchoolListData = useCallback(
+    async (data) => {
+      const payload = {
+        search: get(data, "search", ""),
+        per_page: get(data, "per_page", 10),
+        page: get(data, "page", 1),
+      };
+
+      dispatch(getSchoolList(payload));
+    },
+    [dispatch]
+  );
+
+  const debounceFn = useMemo(
+    () => debounce(getSchoolListData, 1000),
+    [getSchoolListData]
+  );
 
   useEffect(() => {
-    dispatch(getSchoolList(filterData));
-  }, [dispatch, filterData]);
+    const payload = {
+      search: "",
+      page: 1,
+      per_page: 10,
+    };
+    debounceFn(payload);
+  }, [debounceFn, dispatch]);
 
   return (
     <>
@@ -107,6 +135,14 @@ const Dashboard = () => {
           <Grid item sm={6} xs={12} className="text-right">
             <TextField
               variant="standard"
+              value={filterOptions.search}
+              onChange={(e) => {
+                setFilterOptions({ ...filterOptions, search: e.target.value });
+                getSchoolListData({
+                  ...filterOptions,
+                  search: e.target.value,
+                });
+              }}
               placeholder="Arama…"
               className="header_search"
               size="small"
@@ -137,7 +173,9 @@ const Dashboard = () => {
             variant="contained"
             color="secondary"
             className="rounded-0"
-            onClick={() => navigate("/dashboard/add-school")}
+            onClick={() =>
+              navigate("/dashboard/username-and-groups/add-school")
+            }
           >
             Okul Ekle
           </Button>
@@ -145,7 +183,9 @@ const Dashboard = () => {
           <Button
             variant="contained"
             className="rounded-0"
-            onClick={() => navigate("/dashboard/mass-school")}
+            onClick={() =>
+              navigate("/dashboard/username-and-groups/mass-school")
+            }
           >
             Toplu Okul Ekle
           </Button>

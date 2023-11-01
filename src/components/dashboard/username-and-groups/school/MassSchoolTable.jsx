@@ -44,6 +44,7 @@ const MassSchoolTable = () => {
     },
   ];
 
+  
   return (
     <>
       <TableContainer component={Paper} className="rounded-0 mt-3">

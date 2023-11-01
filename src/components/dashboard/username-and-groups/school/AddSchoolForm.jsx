@@ -13,8 +13,8 @@ const AddSchoolForm = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const dispatch = useDispatch();
   const schoolData = state ?? {};
+  const dispatch = useDispatch();
 
   console.log("schoolData", schoolData);
 
@@ -25,13 +25,14 @@ const AddSchoolForm = () => {
       activation_date: moment(values.activation_date).format("YYYY-MM-DD"),
       expired_at: moment(values.expired_at).format("YYYY-MM-DD"),
     };
+    console.log("data", data);
     dispatch(addEditSchool(data))
       .unwrap()
       .then((result) => {
         if (result.success) {
           console.log(result);
           toast.success(result.message);
-          navigate("/dashboard/school");
+          navigate("/dashboard/username-and-groups/school");
         }
       })
       .catch((err) => {
@@ -41,7 +42,7 @@ const AddSchoolForm = () => {
 
     console.log("data", data);
   };
-  return (
+  return (  
     <>
       <Box
         component="section"
@@ -61,9 +62,8 @@ const AddSchoolForm = () => {
             school_admin: schoolData.school_admin ?? "",
             school_email: schoolData.school_email ?? "",
             school_code: schoolData.school_code ?? "",
-            activation_date:
-              moment(schoolData.activation_date) ?? moment("2022-04-17"),
-            expired_at: moment(schoolData.expired_at) ?? moment("2022-04-17"),
+            activation_date: moment(schoolData.activation_date) ?? moment(),
+            expired_at: moment(schoolData.expired_at) ?? moment(),
           }}
           validationSchema={addEditSchoolValidation}
           onSubmit={(value, action) => {
@@ -80,6 +80,7 @@ const AddSchoolForm = () => {
             touched,
           }) => (
             <form onSubmit={handleSubmit} className="h-100">
+              {console.log("values>>", values)}
               <Box className="custom_form border">
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
@@ -213,8 +214,12 @@ const AddSchoolForm = () => {
                     Aktivasyon Tarihi
                   </Typography>
                   <MobileDatePicker
+                    name="activation_date"
+                    className="w-100"
                     value={values.activation_date}
-                    onChange={(newValue) => setFieldValue(newValue)}
+                    onChange={(newValue) =>
+                      setFieldValue("activation_date", newValue)
+                    }
                   />
                 </Box>
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
@@ -226,8 +231,12 @@ const AddSchoolForm = () => {
                     Lisans Sonlanma Tarihi
                   </Typography>
                   <MobileDatePicker
+                    className="w-100"
+                    name="expired_at"
                     value={values.expired_at}
-                    onChange={(newValue) => setFieldValue(newValue)}
+                    onChange={(newValue) => {
+                      setFieldValue("expired_at", newValue);
+                    }}
                   />
                 </Box>
               </Box>

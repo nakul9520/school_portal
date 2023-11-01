@@ -9,6 +9,12 @@ const Api = {
   GET_SCHOOL_LIST: "schoolList",
   GET_SCHOOL_DETAIL: "getSchool",
   DELETE_SCHOOL: "schoolDelete",
+
+  // class
+  ADD_EDIT_CLASS: "addEditClass",
+  GET_CLASS_LIST: "classlist",
+  GET_CLASS_DETAIL: "getclass",
+  DELETE_CLASS: "classDelete",
 };
 
 export default Api;
