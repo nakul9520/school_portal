@@ -74,15 +74,10 @@ const AppRoutes = () => {
               path="/dashboard/username-and-groups"
               element={<UsersAndGroups />}
             >
-              <Route
-                element={
-                  <Navigate to="/dashboard/username-and-groups/school" />
-                }
-                index
-              />
               {/* school */}
               <Route
                 path="/dashboard/username-and-groups/school"
+                index
                 element={<Dashboard />}
               />
               <Route

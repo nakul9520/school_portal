@@ -82,19 +82,17 @@ function NavItem({ item, handleToggle }) {
 
   useEffect(() => {
     const pathStatusMappings = {
-      "/dashboard/school": 1,
-      "/dashboard/class": 2,
-      "/dashboard/teacher": 3,
-      "/dashboard/student": 4,
-      "/dashboard/username-and-groups": 5,
+      "/dashboard/username-and-groups": 1,
+      "/dashboard/username-and-groups/school": 1.1,
+      "/dashboard/username-and-groups/class": 1.2,
+      "/dashboard/username-and-groups/teacher": 1.3,
+      "/dashboard/username-and-groups/student": 1.4,
       "/dashboard/reports": 6,
       "/dashboard/reports/school-reports": 6.1,
       "/dashboard/reports/book-reports": 6.2,
       "/dashboard/reports/system-reports": 6.3,
-
       "/dashboard/leveling": 7,
       "/dashboard/assignment": 8,
-      
       "/dashboard/contents/platform-design": 9.1,
       "/dashboard/contents/library-categories": 9.2,
       "/dashboard/contents/book-design": 9.3,
@@ -115,7 +113,6 @@ function NavItem({ item, handleToggle }) {
         break;
       }
     }
-
     if (parentItem) {
       setPathStatus(parentItem);
     }

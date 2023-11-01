@@ -51,7 +51,7 @@ export default function SubHeader({ onOpenNav }) {
     <StyledToolbar>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="body2" color="text.contrastText">
-          {headingContent.title}
+          {headingContent?.title ?? ""}
         </Typography>
       </Box>
       <Box sx={{ flexGrow: 1 }} />
