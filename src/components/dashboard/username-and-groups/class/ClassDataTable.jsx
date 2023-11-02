@@ -1,45 +1,67 @@
-import { Box, LinearProgress, Stack } from "@mui/material";
+import { Box, LinearProgress, Stack, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-import Iconify from "components/common/iconify/Iconify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import Iconify from "components/common/iconify/Iconify";
+import {
+  getClassList,
+  deleteClass,
+} from "redux/store/slice/dashboard/userSlice";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
+import { isEmpty } from "lodash";
+import CMIconButton from "components/common/CMIconButton";
+import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
 
 const ClassDataTable = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { classListInfo, loading } = useSelector((state) => state.users);
   const classList = classListInfo.data ?? [];
 
   console.log("classList", classList);
+
   const handleDelete = (id) => {
-    // dispatch(deleteClass({ id: [id] }))
-    //   .unwrap()
-    //   .then((result) => {
-    //     if (result.success) {
-    //       console.log(result);
-    //       toast.success(result.message);
-    //       dispatch(getClassList({ search: "", page: 1 }));
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     toast.error(err.message);
-    //     console.log("Error: ", err);
-    //   });
+    dispatch(deleteClass({ id: [id] }))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          console.log(result);
+          toast.success(result.message);
+          dispatch(
+            getClassList({
+              payload: {
+                search: "",
+                per_page: 10,
+              },
+              page: 1,
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
   };
 
   return (
     <>
-      <TableContainer component={Paper} className="rounded-0 mt-3">
+      <TableContainer
+        component={Paper}
+        className="rounded-0 mt-3 scrollbar-none"
+      >
         <StyledTable stickyHeader>
           <TableHead>
             <TableRow>
@@ -58,11 +80,27 @@ const ClassDataTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {!loading ? (
+            {loading ? (
+              <StyledTableRow>
+                <StyledTableCell align="left" colSpan={12}>
+                  <LinearProgress />
+                </StyledTableCell>
+              </StyledTableRow>
+            ) : isEmpty(classList) ? (
+              <StyledTableRow>
+                <StyledTableCell align="center" colSpan={12}>
+                  <Typography variant="subtitle1" color="text.primary">
+                    No Data Available
+                  </Typography>
+                </StyledTableCell>
+              </StyledTableRow>
+            ) : (
               classList.map((row, index) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell scope="row">{row.id}</StyledTableCell>
-                  <StyledTableCell scope="row">{row.school_name}</StyledTableCell>
+                  <StyledTableCell scope="row">
+                    {row.school_name}
+                  </StyledTableCell>
                   <StyledTableCell align="left">
                     {row.class_name}
                   </StyledTableCell>
@@ -99,30 +137,27 @@ const ClassDataTable = () => {
                     >
                       <Box
                         onClick={() =>
-                          navigate(
-                            "/dashboard/username-and-groups/add-class",
-                            { state: row }
-                          )
+                          navigate("/dashboard/username-and-groups/add-class", {
+                            state: row,
+                          })
                         }
                       >
-                        <Iconify icon="el:edit" />
+                        <CMIconButton color="warning">
+                          <Iconify icon="el:edit" />
+                        </CMIconButton>
                       </Box>
                       <Box>
-                        <Iconify icon="mdi:checkbox-outline" />
+                        <SelectCheckbox color="success" />
                       </Box>
                       <Box onClick={() => handleDelete(row.id)}>
-                        <Iconify icon="uiw:delete" />
+                        <CMIconButton color="error">
+                          <Iconify icon="uiw:delete" />
+                        </CMIconButton>
                       </Box>
                     </Stack>
                   </StyledTableCell>
                 </StyledTableRow>
               ))
-            ) : (
-              <StyledTableRow>
-                <StyledTableCell align="left" colSpan={11}>
-                  <LinearProgress />
-                </StyledTableCell>
-              </StyledTableRow>
             )}
           </TableBody>
         </StyledTable>

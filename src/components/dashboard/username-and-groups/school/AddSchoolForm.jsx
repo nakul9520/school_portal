@@ -1,20 +1,23 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { MobileDatePicker } from "@mui/x-date-pickers";
+
 import { Formik } from "formik";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import { addEditSchool } from "redux/store/slice/dashboard/userSlice";
 import { addEditSchoolValidation } from "services/validations";
 
 const AddSchoolForm = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { state } = useLocation();
   const schoolData = state ?? {};
-  const dispatch = useDispatch();
 
   console.log("schoolData", schoolData);
 
@@ -42,7 +45,7 @@ const AddSchoolForm = () => {
 
     console.log("data", data);
   };
-  return (  
+  return (
     <>
       <Box
         component="section"
@@ -234,6 +237,7 @@ const AddSchoolForm = () => {
                     className="w-100"
                     name="expired_at"
                     value={values.expired_at}
+                    label=" "
                     onChange={(newValue) => {
                       setFieldValue("expired_at", newValue);
                     }}

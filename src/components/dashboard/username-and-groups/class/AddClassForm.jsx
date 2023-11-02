@@ -1,36 +1,43 @@
 import React, { useEffect } from "react";
-import { useTheme } from "@mui/material/styles";
+
 import {
   Autocomplete,
   Box,
   Button,
+  CircularProgress,
   TextField,
   Typography,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+
 import { Formik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
-import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
-import { useLocation, useNavigate } from "react-router-dom";
-import { addEditClass } from "redux/store/slice/dashboard/userSlice";
-import { toast } from "react-toastify";
 import { get } from "lodash";
-// import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
+
+import { addEditClass } from "redux/store/slice/dashboard/userSlice";
+import { addEditClassValidation } from "services/validations";
 
 const AddClassForm = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { state } = useLocation();
   const classData = state ?? {};
-  const dispatch = useDispatch();
+
   const { schoolListInfo, loading } = useSelector((state) => state.users);
   const schoolList = schoolListInfo.data ?? [];
   console.log("classData", classData);
+
   const handleAddEdit = (values, action) => {
     console.log("edit");
     const data = {
       ...values,
       id: classData.id ? classData.id : "",
-      school_id: values.school_id.id.toString(),
+      school_id: values.school_id.id,
     };
     console.log("data", data);
     dispatch(addEditClass(data))
@@ -86,7 +93,7 @@ const AddClassForm = () => {
             teacher_password2: get(classData, "teacher_password2", ""),
             no_of_student: get(classData, "no_of_student", ""),
           }}
-          // validationSchema={addEditSchoolValidation}
+          validationSchema={addEditClassValidation}
           onSubmit={(value, action) => {
             handleAddEdit(value, action);
           }}
@@ -112,7 +119,7 @@ const AddClassForm = () => {
                     Okul Adı
                   </Typography>
                   <Autocomplete
-                    getOptionLabel={(option) => option.school_name ?? option}
+                    getOptionLabel={(option) => option.school_name ?? ""}
                     options={schoolList}
                     name="school_id"
                     value={values.school_id}
@@ -122,7 +129,7 @@ const AddClassForm = () => {
                       }
                     }}
                     onChange={(e, value) => {
-                      setFieldValue("school_id", value.id);
+                      setFieldValue("school_id", value);
                     }}
                     autoHighlight
                     disableClearable
@@ -137,14 +144,14 @@ const AddClassForm = () => {
                         inputProps={{
                           ...params.inputProps,
                           autoComplete: "new-password",
-                          // endAdornment: (
-                          //   <React.Fragment>
-                          //     {loading ? (
-                          //       <CircularProgress color="inherit" size={20} />
-                          //     ) : null}
-                          //     {params.InputProps.endAdornment}
-                          //   </React.Fragment>
-                          // ),
+                          endAdornment: (
+                            <React.Fragment>
+                              {loading ? (
+                                <CircularProgress color="inherit" size={20} />
+                              ) : null}
+                              {params.InputProps.endAdornment}
+                            </React.Fragment>
+                          ),
                         }}
                         error={
                           errors.school_id && touched.school_id ? true : false

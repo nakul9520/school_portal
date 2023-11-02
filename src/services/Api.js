@@ -15,6 +15,13 @@ const Api = {
   GET_CLASS_LIST: "classlist",
   GET_CLASS_DETAIL: "getclass",
   DELETE_CLASS: "classDelete",
+
+  //Techers & students
+  ADD_EDIT_USERS: "addEditUser",
+  GET_USERS_LIST: "userList",
+  GET_USERS_DETAIL: "getUser",
+  DELETE_USERS: "userDelete",
+  GET_CLASS_BY_SCHOOL: "getClassBySchool",
 };
 
 export default Api;

@@ -15,33 +15,39 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { debounce, get } from "lodash";
 
 import Iconify from "components/common/iconify/Iconify";
 import SchoolDataTable from "./SchoolDataTable";
-import { useDispatch } from "react-redux";
 import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
-import { debounce, get } from "lodash";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useTheme();
 
+  const { schoolListInfo } = useSelector((state) => state.users);
+
   const [filterOptions, setFilterOptions] = useState({
     search: "",
-    page: 1,
     per_page: 10,
   });
 
+  const [page, setPage] = useState(1);
+  const [perPageData, setperPageData] = useState(10);
+
   const getSchoolListData = useCallback(
-    async (data) => {
-      const payload = {
-        search: get(data, "search", ""),
-        per_page: get(data, "per_page", 10),
-        page: get(data, "page", 1),
+    async (data, pageNumber) => {
+      const param = {
+        payload: {
+          search: get(data, "search", ""),
+          per_page: get(data, "per_page", 10),
+        },
+        page: pageNumber,
       };
 
-      dispatch(getSchoolList(payload));
+      dispatch(getSchoolList(param));
     },
     [dispatch]
   );
@@ -54,12 +60,30 @@ const Dashboard = () => {
   useEffect(() => {
     const payload = {
       search: "",
-      page: 1,
       per_page: 10,
     };
-    debounceFn(payload);
+    debounceFn(payload, 1);
   }, [debounceFn, dispatch]);
 
+  const handlePageChange = (e, value) => {
+    setPage(value);
+    getSchoolListData(filterOptions, value);
+  };
+
+  const handlePerPageData = (e) => {
+    if (e.target.checked) {
+      setFilterOptions({
+        ...filterOptions,
+        per_page: perPageData,
+      });
+    } else {
+      setFilterOptions({
+        ...filterOptions,
+        per_page: 10,
+      });
+    }
+    getSchoolListData(filterOptions, page);
+  };
   return (
     <>
       <Box
@@ -112,6 +136,8 @@ const Dashboard = () => {
               <Box className="d-flex align-items-center border">
                 <TextField
                   variant="outlined"
+                  value={perPageData}
+                  onChange={(e) => setperPageData(e.target.value)}
                   size="small"
                   placeholder="10"
                   sx={{
@@ -127,7 +153,7 @@ const Dashboard = () => {
                 <Box
                   sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
                 >
-                  <Checkbox />
+                  <Checkbox onChange={handlePerPageData} />
                 </Box>
               </Box>
             </Stack>
@@ -202,9 +228,15 @@ const Dashboard = () => {
             color="secondary.disabled"
             className="ms-4"
           >
-            57 sonuçtan 1 ile 10 arası gösteriliyor
+            {schoolListInfo.total_record} sonuçtan 1 ile 10 arası gösteriliyor
           </Typography>
-          <Pagination count={8} />
+          {schoolListInfo.total_record > 0 && (
+            <Pagination
+              count={schoolListInfo.total_record / 2}
+              page={page}
+              onChange={handlePageChange}
+            />
+          )}
         </Stack>
       </Box>
     </>
