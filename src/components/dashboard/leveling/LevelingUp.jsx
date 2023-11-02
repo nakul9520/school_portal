@@ -27,7 +27,7 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import CMCheckBox from "components/common/CMCheckBox";
+import CMCheckBox from "components/common/checkbox/CMCheckBox";
 
 const LevelingUp = () => {
   const navigate = useNavigate();

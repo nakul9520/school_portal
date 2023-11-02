@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   Box,
@@ -15,10 +15,11 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { debounce, get } from "lodash";
 
 import Iconify from "components/common/iconify/Iconify";
 import SchoolDataTable from "./SchoolDataTable";
-import { useDispatch } from "react-redux";
 import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
 
 const Dashboard = () => {
@@ -26,12 +27,63 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  const [filterData, setFilterData] = useState({ search: "", page: 1 });
+  const { schoolListInfo } = useSelector((state) => state.users);
+
+  const [filterOptions, setFilterOptions] = useState({
+    search: "",
+    per_page: 10,
+  });
+
+  const [page, setPage] = useState(1);
+  const [perPageData, setperPageData] = useState(10);
+
+  const getSchoolListData = useCallback(
+    async (data, pageNumber) => {
+      const param = {
+        payload: {
+          search: get(data, "search", ""),
+          per_page: get(data, "per_page", 10),
+        },
+        page: pageNumber,
+      };
+
+      dispatch(getSchoolList(param));
+    },
+    [dispatch]
+  );
+
+  const debounceFn = useMemo(
+    () => debounce(getSchoolListData, 1000),
+    [getSchoolListData]
+  );
 
   useEffect(() => {
-    dispatch(getSchoolList(filterData));
-  }, [dispatch, filterData]);
+    const payload = {
+      search: "",
+      per_page: 10,
+    };
+    debounceFn(payload, 1);
+  }, [debounceFn, dispatch]);
 
+  const handlePageChange = (e, value) => {
+    setPage(value);
+    getSchoolListData(filterOptions, value);
+  };
+
+  const handlePerPageData = (e) => {
+    if (e.target.checked) {
+      setFilterOptions({
+        ...filterOptions,
+        per_page: perPageData,
+      });
+    } else {
+      setFilterOptions({
+        ...filterOptions,
+        per_page: 10,
+      });
+    }
+    getSchoolListData(filterOptions, page);
+  };
   return (
     <>
       <Box
@@ -84,6 +136,8 @@ const Dashboard = () => {
               <Box className="d-flex align-items-center border">
                 <TextField
                   variant="outlined"
+                  value={perPageData}
+                  onChange={(e) => setperPageData(e.target.value)}
                   size="small"
                   placeholder="10"
                   sx={{
@@ -99,7 +153,7 @@ const Dashboard = () => {
                 <Box
                   sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
                 >
-                  <Checkbox />
+                  <Checkbox onChange={handlePerPageData} />
                 </Box>
               </Box>
             </Stack>
@@ -107,6 +161,14 @@ const Dashboard = () => {
           <Grid item sm={6} xs={12} className="text-right">
             <TextField
               variant="standard"
+              value={filterOptions.search}
+              onChange={(e) => {
+                setFilterOptions({ ...filterOptions, search: e.target.value });
+                getSchoolListData({
+                  ...filterOptions,
+                  search: e.target.value,
+                });
+              }}
               placeholder="Arama…"
               className="header_search"
               size="small"
@@ -137,7 +199,9 @@ const Dashboard = () => {
             variant="contained"
             color="secondary"
             className="rounded-0"
-            onClick={() => navigate("/dashboard/add-school")}
+            onClick={() =>
+              navigate("/dashboard/username-and-groups/add-school")
+            }
           >
             Okul Ekle
           </Button>
@@ -145,7 +209,9 @@ const Dashboard = () => {
           <Button
             variant="contained"
             className="rounded-0"
-            onClick={() => navigate("/dashboard/mass-school")}
+            onClick={() =>
+              navigate("/dashboard/username-and-groups/mass-school")
+            }
           >
             Toplu Okul Ekle
           </Button>
@@ -162,9 +228,15 @@ const Dashboard = () => {
             color="secondary.disabled"
             className="ms-4"
           >
-            57 sonuçtan 1 ile 10 arası gösteriliyor
+            {schoolListInfo.total_record} sonuçtan 1 ile 10 arası gösteriliyor
           </Typography>
-          <Pagination count={8} />
+          {schoolListInfo.total_record > 0 && (
+            <Pagination
+              count={schoolListInfo.total_record / 2}
+              page={page}
+              onChange={handlePageChange}
+            />
+          )}
         </Stack>
       </Box>
     </>

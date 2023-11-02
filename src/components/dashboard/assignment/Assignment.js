@@ -25,7 +25,7 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import CMCheckBox from "components/common/CMCheckBox";
+import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 

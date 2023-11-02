@@ -1,78 +1,72 @@
-import { Box, Stack } from "@mui/material";
+import { Box, LinearProgress, Stack, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 import Iconify from "components/common/iconify/Iconify";
+import {
+  getClassList,
+  deleteClass,
+} from "redux/store/slice/dashboard/userSlice";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
+import { isEmpty } from "lodash";
+import CMIconButton from "components/common/CMIconButton";
+import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
 
 const ClassDataTable = () => {
-  const rows = [
-    {
-      order: 1,
-      className: "class 1",
-      Teacher1: "Teacher 1",
-      email01: "123@gmail.com",
-      code01: "12345",
-      Teacher2: "Teacher 1",
-      email02: "123@gmail.com",
-      code02: "12345",
-      numberofStudents: "12",
-      Status: "200 days left",
-      transactions: [
-        <Iconify icon="el:edit" />,
-        <Iconify icon="mdi:checkbox-outline" />,
-        <Iconify icon="uiw:delete" />,
-      ],
-    },
-    {
-      order: 2,
-      className: "class 2",
-      Teacher1: "Teacher 2",
-      email01: "123@gmail.com",
-      code01: "12345",
-      Teacher2: "Teacher 2",
-      email02: "123@gmail.com",
-      code02: "12345",
-      numberofStudents: "14",
-      Status: "Expired",
-      transactions: [
-        <Iconify icon="el:edit" />,
-        <Iconify icon="mdi:checkbox-outline" />,
-        <Iconify icon="uiw:delete" />,
-      ],
-    }, {
-      order: 3,
-      className: "class 3",
-      Teacher1: "Teacher 3",
-      email01: "123@gmail.com",
-      code01: "12345",
-      Teacher2: "Teacher 3",
-      email02: "123@gmail.com",
-      code02: "12345",
-      numberofStudents: "16",
-      Status: "121 days left",
-      transactions: [
-        <Iconify icon="el:edit" />,
-        <Iconify icon="mdi:checkbox-outline" />,
-        <Iconify icon="uiw:delete" />,
-      ],
-    },
-  ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { classListInfo, loading } = useSelector((state) => state.users);
+  const classList = classListInfo.data ?? [];
+
+  console.log("classList", classList);
+
+  const handleDelete = (id) => {
+    dispatch(deleteClass({ id: [id] }))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          console.log(result);
+          toast.success(result.message);
+          dispatch(
+            getClassList({
+              payload: {
+                search: "",
+                per_page: 10,
+              },
+              page: 1,
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
+  };
 
   return (
     <>
-      <TableContainer component={Paper} className="rounded-0 mt-3">
+      <TableContainer
+        component={Paper}
+        className="rounded-0 mt-3 scrollbar-none"
+      >
         <StyledTable stickyHeader>
           <TableHead>
             <TableRow>
               <StyledTableCell align="left">Sıra</StyledTableCell>
+              <StyledTableCell align="left">Okul Adı</StyledTableCell>
               <StyledTableCell align="left">Sınıf Adı</StyledTableCell>
               <StyledTableCell align="left">Öğretmen 1</StyledTableCell>
               <StyledTableCell align="left">Ö1 E-mail</StyledTableCell>
@@ -86,33 +80,85 @@ const ClassDataTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
-              <StyledTableRow key={index}>
-                <StyledTableCell scope="row">{row.order}</StyledTableCell>
-                <StyledTableCell align="left">{row.className}</StyledTableCell>
-                <StyledTableCell align="left">{row.Teacher1}</StyledTableCell>
-                <StyledTableCell align="left">{row.email01}</StyledTableCell>
-                <StyledTableCell align="left">{row.code01}</StyledTableCell>
-                <StyledTableCell align="left">{row.Teacher2}</StyledTableCell>
-                <StyledTableCell align="left">{row.email02}</StyledTableCell>
-                <StyledTableCell align="left">{row.code02}</StyledTableCell>
-                <StyledTableCell align="left">
-                  {row.numberofStudents}
-                </StyledTableCell>
-                <StyledTableCell align="left">{row.Status}</StyledTableCell>
-
-                <StyledTableCell
-                  align="left"
-                  className="d-flex align-items-center"
-                >
-                  <Stack direction="row" className="align-items-center  gap-2">
-                    {row.transactions.map((iconRow, subIndex) => (
-                      <Box key={subIndex}> {iconRow}</Box>
-                    ))}
-                  </Stack>
+            {loading ? (
+              <StyledTableRow>
+                <StyledTableCell align="left" colSpan={12}>
+                  <LinearProgress />
                 </StyledTableCell>
               </StyledTableRow>
-            ))}
+            ) : isEmpty(classList) ? (
+              <StyledTableRow>
+                <StyledTableCell align="center" colSpan={12}>
+                  <Typography variant="subtitle1" color="text.primary">
+                    No Data Available
+                  </Typography>
+                </StyledTableCell>
+              </StyledTableRow>
+            ) : (
+              classList.map((row, index) => (
+                <StyledTableRow key={index}>
+                  <StyledTableCell scope="row">{row.id}</StyledTableCell>
+                  <StyledTableCell scope="row">
+                    {row.school_name}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.class_name}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.teacher_name1 ?? ""}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.teacher_email1 ?? ""}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.teacher_code1 ?? ""}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.teacher_name2 ?? ""}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.teacher_email2 ?? ""}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.teacher_code2 ?? ""}
+                  </StyledTableCell>
+
+                  <StyledTableCell align="left">
+                    {row.no_of_student}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">{row.status}</StyledTableCell>
+                  <StyledTableCell
+                    align="left"
+                    className="d-flex align-items-center"
+                  >
+                    <Stack
+                      direction="row"
+                      className="align-items-center  gap-2"
+                    >
+                      <Box
+                        onClick={() =>
+                          navigate("/dashboard/username-and-groups/add-class", {
+                            state: row,
+                          })
+                        }
+                      >
+                        <CMIconButton color="warning">
+                          <Iconify icon="el:edit" />
+                        </CMIconButton>
+                      </Box>
+                      <Box>
+                        <SelectCheckbox color="success" />
+                      </Box>
+                      <Box onClick={() => handleDelete(row.id)}>
+                        <CMIconButton color="error">
+                          <Iconify icon="uiw:delete" />
+                        </CMIconButton>
+                      </Box>
+                    </Stack>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))
+            )}
           </TableBody>
         </StyledTable>
       </TableContainer>

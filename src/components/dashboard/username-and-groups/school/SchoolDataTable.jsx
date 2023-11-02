@@ -6,14 +6,16 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-import Iconify from "components/common/iconify/Iconify";
-import { isEmpty } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { isEmpty } from "lodash";
+
+import Iconify from "components/common/iconify/Iconify";
 import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
 import { deleteSchool } from "redux/store/slice/dashboard/userSlice";
 import {
@@ -21,13 +23,15 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
+import CMIconButton from "components/common/CMIconButton";
+import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
 
 const SchoolDataTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { schoolListInfo, loading } = useSelector((state) => state.users);
   const schoolList = schoolListInfo.data ?? [];
-  // console.log("schoolList", schoolList);
 
   const handleDelete = (id) => {
     dispatch(deleteSchool({ id: [id] }))
@@ -36,7 +40,15 @@ const SchoolDataTable = () => {
         if (result.success) {
           console.log(result);
           toast.success(result.message);
-          dispatch(getSchoolList({ search: "", page: 1 }));
+          dispatch(
+            getSchoolList({
+              payload: {
+                search: "",
+                per_page: 10,
+              },
+              page: 1,
+            })
+          );
         }
       })
       .catch((err) => {
@@ -46,7 +58,10 @@ const SchoolDataTable = () => {
   };
   return (
     <>
-      <TableContainer component={Paper} className="rounded-0 mt-3">
+      <TableContainer
+        component={Paper}
+        className="rounded-0 mt-3 scrollbar-none"
+      >
         <StyledTable stickyHeader>
           <TableHead>
             <TableRow>
@@ -65,64 +80,80 @@ const SchoolDataTable = () => {
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>
-          {!loading ? (
-            <TableBody>
-              {isEmpty(schoolList)
-                ? null
-                : schoolList.map((row, index) => (
-                    <StyledTableRow key={index}>
-                      <StyledTableCell scope="row">{row.id}</StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.school_name}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {" "}
-                        {row.school_admin}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.school_email}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.user_name}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.school_code}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.activation_date}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.expired_at}
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="left"
-                        className="d-flex align-items-center"
+          <TableBody>
+            {loading ? (
+              <StyledTableRow>
+                <StyledTableCell align="left" colSpan={9}>
+                  <LinearProgress />
+                </StyledTableCell>
+              </StyledTableRow>
+            ) : isEmpty(schoolList) ? (
+              <StyledTableRow>
+                <StyledTableCell align="center" colSpan={9}>
+                  <Typography variant="subtitle1" color="text.primary">
+                    No Data Available
+                  </Typography>
+                </StyledTableCell>
+              </StyledTableRow>
+            ) : (
+              schoolList.map((row, index) => (
+                <StyledTableRow key={index}>
+                  <StyledTableCell scope="row">{row.id}</StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.school_name}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.school_admin}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.school_email}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.user_name}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.school_code}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.activation_date}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.expired_at}
+                  </StyledTableCell>
+                  <StyledTableCell
+                    align="left"
+                    className="d-flex align-items-center"
+                  >
+                    <Stack
+                      direction="row"
+                      className="align-items-center  gap-2"
+                    >
+                      <Box
+                        onClick={() =>
+                          navigate(
+                            "/dashboard/username-and-groups/add-school",
+                            { state: row }
+                          )
+                        }
                       >
-                        <Stack
-                          direction="row"
-                          className="align-items-center  gap-2"
-                        >
-                          <Box
-                            onClick={() =>
-                              navigate("/dashboard/add-school", { state: row })
-                            }
-                          >
-                            <Iconify icon="el:edit" />
-                          </Box>
-                          <Box>
-                            <Iconify icon="mdi:checkbox-outline" />
-                          </Box>
-                          <Box onClick={() => handleDelete(row.id)}>
-                            <Iconify icon="uiw:delete" />
-                          </Box>
-                        </Stack>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
-            </TableBody>
-          ) : (
-            <LinearProgress />
-          )}
+                        <CMIconButton color="warning">
+                          <Iconify icon="el:edit" />
+                        </CMIconButton>
+                      </Box>
+                      <Box>
+                        <SelectCheckbox color="success" />
+                      </Box>
+                      <Box onClick={() => handleDelete(row.id)}>
+                        <CMIconButton color="error">
+                          <Iconify icon="uiw:delete" />
+                        </CMIconButton>
+                      </Box>
+                    </Stack>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))
+            )}
+          </TableBody>
         </StyledTable>
       </TableContainer>
     </>

@@ -27,7 +27,7 @@ const Login = () => {
         if (result.success) {
           saveSession(result.data);
           toast.success(result.message);
-          navigate("/dashboard");
+          navigate("/dashboard/username-and-groups/school");
         }
       })
       .catch((err) => {
