@@ -1,5 +1,4 @@
-import axios from "axios";
-import { REACT_APP_API_END_POINT } from "./constant";
+import { find } from "lodash";
 
 export const saveSession = (data) => {
   localStorage.setItem("authToken", data.token);
@@ -23,7 +22,7 @@ export const clearSession = () => {
   localStorage.clear();
 };
 
-
-export const DataService = axios.create({
-  baseURL: REACT_APP_API_END_POINT,
-});
+export const autocompleteFindData = (list, key_name, option) => {
+  const result = find(list, (item) => item.id === option);
+  return result[key_name];
+};

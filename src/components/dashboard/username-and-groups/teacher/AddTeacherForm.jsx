@@ -119,7 +119,6 @@ const AddTeacherForm = () => {
             touched,
           }) => (
             <form onSubmit={handleSubmit} className="h-100">
-              {console.log("values>>", values)}
               <Box className="custom_form border">
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography

@@ -4,16 +4,16 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import CMIconButton from "components/common/CMIconButton";
-import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
 
-import Iconify from "components/common/iconify/Iconify";
 import { isEmpty } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getUsersList } from "redux/store/slice/dashboard/userSlice";
-import { deleteUsers } from "redux/store/slice/dashboard/userSlice";
+
+import CMIconButton from "components/common/CMIconButton";
+import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
+import Iconify from "components/common/iconify/Iconify";
+import { deleteUsers, getUsersList } from "redux/store/slice/dashboard/userSlice";
 import { USER_TYPE } from "services/constant";
 import {
   StyledTable,

@@ -11,13 +11,14 @@ import {
 import { useTheme } from "@mui/material/styles";
 
 import { Formik } from "formik";
-import { get } from "lodash";
+import { get, toString } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
 
 import { addEditClass } from "redux/store/slice/dashboard/userSlice";
+import { autocompleteFindData } from "services/utiles";
 import { addEditClassValidation } from "services/validations";
 
 const AddClassForm = () => {
@@ -30,7 +31,6 @@ const AddClassForm = () => {
 
   const { schoolListInfo, loading } = useSelector((state) => state.users);
   const schoolList = schoolListInfo.data ?? [];
-  console.log("classData", classData);
 
   const handleAddEdit = (values, action) => {
     console.log("edit");
@@ -82,7 +82,7 @@ const AddClassForm = () => {
 
         <Formik
           initialValues={{
-            school_id: get(classData, "school_name", ""),
+            school_id: get(classData, "school_id", ""),
             class_name: get(classData, "class_name", ""),
             class_code: get(classData, "class_code", ""),
             teacher_name1: get(classData, "teacher_name1", ""),
@@ -108,7 +108,6 @@ const AddClassForm = () => {
             touched,
           }) => (
             <form onSubmit={handleSubmit} className="h-100">
-              {console.log("val", values)}
               <Box className="custom_form border">
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
@@ -119,12 +118,19 @@ const AddClassForm = () => {
                     Okul Adı
                   </Typography>
                   <Autocomplete
-                    getOptionLabel={(option) => option.school_name ?? ""}
+                    getOptionLabel={(option) =>
+                      option.school_name ??
+                      autocompleteFindData(schoolList, "school_name", option)
+                    }
                     options={schoolList}
                     name="school_id"
                     value={values.school_id}
                     isOptionEqualToValue={(option, value) => {
-                      if (value === "" || option.id === value.id) {
+                      if (
+                        value === "" ||
+                        toString(option.id) === toString(value.id) ||
+                        toString(option.id) === toString(value)
+                      ) {
                         return true;
                       }
                     }}
@@ -144,7 +150,7 @@ const AddClassForm = () => {
                         inputProps={{
                           ...params.inputProps,
                           autoComplete: "new-password",
-                          endAdornment: (
+                          endadornment: (
                             <React.Fragment>
                               {loading ? (
                                 <CircularProgress color="inherit" size={20} />

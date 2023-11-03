@@ -1,6 +1,13 @@
 import React from "react";
 
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 
@@ -23,11 +30,12 @@ const Login = () => {
     dispatch(postLogin({ ...values, user_type: USER_TYPE.admin }))
       .unwrap()
       .then((result) => {
-        console.log(result);
         if (result.success) {
           saveSession(result.data);
           toast.success(result.message);
           navigate("/dashboard/username-and-groups/school");
+        } else {
+          toast.error(result.message);
         }
       })
       .catch((err) => {
@@ -46,52 +54,43 @@ const Login = () => {
           backgroundSize: "cover",
           height: "100vh",
         }}
+        component="section"
       >
-        <Formik
-          initialValues={{ email: "", password: "" }}
-          validationSchema={loginValidation}
-          onSubmit={(value, action) => {
-            handleLogin(value, action);
-          }}
-        >
-          {({
-            values,
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            errors,
-            touched,
-          }) => (
-            <Grid container className="h-100 align-items-center">
-              <Grid item xs={12} md={6}>
+        <Container maxWidth={false} className="px-0 h-100">
+          <Grid container spacing={0} className="align-items-center h-100">
+            <Grid item xs={12} md={6}>
+              <Box
+                className="d-flex align-items-center justify-content-center flex-column"
+                sx={{ py: 10 }}
+              >
                 <Box
-                  className="d-flex align-items-center justify-content-center flex-column"
-                  sx={{ py: 10 }}
-                >
-                  <Box
-                    component="img"
-                    src={imageObj.logo}
-                    sx={{ maxWidth: 380, mb: 2 }}
-                  />
-                  <Typography
-                    variant="h3"
-                    color="primary"
-                    className="fw-bolder"
-                  >
-                    Superadmin Dashboard
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={6} className="h-100 align-item-center">
-                <Box className="blue_bg">
-                  <form onSubmit={handleSubmit} className="login_form h-100">
-                    <Grid
-                      container
-                      item
-                      xs={12}
-                      spacing={2}
-                      className="justify-content-center"
-                    >
+                  component="img"
+                  src={imageObj.logo}
+                  sx={{ maxWidth: 280, mb: 2 }}
+                />
+                <Typography variant="h3" color="primary" className="fw-bolder">
+                  Superadmin Dashboard
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Formik
+                initialValues={{ email: "", password: "" }}
+                validationSchema={loginValidation}
+                onSubmit={(value, action) => {
+                  handleLogin(value, action);
+                }}
+              >
+                {({
+                  values,
+                  handleSubmit,
+                  handleChange,
+                  handleBlur,
+                  errors,
+                  touched,
+                }) => (
+                  <form onSubmit={handleSubmit} className="blue_bg">
+                    <Grid container className="justify-content-center gap-3">
                       <Grid item xs={8}>
                         <TextField
                           name="email"
@@ -142,11 +141,11 @@ const Login = () => {
                       </Grid>
                     </Grid>
                   </form>
-                </Box>
-              </Grid>
+                )}
+              </Formik>
             </Grid>
-          )}
-        </Formik>
+          </Grid>
+        </Container>
       </Box>
     </>
   );
