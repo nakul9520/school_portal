@@ -1,3 +1,5 @@
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+
 import {
   Box,
   Button,
@@ -10,13 +12,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Iconify from "components/common/iconify/Iconify";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import TeacherDataTable from "./TeacherDataTable";
-import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { debounce, get } from "lodash";
+
+import Iconify from "components/common/iconify/Iconify";
+import TeacherDataTable from "./TeacherDataTable";
 import { getUsersList } from "redux/store/slice/dashboard/userSlice";
 import { USER_TYPE } from "services/constant";
 
@@ -234,7 +237,7 @@ const Teacher = () => {
           </Typography>
           {userListInfo.total_record > 0 && (
             <Pagination
-              count={userListInfo.total_record / 2}
+              count={userListInfo.last_page}
               page={page}
               onChange={handlePageChange}
             />

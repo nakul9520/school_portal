@@ -232,7 +232,7 @@ const Dashboard = () => {
           </Typography>
           {schoolListInfo.total_record > 0 && (
             <Pagination
-              count={schoolListInfo.total_record / 2}
+              count={schoolListInfo.last_page}
               page={page}
               onChange={handlePageChange}
             />

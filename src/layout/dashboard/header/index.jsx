@@ -6,6 +6,7 @@ import {
   Badge,
   Box,
   IconButton,
+  MenuItem,
   Stack,
   TextField,
   Toolbar,
@@ -14,13 +15,19 @@ import {
 import { styled } from "@mui/material/styles";
 
 // utils
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // components
 import Iconify from "../../../components/common/iconify/Iconify";
 import NotificationsPopover from "./NotificationsPopover";
 import InputAdornment from "@mui/material/InputAdornment";
 import SubHeader from "./SubHeader";
+import MenuPopover from "components/common/MenuPopover";
+import { get, map } from "lodash";
+import { useState } from "react";
+import { postLogout } from "redux/store/slice/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import { logout } from "redux/store/slice/auth/authSlice";
 
 // ----------------------------------------------------------------------
 
@@ -55,8 +62,26 @@ Header.propTypes = {
 };
 
 export default function Header({ onOpenNav }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = useState(null);
+
   const { profileInfo } = useSelector((state) => state.auth);
 
+  const handleLogout = () => {
+    dispatch(postLogout())
+      .unwrap()
+      .then((result) => {
+        if (get(result, "status", false)) {
+          dispatch(logout());
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.log(":logut error", error);
+      });
+  };
+  const optionList = [{ label: "Logout", action: handleLogout }];
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -91,14 +116,30 @@ export default function Header({ onOpenNav }) {
                 border: (theme) => `2px solid ${theme.palette.text.secondary}`,
               }}
               src={profileInfo.profileUrl}
+              onClick={(e) => setAnchorEl(e.currentTarget)}
             />
 
             <Box>
               <Typography variant="body1" className="text-capitalize">
                 {profileInfo.name}
               </Typography>
-              
             </Box>
+            <MenuPopover
+              open={Boolean(anchorEl)}
+              onClose={() => setAnchorEl(null)}
+              anchorEl={anchorEl}
+              PaperProps={{
+                style: {
+                  width: "15ch",
+                },
+              }}
+            >
+              {map(optionList, (item, index) => (
+                <MenuItem key={index} onClick={item.action}>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </MenuPopover>
           </Stack>
           <IconButton
             onClick={onOpenNav}

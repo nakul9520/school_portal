@@ -66,17 +66,39 @@ const ClassDataTable = () => {
           <TableHead>
             <TableRow>
               <StyledTableCell align="left">Sıra</StyledTableCell>
-              <StyledTableCell align="left">Okul Adı</StyledTableCell>
-              <StyledTableCell align="left">Sınıf Adı</StyledTableCell>
-              <StyledTableCell align="left">Öğretmen 1</StyledTableCell>
-              <StyledTableCell align="left">Ö1 E-mail</StyledTableCell>
-              <StyledTableCell align="left">Ö1 Şifre</StyledTableCell>
-              <StyledTableCell align="left">Öğretmen 2</StyledTableCell>
-              <StyledTableCell align="left">Ö2 E-mail</StyledTableCell>
-              <StyledTableCell align="left">Ö2 Şifre</StyledTableCell>
-              <StyledTableCell align="left">Öğrenci Sayısı</StyledTableCell>
-              <StyledTableCell align="left">Durumu</StyledTableCell>
-              <StyledTableCell align="left">İşlemler</StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Okul Adı
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Sınıf Adı
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 120 }}>
+                Öğretmen 1
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Ö1 E-mail
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 120 }}>
+                Ö1 Şifre
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 120 }}>
+                Öğretmen 2
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Ö2 E-mail
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 120 }}>
+                Ö2 Şifre
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 120 }}>
+                Öğrenci Sayısı
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 80 }}>
+                Durumu
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                İşlemler
+              </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>

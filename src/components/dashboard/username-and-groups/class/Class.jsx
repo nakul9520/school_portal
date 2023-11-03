@@ -230,7 +230,7 @@ const Class = () => {
           </Typography>
           {classListInfo.total_record > 0 && (
             <Pagination
-              count={classListInfo.total_record / 2}
+              count={classListInfo.last_page}
               page={page}
               onChange={handlePageChange}
             />

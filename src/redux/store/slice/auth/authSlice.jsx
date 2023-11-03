@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Api from "services/Api";
 
 import AxiosDefault from "services/AxiosDefault";
+import { clearSession } from "services/utiles";
 
 const initialState = {
   profileInfo: {},
@@ -13,6 +14,22 @@ export const postLogin = createAsyncThunk("auth/postLogin", async (data) => {
     const response = await AxiosDefault({
       method: "POST",
       url: Api.ADMIN_LOGIN,
+      data: data,
+    });
+    return response.data;
+  } catch (err) {
+    return {
+      status: err.response.data.status,
+      message: err.response.data.message,
+    };
+  }
+});
+
+export const postLogout = createAsyncThunk("auth/postLogout", async (data) => {
+  try {
+    const response = await AxiosDefault({
+      method: "GET",
+      url: Api.ADMIN_LOGOUT,
       data: data,
     });
     return response.data;
@@ -47,6 +64,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
+      clearSession();
       state = {};
     },
   },
@@ -55,17 +73,26 @@ const authSlice = createSlice({
       .addCase(postLogin.pending, (state) => {
         state.loading = true;
       })
-      .addCase(postLogin.fulfilled, (state, { payload }) => {
+      .addCase(postLogin.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(postLogin.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(postLogout.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(postLogout.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(postLogout.rejected, (state) => {
         state.loading = false;
       })
       .addCase(getProfileInfo.pending, (state) => {
         state.loading = true;
       })
       .addCase(getProfileInfo.fulfilled, (state, { payload }) => {
-        state.profileInfo = payload.data??{};
+        state.profileInfo = payload.data ?? {};
         state.loading = false;
       })
       .addCase(getProfileInfo.rejected, (state) => {
