@@ -50,3 +50,15 @@ export const addEditTeacherValidation = Yup.object().shape({
   activation_date: Yup.string().required("Activation date is required"),
   expired_at: Yup.string().required("expired date is required"),
 });
+
+export const addFileTitleValidation = Yup.object().shape({
+  book_name: Yup.string().required("File Title is Required"),
+});
+
+export const addAudioFileValidation = Yup.object().shape({
+  data: Yup.array().of(
+    Yup.object().shape({
+      file: Yup.string().required("File is Required"),
+    })
+  ),
+});

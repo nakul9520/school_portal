@@ -1,5 +1,3 @@
-import { find } from "lodash";
-
 export const saveSession = (data) => {
   localStorage.setItem("authToken", data.token);
   localStorage.setItem("id", data.id);
@@ -20,9 +18,4 @@ export const getSession = () => {
 
 export const clearSession = () => {
   localStorage.clear();
-};
-
-export const autocompleteFindData = (list, key_name, option) => {
-  const result = find(list, (item) => item.id === option);
-  return result[key_name];
 };

@@ -19,8 +19,6 @@ const AddSchoolForm = () => {
   const { state } = useLocation();
   const schoolData = state ?? {};
 
-  console.log("schoolData", schoolData);
-
   const handleAddEdit = (values, action) => {
     const data = {
       ...values,
@@ -28,22 +26,20 @@ const AddSchoolForm = () => {
       activation_date: moment(values.activation_date).format("YYYY-MM-DD"),
       expired_at: moment(values.expired_at).format("YYYY-MM-DD"),
     };
-    console.log("data", data);
     dispatch(addEditSchool(data))
       .unwrap()
       .then((result) => {
         if (result.success) {
-          console.log(result);
           toast.success(result.message);
           navigate("/dashboard/username-and-groups/school");
+        } else {
+          toast.error(result.message);
         }
       })
       .catch((err) => {
         toast.error(err.message);
         console.log("Error: ", err);
       });
-
-    console.log("data", data);
   };
   return (
     <>
@@ -99,7 +95,6 @@ const AddSchoolForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="school_name"
                     error={
                       errors.school_name && touched.school_name ? true : false
                     }

@@ -24,6 +24,7 @@ import {
   getSchoolList,
 } from "redux/store/slice/dashboard/userSlice";
 import { USER_TYPE } from "services/constant";
+import { omit } from "lodash";
 
 const AddStudentForm = () => {
   const theme = useTheme();
@@ -46,18 +47,21 @@ const AddStudentForm = () => {
       ...values,
       user_type: USER_TYPE.student,
       id: userData.id ? userData.id : "",
-      school_id: values.school_id.id,
-      class_id: values.class_id.id,
+      school_id: values.school_id,
+      class_id: values.class_id,
       activation_date: moment(values.activation_date).format("YYYY-MM-DD"),
       expired_at: moment(values.expired_at).format("YYYY-MM-DD"),
     };
-    dispatch(addEditUsers(data))
+    const payload = omit(data, "school_name", "class_name");
+    dispatch(addEditUsers(payload))
       .unwrap()
       .then((result) => {
         if (result.success) {
           console.log(result);
           toast.success(result.message);
           navigate("/dashboard/username-and-groups/student");
+        } else {
+          toast.error(result.message);
         }
       })
       .catch((err) => {
@@ -95,7 +99,9 @@ const AddStudentForm = () => {
         <Formik
           initialValues={{
             school_id: userData.school_id ?? "",
+            school_name: userData.school_name ?? "",
             class_id: userData.class_id ?? "",
+            class_name: userData.class_name ?? "",
             email: userData.email ?? "",
             name: userData.name ?? "",
             password: userData.password ?? "",
@@ -128,19 +134,21 @@ const AddStudentForm = () => {
                     Okul Adı
                   </Typography>
                   <Autocomplete
-                    getOptionLabel={(option) => option.school_name ?? ""}
+                    getOptionLabel={(option) => option.school_name ?? option}
                     options={schoolList}
-                    name="school_id"
-                    value={values.school_id}
+                    name="school_name"
+                    value={values.school_name}
                     isOptionEqualToValue={(option, value) => {
-                      if (value === "" || option.id === value.id) {
+                      if (value === "" || option.school_name === value) {
                         return true;
                       }
                     }}
                     onChange={(e, value) => {
-                      setFieldValue("school_id", value);
+                      setFieldValue("school_id", value.id);
+                      setFieldValue("school_name", value.school_name);
                       handleSchoolChange(value);
-                      setFieldValue("class_id", value);
+                      setFieldValue("class_id", value.class_id);
+                      // setFieldValue("class_name", value.class_name);
                     }}
                     autoHighlight
                     disableClearable
@@ -151,7 +159,7 @@ const AddStudentForm = () => {
                       <TextField
                         fullWidth
                         {...params}
-                        name="school_id"
+                        name="school_name"
                         inputProps={{
                           ...params.inputProps,
                           autoComplete: "new-password",
@@ -165,11 +173,13 @@ const AddStudentForm = () => {
                           ),
                         }}
                         error={
-                          errors.school_id && touched.school_id ? true : false
+                          errors.school_name && touched.school_name
+                            ? true
+                            : false
                         }
                         helperText={
-                          errors.school_id && touched.school_id
-                            ? errors.school_id
+                          errors.school_name && touched.school_name
+                            ? errors.school_name
                             : null
                         }
                       />
@@ -186,17 +196,18 @@ const AddStudentForm = () => {
                     Sınıfları
                   </Typography>
                   <Autocomplete
-                    getOptionLabel={(option) => option.class_name ?? ""}
+                    getOptionLabel={(option) => option.class_name ?? option}
                     options={classBySchoolList}
-                    name="school_id"
-                    value={values.class_id}
+                    name="class_name"
+                    value={values.class_name}
                     isOptionEqualToValue={(option, value) => {
-                      if (value === "" || option.id === value.id) {
+                      if (value === "" || option.class_name === value) {
                         return true;
                       }
                     }}
                     onChange={(e, value) => {
-                      setFieldValue("class_id", value);
+                      setFieldValue("class_id", value.id);
+                      setFieldValue("class_name", value.class_name);
                     }}
                     autoHighlight
                     disableClearable
@@ -207,7 +218,7 @@ const AddStudentForm = () => {
                       <TextField
                         fullWidth
                         {...params}
-                        name="class_id"
+                        name="class_name"
                         inputProps={{
                           ...params.inputProps,
                           autoComplete: "new-password",
@@ -221,11 +232,11 @@ const AddStudentForm = () => {
                           ),
                         }}
                         error={
-                          errors.school_id && touched.school_id ? true : false
+                          errors.class_name && touched.class_name ? true : false
                         }
                         helperText={
-                          errors.school_id && touched.school_id
-                            ? errors.school_id
+                          errors.class_name && touched.class_name
+                            ? errors.class_name
                             : null
                         }
                       />

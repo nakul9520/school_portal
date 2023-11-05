@@ -13,7 +13,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   borderBottom: "none",
   [`&.${tableCellClasses.head}`]: {
     padding: 10,
-    backgroundColor: "transparent",
+    backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.secondary,
     fontSize: 14,
   },

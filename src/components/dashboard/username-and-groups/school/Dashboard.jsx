@@ -16,7 +16,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
-import { debounce, get } from "lodash";
+import { debounce, get, size } from "lodash";
 
 import Iconify from "components/common/iconify/Iconify";
 import SchoolDataTable from "./SchoolDataTable";
@@ -188,17 +188,15 @@ const Dashboard = () => {
         <SchoolDataTable />
 
         <Stack
-          direction="row"
-          justifyContent="flex-end"
+          direction={{ sm: "row", xs: "column" }}
+          justifyContent={{ sm: "flex-end", xs: "flex-start" }}
           alignItems="center"
-          spacing={1}
           mt={3}
-          className="table_bottom_tabs"
+          className="table_bottom_tabs gap-2"
         >
           <Button
             variant="contained"
             color="secondary"
-            className="rounded-0"
             onClick={() =>
               navigate("/dashboard/username-and-groups/add-school")
             }
@@ -208,7 +206,6 @@ const Dashboard = () => {
 
           <Button
             variant="contained"
-            className="rounded-0"
             onClick={() =>
               navigate("/dashboard/username-and-groups/mass-school")
             }
@@ -223,12 +220,9 @@ const Dashboard = () => {
           spacing={1}
           mt={3}
         >
-          <Typography
-            variant="body2"
-            color="secondary.disabled"
-            className="ms-4"
-          >
-            {schoolListInfo.total_record} sonuçtan 1 ile 10 arası gösteriliyor
+          <Typography variant="body2" color="secondary.disabled">
+            {schoolListInfo.total_record} sonuçtan 1 ile{" "}
+            {size(schoolListInfo.data)} arası gösteriliyor
           </Typography>
           {schoolListInfo.total_record > 0 && (
             <Pagination

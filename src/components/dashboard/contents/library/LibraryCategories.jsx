@@ -53,27 +53,27 @@ const LibraryCategories = () => {
           mt={2}
         >
           <Box className="table_bottom_tabs text-right">
-            <Button variant="contained" color="primary" className="rounded-0">
+            <Button variant="contained" color="primary">
               Sınıf Düzeyi Ekle/Çıkar
             </Button>
           </Box>
           <Box className="table_bottom_tabs text-right">
-            <Button variant="contained" color="secondary" className="rounded-0">
+            <Button variant="contained" color="secondary">
               PYP Temaları Ekle/Çıkar
             </Button>
           </Box>
           <Box className="table_bottom_tabs text-right">
-            <Button variant="contained" color="primary" className="rounded-0">
+            <Button variant="contained" color="primary">
               Genel Temalar Ekle/Çıkar
             </Button>
           </Box>
           <Box className="table_bottom_tabs text-right">
-            <Button variant="contained" color="secondary" className="rounded-0">
+            <Button variant="contained" color="secondary">
               Kazanımlar Ekle/Çıkar
             </Button>
           </Box>
           <Box className="table_bottom_tabs text-right">
-            <Button variant="contained" color="primary" className="rounded-0">
+            <Button variant="contained" color="primary">
               Seriler Ekle/Çıkar
             </Button>
           </Box>

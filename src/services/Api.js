@@ -22,6 +22,14 @@ const Api = {
   GET_USERS_DETAIL: "getUser",
   DELETE_USERS: "userDelete",
   GET_CLASS_BY_SCHOOL: "getClassBySchool",
+
+  // Book
+  ADD_BOOK_TITLE: "addEditBook",
+  ADD_BOOK_FILE: "addBookFile",
+  GET_BOOK_LIST: "bookList",
+  GET_BOOK_DETAIL: "getBookDetails",
+  BOOK_ADD_TO_LIBRARY: "addToLibray",
+  BOOK_DELETE_TO_LIBRARY: "deleteToLibray",
 };
 
 export default Api;
