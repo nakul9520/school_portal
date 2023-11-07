@@ -17,7 +17,7 @@ import { useTheme } from "@mui/material/styles";
 import Iconify from "components/common/iconify";
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -41,18 +41,20 @@ const AddBookTopic = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const bookId = localStorage.getItem("bookId");
+  const [activeTaskBtn, setActiveTaskBtn] = useState(true);
 
+  console.log("activeTaskBtn", activeTaskBtn);
+  console.log("book empty", isEmpty(bookId));
   const { state } = useLocation();
   const bookData = state ?? {};
 
-  //remove book id when component is unmounted & add book id when component is mounted
+  //remove book id when component is unmounted
   useEffect(() => {
-    const bookData = state ?? {};
-    !isEmpty(bookData) && localStorage.setItem("bookId", bookData.id);
     return () => {
       localStorage.removeItem("bookId");
     };
-  }, [state]);
+  }, []);
 
   const handleAddBookTitle = (values) => {
     const payload = {
@@ -64,6 +66,7 @@ const AddBookTopic = () => {
       .then((result) => {
         if (result.success) {
           toast.success(result.message);
+          setActiveTaskBtn(false);
           localStorage.setItem("bookId", result.data);
         } else {
           toast.error(result.message);
@@ -75,7 +78,6 @@ const AddBookTopic = () => {
   };
 
   const handleAddBookFile = (values, fileType) => {
-    const bookId = localStorage.getItem("bookId");
     if (bookId) {
       const filteredFiles = values.data.filter((item) => {
         return typeof item.file === "object";
@@ -360,7 +362,12 @@ const AddBookTopic = () => {
               color="secondary"
               size="small"
               fullWidth
-              onClick={() => navigate("/dashboard/contents/create-book-event")}
+              disabled={activeTaskBtn && isEmpty(bookId)}
+              onClick={() =>
+                navigate("/dashboard/contents/create-book-event", {
+                  state: { book_id: bookId },
+                })
+              }
             >
               Kitap etkinlikleri oluştur ve ekle
             </Button>

@@ -2,13 +2,16 @@ import React, { useState } from "react";
 
 import { Box, Grid } from "@mui/material";
 
-import AddPuzzel from "../model/AddPuzzel";
-import VoiceRecording from "../model/VoiceRecording";
-import AddMultipleChoiceQuestions from "../model/AddMultipleChoiceQuestions";
-import AddMatchingQuestions from "../model/AddMatchingQuestions";
-import QuestionsWrittenHere from "../model/QuestionsWrittenHere";
+import AddPuzzel from "./model/AddPuzzel";
+import VoiceRecording from "./model/VoiceRecording";
+import AddMultipleChoiceQuestions from "./model/AddMultipleChoiceQuestions";
+import AddMatchingQuestions from "./model/AddMatchingQuestions";
+import QuestionsWrittenHere from "./model/QuestionsWrittenHere";
+import { useLocation } from "react-router-dom";
 
 const CreateBookAndEvent = () => {
+  const { state } = useLocation();
+  console.log(state);
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
@@ -30,6 +33,7 @@ const CreateBookAndEvent = () => {
   const handleClose5 = () => {
     setOpen5(false);
   };
+
   return (
     <>
       <Grid container className="gap-3">

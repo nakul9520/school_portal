@@ -122,6 +122,25 @@ export const deleteToLibrary = createAsyncThunk(
     }
   }
 );
+
+export const addVoiceTask = createAsyncThunk(
+  "content/addVoiceTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.ADD_VOICE_TASK,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
 const contentSlice = createSlice({
   name: "content",
   initialState,
@@ -182,6 +201,15 @@ const contentSlice = createSlice({
         state.loading = false;
       })
       .addCase(deleteToLibrary.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(addVoiceTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addVoiceTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(addVoiceTask.rejected, (state) => {
         state.loading = false;
       });
   },

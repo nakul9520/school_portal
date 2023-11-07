@@ -83,7 +83,7 @@ const navConfig = [
   {
     id: 5,
     title: "İçerik",
-    path: "/dashboard/contents",
+    // path: "/dashboard/contents",
     icon: icon("contents"),
     type: "collapse",
     children: [

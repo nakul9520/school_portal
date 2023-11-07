@@ -52,6 +52,17 @@ import SystemReports from "components/dashboard/reports/system-report/SystemRepo
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import UsersAndGroups from "components/dashboard/username-and-groups/UsersAndGroups";
+import CreatingPage from "components/dashboard/contents/platform/creating-page/CreatingPage";
+import PlatformLayout from "components/dashboard/contents/platform/PlatformLayout";
+import AddCreatingPage from "components/dashboard/contents/platform/creating-page/AddCreatingPage";
+import SocialContent from "components/dashboard/contents/platform/social-content/SocialContent";
+import AddSocialContent from "components/dashboard/contents/platform/social-content/AddSocialContent";
+import DownloadableContent from "components/dashboard/contents/platform/downloadable-content/DownloadableContent";
+import AddDownloadableContent from "components/dashboard/contents/platform/downloadable-content/AddDownloadableContent";
+import VideoContent from "components/dashboard/contents/platform/video-content/VideoContent";
+import AddVideoContent from "components/dashboard/contents/platform/video-content/AddVideoContent";
+import FAQList from "components/dashboard/contents/platform/faq/FAQList";
+import AddFAQ from "components/dashboard/contents/platform/faq/AddFAQ";
 
 // private
 // const DashboardLayout = Loadable(
@@ -187,8 +198,38 @@ const AppRoutes = () => {
               />
               <Route
                 path="/dashboard/contents/platform-design"
-                element={<PlatFormDesign />}
-              />
+                element={<PlatformLayout />}
+              >
+                {/* creating page */}
+                <Route element={<PlatFormDesign />} index />
+                <Route path="creating-page" element={<CreatingPage />} />
+                <Route path="add-creating-page" element={<AddCreatingPage />} />
+
+                {/* social content page */}
+                <Route path="social-content" element={<SocialContent />} />
+                <Route
+                  path="add-social-content"
+                  element={<AddSocialContent />}
+                />
+
+                {/* Downloadable content page */}
+                <Route
+                  path="downloadable-content"
+                  element={<DownloadableContent />}
+                />
+                <Route
+                  path="add-downloadable-content"
+                  element={<AddDownloadableContent />}
+                />
+
+                {/* video content page */}
+                <Route path="video-content" element={<VideoContent />} />
+                <Route path="add-video-content" element={<AddVideoContent />} />
+
+                {/* FAQ page */}
+                <Route path="faq" element={<FAQList />} />
+                <Route path="add-faq" element={<AddFAQ />} />
+              </Route>
               <Route
                 path="/dashboard/contents/library-categories"
                 element={<LibraryCategories />}
