@@ -30,6 +30,11 @@ const Api = {
   GET_BOOK_DETAIL: "getBookDetails",
   BOOK_ADD_TO_LIBRARY: "addToLibray",
   BOOK_DELETE_TO_LIBRARY: "deleteToLibray",
+
+  // Task
+  ADD_VOICE_TASK: "addVoiceTask",
+  VOICE_TASK_DETAIL: "getVoiceTaskDetails",
+  DELETE_TASK_DETAIL: "deleteVoiceTask",
 };
 
 export default Api;

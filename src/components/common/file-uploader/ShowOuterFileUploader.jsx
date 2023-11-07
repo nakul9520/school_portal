@@ -17,7 +17,6 @@
 
 // "microphone": This value captures audio using the device's microphone.
 
-
 const ShowOuterFileUploader = (props) => {
   const {
     fileRef,
@@ -52,6 +51,12 @@ const ShowOuterFileUploader = (props) => {
         } else if (files[i].type.indexOf("application") > -1) {
           fileArray.push({
             type: "file",
+            url: URL.createObjectURL(files[i]),
+            name: files[i].name,
+          });
+        } else if (files[i].type.indexOf("audio") > -1) {
+          fileArray.push({
+            type: "audio",
             url: URL.createObjectURL(files[i]),
             name: files[i].name,
           });

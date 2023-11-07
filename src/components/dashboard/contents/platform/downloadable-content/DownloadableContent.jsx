@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
+
 import {
   Box,
   Button,
@@ -12,24 +14,20 @@ import {
 } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
-import Iconify from "components/common/iconify/Iconify";
 import { debounce, get, size } from "lodash";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getBookList } from "redux/store/slice/dashboard/contentSlice";
-import BookListTable from "./BookListTable";
-import { getBookDetail } from "redux/store/slice/dashboard/contentSlice";
-import { toast } from "react-toastify";
 
-const BookDesign = () => {
+import Iconify from "components/common/iconify/Iconify";
+import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
+import DownloadableContentTable from "./DownloadableContentTable";
+
+const DownloadableContent = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  const { bookListInfo } = useSelector((state) => state.content);
-  // console.log("BookList:", bookListInfo);
-  const [bookId, setBookId] = useState(null);
+  const { schoolListInfo } = useSelector((state) => state.users);
 
   const [filterOptions, setFilterOptions] = useState({
     search: "",
@@ -39,7 +37,7 @@ const BookDesign = () => {
   const [page, setPage] = useState(1);
   const [perPageData, setperPageData] = useState(10);
 
-  const getBookListData = useCallback(
+  const getSchoolListData = useCallback(
     async (data, pageNumber) => {
       const param = {
         payload: {
@@ -49,14 +47,14 @@ const BookDesign = () => {
         page: pageNumber,
       };
 
-      dispatch(getBookList(param));
+      dispatch(getSchoolList(param));
     },
     [dispatch]
   );
 
   const debounceFn = useMemo(
-    () => debounce(getBookListData, 1000),
-    [getBookListData]
+    () => debounce(getSchoolListData, 1000),
+    [getSchoolListData]
   );
 
   useEffect(() => {
@@ -69,7 +67,7 @@ const BookDesign = () => {
 
   const handlePageChange = (e, value) => {
     setPage(value);
-    getBookListData(filterOptions, value);
+    getSchoolListData(filterOptions, value);
   };
 
   const handlePerPageData = (e) => {
@@ -83,27 +81,9 @@ const BookDesign = () => {
         ...filterOptions,
         per_page: 10,
       });
-      setperPageData(10);
     }
-    getBookListData(filterOptions, page);
+    getSchoolListData(filterOptions, page);
   };
-
-  const handleBookEdit = () => {
-    dispatch(getBookDetail(bookId))
-      .unwrap()
-      .then((result) => {
-        if (result.success) {
-          localStorage.setItem("bookId", result.data.id);
-          navigate("/dashboard/contents/add-book-topic", {
-            state: result.data,
-          });
-        } else {
-          toast.error(result.message);
-        }
-      })
-      .catch((err) => {});
-  };
-
   return (
     <>
       <Box
@@ -120,18 +100,8 @@ const BookDesign = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              Kitap Tasarımı
+              indirilebilir İçerik
             </Typography>
-          </Grid>
-          <Grid item sm={6} xs={12} className="text-right">
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<Iconify icon="bi:plus" />}
-              onClick={() => navigate("/dashboard/contents/add-book-topic")}
-            >
-              Kitap Ekle
-            </Button>
           </Grid>
         </Grid>
 
@@ -178,7 +148,7 @@ const BookDesign = () => {
               value={filterOptions.search}
               onChange={(e) => {
                 setFilterOptions({ ...filterOptions, search: e.target.value });
-                getBookListData({
+                getSchoolListData({
                   ...filterOptions,
                   search: e.target.value,
                 });
@@ -199,8 +169,27 @@ const BookDesign = () => {
           </Grid>
         </Grid>
 
-        <BookListTable bookId={bookId} setBookId={setBookId} />
+        <DownloadableContentTable />
 
+        <Stack
+          direction={{ sm: "row", xs: "column" }}
+          justifyContent={{ sm: "flex-end", xs: "flex-start" }}
+          alignItems="center"
+          mt={3}
+          className="table_bottom_tabs gap-2"
+        >
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() =>
+              navigate(
+                "/dashboard/contents/platform-design/add-downloadable-content"
+              )
+            }
+          >
+            indirilebilir İçerik Ekle
+          </Button>
+        </Stack>
         <Stack
           direction={{ md: "row", xs: "column" }}
           justifyContent="space-between"
@@ -209,52 +198,20 @@ const BookDesign = () => {
           mt={3}
         >
           <Typography variant="body2" color="secondary.disabled">
-            {bookListInfo.total_record} sonuçtan 1 ile {size(bookListInfo.data)}{" "}
-            arası gösteriliyor
+            {schoolListInfo.total_record} sonuçtan 1 ile{" "}
+            {size(schoolListInfo.data)} arası gösteriliyor
           </Typography>
-          {bookListInfo.total_record > 0 && (
+          {schoolListInfo.total_record > 0 && (
             <Pagination
-              count={bookListInfo.last_page}
+              count={schoolListInfo.last_page}
               page={page}
               onChange={handlePageChange}
             />
           )}
-        </Stack>
-
-        <Stack
-          direction={{ sm: "row", xs: "column" }}
-          justifyContent={{ sm: "space-between", xs: "flex-start" }}
-          alignItems="center"
-          mt={3}
-          className="gap-2"
-        >
-          <Stack direction="row" alignItems="center" className="gap-2">
-            <Button variant="contained" color="primary">
-              Pdf
-            </Button>
-            <Button variant="contained" color="secondary">
-              Print
-            </Button>
-          </Stack>
-
-          <Stack direction="row" alignItems="center" className="gap-2">
-            {bookId ? (
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleBookEdit}
-              >
-                Düzenlemek
-              </Button>
-            ) : null}
-            <Button variant="contained" color="primary">
-              Kaydet
-            </Button>
-          </Stack>
         </Stack>
       </Box>
     </>
   );
 };
 
-export default BookDesign;
+export default DownloadableContent;

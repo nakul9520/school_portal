@@ -44,7 +44,6 @@ const BookListTable = (props) => {
   const { bookListInfo, loading } = useSelector((state) => state.content);
 
   const bookList = bookListInfo.data ?? [];
-  console.log("selectedCategory", selectedCategory);
 
   const categoryList = [
     { label: "Sınıf Düzeyi Ekle/Çıkar", id: 1 },
@@ -163,7 +162,6 @@ const BookListTable = (props) => {
                         checkedIcon={<Iconify icon="akar-icons:radio-fill" />}
                         icon={<Iconify icon="akar-icons:radio" />}
                         onChange={(e) => {
-                          console.log("checked", e.target.checked);
                           if (e.target.checked) {
                             handleAddToLibrary(row.id, item.id);
                           } else {
@@ -189,7 +187,6 @@ const BookListTable = (props) => {
           </TableBody>
         </StyledTable>
       </TableContainer>
-      {console.log("remove", selectedCategory)}
       <ConfirmationDialog
         dialogTitle="Remove Category Confirmation"
         confirmationText="Are you sure you want to remove from category"
