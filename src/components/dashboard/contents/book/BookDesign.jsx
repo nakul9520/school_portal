@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Grid,
   IconButton,
   InputAdornment,
   Pagination,
@@ -9,40 +10,98 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Paper from "@mui/material/Paper";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 
-import Iconify from "components/common/iconify/Iconify";
-import {
-  StyledTable,
-  StyledTableCell,
-  StyledTableRow,
-} from "styles/ComponentStyle";
-import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import { useTheme } from "@mui/material/styles";
+import Iconify from "components/common/iconify/Iconify";
+import { debounce, get, size } from "lodash";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getBookList } from "redux/store/slice/dashboard/contentSlice";
+import BookListTable from "./BookListTable";
+import { getBookDetail } from "redux/store/slice/dashboard/contentSlice";
+import { toast } from "react-toastify";
 
 const BookDesign = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const theme = useTheme();
 
-  const rows = [
-    {
-      order: 1,
+  const { bookListInfo } = useSelector((state) => state.content);
+  // console.log("BookList:", bookListInfo);
+  const [bookId, setBookId] = useState(null);
+
+  const [filterOptions, setFilterOptions] = useState({
+    search: "",
+    per_page: 10,
+  });
+
+  const [page, setPage] = useState(1);
+  const [perPageData, setperPageData] = useState(10);
+
+  const getBookListData = useCallback(
+    async (data, pageNumber) => {
+      const param = {
+        payload: {
+          search: get(data, "search", ""),
+          per_page: get(data, "per_page", 10),
+        },
+        page: pageNumber,
+      };
+
+      dispatch(getBookList(param));
     },
-    {
-      order: 2,
-    },
-    {
-      order: 3,
-    },
-    {
-      order: 4,
-    },
-  ];
+    [dispatch]
+  );
+
+  const debounceFn = useMemo(
+    () => debounce(getBookListData, 1000),
+    [getBookListData]
+  );
+
+  useEffect(() => {
+    const payload = {
+      search: "",
+      per_page: 10,
+    };
+    debounceFn(payload, 1);
+  }, [debounceFn, dispatch]);
+
+  const handlePageChange = (e, value) => {
+    setPage(value);
+    getBookListData(filterOptions, value);
+  };
+
+  const handlePerPageData = (e) => {
+    if (e.target.checked) {
+      setFilterOptions({
+        ...filterOptions,
+        per_page: perPageData,
+      });
+    } else {
+      setFilterOptions({
+        ...filterOptions,
+        per_page: 10,
+      });
+      setperPageData(10);
+    }
+    getBookListData(filterOptions, page);
+  };
+
+  const handleBookEdit = () => {
+    dispatch(getBookDetail(bookId))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          navigate("/dashboard/contents/add-book-topic", {
+            state: result.data,
+          });
+        } else {
+          toast.error(result.message);
+        }
+      })
+      .catch((err) => {});
+  };
 
   return (
     <>
@@ -52,149 +111,145 @@ const BookDesign = () => {
           boxShadow: theme.shadows[3],
         }}
       >
-        <Stack
-          direction="row"
+        <Grid
+          container
           justifyContent="space-between"
           alignItems="center"
-          className="gap-2"
+          spacing={1}
         >
-          <Typography variant="subtitle2" color="text.secondary">
-            Kitap Tasarımı
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Iconify icon="bi:plus" />}
-            onClick={() => navigate("/dashboard/contents/add-book-topic")}
-          >
-            Kitap Ekle
-          </Button>
-        </Stack>
-
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          className="gap-2"
-          mt={2}
-        >
-          <Stack
-            direction="row"
-            justifyContent="flex-end"
-            alignItems="center"
-            className="gap-2"
-          >
-            <Typography variant="caption" color="text.secondary">
-              Sayfada Göster
+          <Grid item sm={6} xs={12}>
+            <Typography variant="subtitle2" color="text.secondary">
+              Kitap Tasarımı
             </Typography>
-            <Box className="d-flex align-items-center border">
-              <TextField
-                variant="outlined"
-                size="small"
-                placeholder="10"
-                sx={{
-                  width: "50px",
-                  ".MuiInputBase-root": {
-                    backgroundColor: "transparent",
-                    ".MuiOutlinedInput-notchedOutline": {
-                      border: "none",
+          </Grid>
+          <Grid item sm={6} xs={12} className="text-right">
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<Iconify icon="bi:plus" />}
+              onClick={() => navigate("/dashboard/contents/add-book-topic")}
+            >
+              Kitap Ekle
+            </Button>
+          </Grid>
+        </Grid>
+
+        <Grid
+          container
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={1}
+          mt={1}
+        >
+          <Grid item sm={6} xs={12}>
+            <Stack direction="row" alignItems="center" className="gap-2">
+              <Typography variant="caption" color="text.secondary">
+                Sayfada Göster
+              </Typography>
+              <Box className="d-flex align-items-center border">
+                <TextField
+                  variant="outlined"
+                  value={perPageData}
+                  onChange={(e) => setperPageData(e.target.value)}
+                  size="small"
+                  placeholder="10"
+                  sx={{
+                    width: "50px",
+                    ".MuiInputBase-root": {
+                      backgroundColor: "transparent",
+                      ".MuiOutlinedInput-notchedOutline": {
+                        border: "none",
+                      },
                     },
-                  },
-                }}
-              />
-              <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}>
-                <Checkbox />
+                  }}
+                />
+                <Box
+                  sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
+                >
+                  <Checkbox onChange={handlePerPageData} />
+                </Box>
               </Box>
-            </Box>
-          </Stack>
+            </Stack>
+          </Grid>
+          <Grid item sm={6} xs={12} className="text-right">
+            <TextField
+              variant="standard"
+              value={filterOptions.search}
+              onChange={(e) => {
+                setFilterOptions({ ...filterOptions, search: e.target.value });
+                getBookListData({
+                  ...filterOptions,
+                  search: e.target.value,
+                });
+              }}
+              placeholder="Arama…"
+              className="header_search"
+              size="small"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="start">
+                    <IconButton sx={{ color: "text.secondary" }}>
+                      <Iconify icon="iconamoon:search-light" width={20} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+        </Grid>
 
-          <TextField
-            variant="standard"
-            placeholder="Arama…"
-            className="header_search"
-            size="small"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="start">
-                  <IconButton sx={{ color: "text.secondary" }}>
-                    <Iconify icon="iconamoon:search-light" width={20} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Stack>
-
-        <TableContainer component={Paper} className="rounded-0 mt-3">
-          <StyledTable stickyHeader>
-            <TableHead>
-              <TableRow>
-                <StyledTableCell align="left">Sıra</StyledTableCell>
-                <StyledTableCell>Kitap Adı </StyledTableCell>
-                <StyledTableCell>Seviyesi </StyledTableCell>
-                <StyledTableCell>PYP Teması </StyledTableCell>
-                <StyledTableCell>Genel Teması </StyledTableCell>
-                <StyledTableCell>Kazanımlar</StyledTableCell>
-                <StyledTableCell>Seriler</StyledTableCell>
-                <StyledTableCell>Seç</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row, index) => (
-                <StyledTableRow key={index}>
-                  <StyledTableCell align="left">{row.order}</StyledTableCell>
-                  <StyledTableCell align="left"></StyledTableCell>
-                  <StyledTableCell align="left"></StyledTableCell>
-                  <StyledTableCell align="left"></StyledTableCell>
-                  <StyledTableCell align="left"></StyledTableCell>
-                  <StyledTableCell align="left"></StyledTableCell>
-                  <StyledTableCell align="left"></StyledTableCell>
-                  <StyledTableCell align="left">
-                    <CMCheckBox />
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </StyledTable>
-        </TableContainer>
+        <BookListTable bookId={bookId} setBookId={setBookId} />
 
         <Stack
-          direction="row"
+          direction={{ md: "row", xs: "column" }}
           justifyContent="space-between"
           alignItems="center"
           spacing={1}
           mt={3}
         >
-          <Typography
-            variant="body2"
-            color="secondary.disabled"
-            className="ms-4"
-          >
-            57 sonuçtan 1 ile 10 arası gösteriliyor
+          <Typography variant="body2" color="secondary.disabled">
+            {bookListInfo.total_record} sonuçtan 1 ile {size(bookListInfo.data)}{" "}
+            arası gösteriliyor
           </Typography>
-          <Pagination count={10} />
+          {bookListInfo.total_record > 0 && (
+            <Pagination
+              count={bookListInfo.last_page}
+              page={page}
+              onChange={handlePageChange}
+            />
+          )}
         </Stack>
+
         <Stack
-          direction="row"
-          justifyContent="space-between"
+          direction={{ sm: "row", xs: "column" }}
+          justifyContent={{ sm: "space-between", xs: "flex-start" }}
           alignItems="center"
+          mt={3}
           className="gap-2"
-          mt={2}
         >
           <Stack direction="row" alignItems="center" className="gap-2">
-            <Button variant="contained" color="primary" className="rounded-0">
+            <Button variant="contained" color="primary">
               Pdf
             </Button>
-            <Button variant="contained" color="secondary" className="rounded-0">
+            <Button variant="contained" color="secondary">
               Print
             </Button>
           </Stack>
 
-          <Box className="table_bottom_tabs text-right mt-3">
-            <Button variant="contained" color="primary" className="rounded-0">
+          <Stack direction="row" alignItems="center" className="gap-2">
+            {bookId ? (
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleBookEdit}
+              >
+                Düzenlemek
+              </Button>
+            ) : null}
+            <Button variant="contained" color="primary">
               Kaydet
             </Button>
-          </Box>
+          </Stack>
         </Stack>
       </Box>
     </>

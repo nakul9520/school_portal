@@ -81,7 +81,10 @@ input[type="number"] {
   position: relative;
   height: 100%;
 }
-
+.login_right .blue_bg {
+  display: flex;
+  align-items: center;
+}
 .blue_bg {
   background: #183887db;
   width: 100%;

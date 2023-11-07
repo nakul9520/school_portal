@@ -188,12 +188,11 @@ const Class = () => {
         <ClassDataTable />
 
         <Stack
-          direction="row"
-          justifyContent="flex-end"
+          direction={{ sm: "row", xs: "column" }}
+          justifyContent={{ sm: "flex-end", xs: "flex-start" }}
           alignItems="center"
-          spacing={1}
           mt={3}
-          className="table_bottom_tabs"
+          className="table_bottom_tabs gap-2"
         >
           <Button
             variant="contained"
@@ -224,7 +223,6 @@ const Class = () => {
           <Typography
             variant="body2"
             color="secondary.disabled"
-            className="ms-4"
           >
             {classListInfo.total_record} sonuçtan 1 ile 10 arası gösteriliyor
           </Typography>

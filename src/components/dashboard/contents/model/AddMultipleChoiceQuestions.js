@@ -19,7 +19,7 @@ const AddMultipleChoiceQuestions = (props) => {
       <CMDialog
         dialogOpen={open}
         dialogClose={onClose}
-        dialogTitle=" Çoktan seçmeli soruları buradan ekleyin"
+        dialogTitle="Çoktan seçmeli soruları buradan ekleyin"
         mxWidth="sm"
       >
         <DialogContent>

@@ -11,14 +11,13 @@ import {
 import { useTheme } from "@mui/material/styles";
 
 import { Formik } from "formik";
-import { get, toString } from "lodash";
+import { get, omit } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
 
 import { addEditClass } from "redux/store/slice/dashboard/userSlice";
-import { autocompleteFindData } from "services/utiles";
 import { addEditClassValidation } from "services/validations";
 
 const AddClassForm = () => {
@@ -32,29 +31,28 @@ const AddClassForm = () => {
   const { schoolListInfo, loading } = useSelector((state) => state.users);
   const schoolList = schoolListInfo.data ?? [];
 
-  const handleAddEdit = (values, action) => {
-    console.log("edit");
+  const handleAddEdit = (values) => {
     const data = {
       ...values,
       id: classData.id ? classData.id : "",
-      school_id: values.school_id.id,
+      school_id: values.school_id,
     };
-    console.log("data", data);
-    dispatch(addEditClass(data))
+    const payload = omit(data, "school_name");
+    dispatch(addEditClass(payload))
       .unwrap()
       .then((result) => {
         if (result.success) {
           console.log(result);
           toast.success(result.message);
           navigate("/dashboard/username-and-groups/class");
+        } else {
+          toast.error(result.message);
         }
       })
       .catch((err) => {
         toast.error(err.message);
         console.log("Error: ", err);
       });
-
-    // console.log("data", values);
   };
 
   useEffect(() => {
@@ -83,6 +81,7 @@ const AddClassForm = () => {
         <Formik
           initialValues={{
             school_id: get(classData, "school_id", ""),
+            school_name: get(classData, "school_name", ""),
             class_name: get(classData, "class_name", ""),
             class_code: get(classData, "class_code", ""),
             teacher_name1: get(classData, "teacher_name1", ""),
@@ -118,24 +117,20 @@ const AddClassForm = () => {
                     Okul Adı
                   </Typography>
                   <Autocomplete
-                    getOptionLabel={(option) =>
-                      option.school_name ??
-                      autocompleteFindData(schoolList, "school_name", option)
-                    }
+                    getOptionLabel={(option) => {
+                      return option.school_name ?? option;
+                    }}
                     options={schoolList}
-                    name="school_id"
-                    value={values.school_id}
+                    name="school_name"
+                    value={values.school_name}
                     isOptionEqualToValue={(option, value) => {
-                      if (
-                        value === "" ||
-                        toString(option.id) === toString(value.id) ||
-                        toString(option.id) === toString(value)
-                      ) {
+                      if (value === "" || option.school_name === value) {
                         return true;
                       }
                     }}
                     onChange={(e, value) => {
-                      setFieldValue("school_id", value);
+                      setFieldValue("school_id", value.id);
+                      setFieldValue("school_name", value.school_name);
                     }}
                     autoHighlight
                     disableClearable
@@ -146,7 +141,7 @@ const AddClassForm = () => {
                       <TextField
                         fullWidth
                         {...params}
-                        name="school_id"
+                        name="school_name"
                         inputProps={{
                           ...params.inputProps,
                           autoComplete: "new-password",
@@ -160,11 +155,13 @@ const AddClassForm = () => {
                           ),
                         }}
                         error={
-                          errors.school_id && touched.school_id ? true : false
+                          errors.school_name && touched.school_name
+                            ? true
+                            : false
                         }
                         helperText={
-                          errors.school_id && touched.school_id
-                            ? errors.school_id
+                          errors.school_name && touched.school_name
+                            ? errors.school_name
                             : null
                         }
                       />

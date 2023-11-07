@@ -7,3 +7,9 @@ export const USER_TYPE = {
   student: "2",
   teacher: "3",
 };
+
+export const FILE_TYPE = {
+  image: 1,
+  audio: 2,
+  document: 3,
+};
