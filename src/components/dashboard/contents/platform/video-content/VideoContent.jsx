@@ -19,8 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Iconify from "components/common/iconify/Iconify";
-import { getAllContentList } from "redux/store/slice/dashboard/contentSlice";
-import { CONTENT_TYPE } from "services/constant";
+import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
 import VideoContentTable from "./VideoContentTable";
 
 const VideoContent = () => {
@@ -28,7 +27,7 @@ const VideoContent = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  const { contentListInfo } = useSelector((state) => state.content);
+  const { schoolListInfo } = useSelector((state) => state.users);
 
   const [filterOptions, setFilterOptions] = useState({
     search: "",
@@ -38,25 +37,24 @@ const VideoContent = () => {
   const [page, setPage] = useState(1);
   const [perPageData, setperPageData] = useState(10);
 
-  const getContentListData = useCallback(
+  const getSchoolListData = useCallback(
     async (data, pageNumber) => {
       const param = {
         payload: {
-          type: CONTENT_TYPE.videoTutorial,
           search: get(data, "search", ""),
           per_page: get(data, "per_page", 10),
         },
         page: pageNumber,
       };
 
-      dispatch(getAllContentList(param));
+      dispatch(getSchoolList(param));
     },
     [dispatch]
   );
 
   const debounceFn = useMemo(
-    () => debounce(getContentListData, 1000),
-    [getContentListData]
+    () => debounce(getSchoolListData, 1000),
+    [getSchoolListData]
   );
 
   useEffect(() => {
@@ -69,7 +67,7 @@ const VideoContent = () => {
 
   const handlePageChange = (e, value) => {
     setPage(value);
-    getContentListData(filterOptions, value);
+    getSchoolListData(filterOptions, value);
   };
 
   const handlePerPageData = (e) => {
@@ -84,7 +82,7 @@ const VideoContent = () => {
         per_page: 10,
       });
     }
-    getContentListData(filterOptions, page);
+    getSchoolListData(filterOptions, page);
   };
   return (
     <>
@@ -102,7 +100,7 @@ const VideoContent = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              Video Ekle
+              Video İçerik
             </Typography>
           </Grid>
         </Grid>
@@ -150,7 +148,7 @@ const VideoContent = () => {
               value={filterOptions.search}
               onChange={(e) => {
                 setFilterOptions({ ...filterOptions, search: e.target.value });
-                getContentListData({
+                getSchoolListData({
                   ...filterOptions,
                   search: e.target.value,
                 });
@@ -198,12 +196,12 @@ const VideoContent = () => {
           mt={3}
         >
           <Typography variant="body2" color="secondary.disabled">
-            {contentListInfo.total_record} sonuçtan 1 ile{" "}
-            {size(contentListInfo.data)} arası gösteriliyor
+            {schoolListInfo.total_record} sonuçtan 1 ile{" "}
+            {size(schoolListInfo.data)} arası gösteriliyor
           </Typography>
-          {contentListInfo.total_record > 0 && (
+          {schoolListInfo.total_record > 0 && (
             <Pagination
-              count={contentListInfo.last_page}
+              count={schoolListInfo.last_page}
               page={page}
               onChange={handlePageChange}
             />

@@ -5,7 +5,7 @@ const Contents = () => {
   return (
     <>
       <Outlet />
-  </>
+    </>
   );
 };
 

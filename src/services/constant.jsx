@@ -13,10 +13,3 @@ export const FILE_TYPE = {
   audio: 2,
   document: 3,
 };
-
-export const CONTENT_TYPE = {
-  videoTutorial: 1,
-  downloadadble: 2,
-  socialContent: 3,
-  creatingPage: 4,
-};

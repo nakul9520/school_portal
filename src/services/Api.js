@@ -31,18 +31,10 @@ const Api = {
   BOOK_ADD_TO_LIBRARY: "addToLibray",
   BOOK_DELETE_TO_LIBRARY: "deleteToLibray",
 
-  // Content 
-  // Book
+  // Task
   ADD_VOICE_TASK: "addVoiceTask",
   VOICE_TASK_DETAIL: "getVoiceTaskDetails",
   DELETE_TASK_DETAIL: "deleteVoiceTask",
-  
-  // PlateForm COntent
-  ADD_EDIT_CONTENT_FILE: "addEditVideoContent",
-  ADD_ALL_CONTENT_LIST: "getAllContentFile",
-  DELETE_CONTENT_FILE: "deletevideoContent",
-
-
 };
 
 export default Api;

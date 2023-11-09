@@ -18,34 +18,32 @@ import { toast } from "react-toastify";
 import CMIconButton from "components/common/CMIconButton";
 import Iconify from "components/common/iconify/Iconify";
 import {
-  deleteContentFile,
-  getAllContentList,
-} from "redux/store/slice/dashboard/contentSlice";
-import { CONTENT_TYPE } from "services/constant";
+  deleteSchool,
+  getSchoolList,
+} from "redux/store/slice/dashboard/userSlice";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import VedioThumbnail from "components/common/thumbnail/VedioThumbnail";
 
 const VideoContentTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { contentListInfo, loading } = useSelector((state) => state.content);
-  const contentList = contentListInfo.data ?? [];
+  const { schoolListInfo, loading } = useSelector((state) => state.users);
+  const schoolList = schoolListInfo.data ?? [];
 
   const handleDelete = (id) => {
-    dispatch(deleteContentFile({ id: id }))
+    dispatch(deleteSchool({ id: [id] }))
       .unwrap()
       .then((result) => {
         if (result.success) {
+          console.log(result);
           toast.success(result.message);
           dispatch(
-            getAllContentList({
+            getSchoolList({
               payload: {
-                type: CONTENT_TYPE.videoTutorial,
                 search: "",
                 per_page: 10,
               },
@@ -84,7 +82,7 @@ const VideoContentTable = () => {
                   <LinearProgress />
                 </StyledTableCell>
               </StyledTableRow>
-            ) : isEmpty(contentList) ? (
+            ) : isEmpty(schoolList) ? (
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={9}>
                   <Typography variant="subtitle1" color="text.primary">
@@ -93,21 +91,17 @@ const VideoContentTable = () => {
                 </StyledTableCell>
               </StyledTableRow>
             ) : (
-              contentList.map((row, index) => (
+              schoolList.map((row, index) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell scope="row">{row.id}</StyledTableCell>
-                  <StyledTableCell align="left">{row.title}</StyledTableCell>
                   <StyledTableCell align="left">
-                    <Box sx={{ width: 80, height: 80 }}>
-                      <VedioThumbnail
-                        key={index}
-                        videoPath={row.file}
-                        size={80}
-                      />
-                    </Box>
+                    {row.school_name}
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.description}
+                    {row.school_admin}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.school_admin}
                   </StyledTableCell>
 
                   <StyledTableCell
@@ -121,7 +115,7 @@ const VideoContentTable = () => {
                       <Box
                         onClick={() =>
                           navigate(
-                            "/dashboard/contents/platform-design/add-video-content",
+                            "/dashboard/contents/platform-design/add-social-content",
                             { state: row }
                           )
                         }
@@ -131,11 +125,8 @@ const VideoContentTable = () => {
                         </CMIconButton>
                       </Box>
 
-                      <Box>
-                        <CMIconButton
-                          color="error"
-                          onClick={() => handleDelete(row.id)}
-                        >
+                      <Box onClick={() => handleDelete(row.id)}>
+                        <CMIconButton color="error">
                           <Iconify icon="uiw:delete" />
                         </CMIconButton>
                       </Box>

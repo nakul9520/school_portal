@@ -13,12 +13,14 @@ import Iconify from "components/common/iconify";
 
 import { Formik } from "formik";
 import { map } from "lodash";
+import moment from "moment";
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { addEditContentFile } from "redux/store/slice/dashboard/contentSlice";
-import { CONTENT_TYPE } from "services/constant";
+
+import { addEditSchool } from "redux/store/slice/dashboard/userSlice";
+import { addEditSchoolValidation } from "services/validations";
 
 const AddSocialContent = () => {
   const theme = useTheme();
@@ -28,27 +30,27 @@ const AddSocialContent = () => {
   const mediaInputRef = useRef(null);
   const handleRemoveFile = (formikProp, index) => {
     const updatedFiles = imageList.filter(
-      (_file, fileIndex) => fileIndex !== index
+      (file, fileIndex) => fileIndex !== index
     );
     setImageList(updatedFiles);
     formikProp.setFieldValue("file", updatedFiles);
   };
   const { state } = useLocation();
-  const contentData = state ?? {};
+  const schoolData = state ?? {};
 
   const handleAddEdit = (values, action) => {
     const data = {
       ...values,
-      file: typeof values.file === "object" ? values.file[0] : "",
-      id: contentData.id ? contentData.id : "",
-      filetype: CONTENT_TYPE.socialContent,
+      id: schoolData.id ? schoolData.id : "",
+      activation_date: moment(values.activation_date).format("YYYY-MM-DD"),
+      expired_at: moment(values.expired_at).format("YYYY-MM-DD"),
     };
-    dispatch(addEditContentFile(data))
+    dispatch(addEditSchool(data))
       .unwrap()
       .then((result) => {
         if (result.success) {
           toast.success(result.message);
-          navigate("/dashboard/contents/platform-design/social-content");
+          navigate("/dashboard/contents/platform-design/creating-page");
         } else {
           toast.error(result.message);
         }
@@ -73,10 +75,12 @@ const AddSocialContent = () => {
 
         <Formik
           initialValues={{
-            title: contentData.title ?? "",
-            description: contentData.description ?? "",
-            file: contentData.file ?? "",
+            school_name: schoolData.school_name ?? "",
+            user_name: schoolData.user_name ?? "",
+            brief_infomation: schoolData.brief_infomation ?? "",
+            file: "",
           }}
+          validationSchema={addEditSchoolValidation}
           onSubmit={(value, action) => {
             handleAddEdit(value, action);
           }}
@@ -93,17 +97,19 @@ const AddSocialContent = () => {
                     Başlık
                   </Typography>
                   <TextField
-                    name="title"
-                    value={props.values.title}
+                    name="school_name"
+                    value={props.values.school_name}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     fullWidth
                     error={
-                      props.errors.title && props.touched.title ? true : false
+                      props.errors.school_name && props.touched.school_name
+                        ? true
+                        : false
                     }
                     helperText={
-                      props.errors.title && props.touched.title
-                        ? props.errors.title
+                      props.errors.school_name && props.touched.school_name
+                        ? props.errors.school_name
                         : null
                     }
                   />
@@ -121,12 +127,12 @@ const AddSocialContent = () => {
                       background: theme.palette.background.tableBgBody,
                       height: 70,
                     }}
-                    className="cursor-pointer w-100"
+                    className="cursor-pointer w-100 d-flex align-items-center"
                   >
                     {imageList.length <= 0 ? (
                       <Box
                         onClick={() => mediaInputRef.current.click()}
-                        className="w-100 h-100 d-flex align-items-center"
+                        className="w-100"
                       >
                         <Typography variant="body2" className="px-3">
                           click to add Image
@@ -194,19 +200,21 @@ const AddSocialContent = () => {
                     Tanım
                   </Typography>
                   <RichTextEditor
-                    name="description"
-                    value={props.values.description}
+                    name="brief_infomation"
+                    value={props.values.brief_infomation}
                     setFieldValue={props.setFieldValue}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     error={
-                      props.errors.description && props.touched.description
+                      props.errors.brief_infomation &&
+                      props.touched.brief_infomation
                         ? true
                         : false
                     }
                     helperText={
-                      props.errors.description && props.touched.description
-                        ? props.errors.description
+                      props.errors.brief_infomation &&
+                      props.touched.brief_infomation
+                        ? props.errors.brief_infomation
                         : null
                     }
                   />
