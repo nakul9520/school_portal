@@ -9,7 +9,7 @@ const breadcrumbNameMap = {
   "/dashboard": "Dashboard",
 
   "/dashboard/username-and-groups": "Kullanıcı Adı ve Gruplar",
-  
+
   "/dashboard/username-and-groups/school": "Okul",
   "/dashboard/username-and-groups/add-school": "Okul",
   "/dashboard/username-and-groups/mass-school": "Okul",
@@ -26,7 +26,6 @@ const breadcrumbNameMap = {
   "/dashboard/username-and-groups/add-student": "Öğrenci",
   "/dashboard/username-and-groups/mass-student": "Öğrenci",
 
-
   "/dashboard/reports": "Raporlar",
   "/dashboard/reports/school-reports": "Okul Raporlar",
   "/dashboard/reports/get-school-reports": "Okul Raporlar",
@@ -40,6 +39,18 @@ const breadcrumbNameMap = {
   "/dashboard/assignment": "Görevlendirme",
 
   "/dashboard/contents": "İçerik",
+  "/dashboard/contents/platform-design": "Platrofm Tasarımı",
+  "/dashboard/contents/platform-design/creating-page": "Sayfa Oluşturuluyor",
+  "/dashboard/contents/platform-design/add-creating-page":
+    "Sayfa Oluşturuluyor",
+  "/dashboard/contents/platform-design/social-content": "Sosyal İçerik",
+  "/dashboard/contents/platform-design/add-social-content": "Sosyal İçerik",
+  "/dashboard/contents/platform-design/downloadable-content":
+    "İndirilebilir İçerik",
+  "/dashboard/contents/platform-design/add-downloadable-content":
+    "İndirilebilir İçerik",
+  "/dashboard/contents/platform-design/video-content": "Video İçerik",
+  "/dashboard/contents/platform-design/add-video-content": "Video İçerik",
 
   "/dashboard/system-settings": "Sistem Ayarları",
 

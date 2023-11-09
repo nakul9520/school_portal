@@ -17,34 +17,35 @@ import { toast } from "react-toastify";
 
 import CMIconButton from "components/common/CMIconButton";
 import Iconify from "components/common/iconify/Iconify";
+import createMarkup from "components/hooks/createMarkup";
 import {
-  deleteSchool,
-  getSchoolList,
-} from "redux/store/slice/dashboard/userSlice";
+  deleteContentFile,
+  getAllContentList,
+} from "redux/store/slice/dashboard/contentSlice";
+import { CONTENT_TYPE } from "services/constant";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import { imageObj } from "services/images";
 
 const SocialContentTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { schoolListInfo, loading } = useSelector((state) => state.users);
-  const schoolList = schoolListInfo.data ?? [];
+  const { contentListInfo, loading } = useSelector((state) => state.content);
+  const contentList = contentListInfo.data ?? [];
 
   const handleDelete = (id) => {
-    dispatch(deleteSchool({ id: [id] }))
+    dispatch(deleteContentFile({ id: id }))
       .unwrap()
       .then((result) => {
         if (result.success) {
-          console.log(result);
           toast.success(result.message);
           dispatch(
-            getSchoolList({
+            getAllContentList({
               payload: {
+                type: CONTENT_TYPE.socialContent,
                 search: "",
                 per_page: 10,
               },
@@ -83,7 +84,7 @@ const SocialContentTable = () => {
                   <LinearProgress />
                 </StyledTableCell>
               </StyledTableRow>
-            ) : isEmpty(schoolList) ? (
+            ) : isEmpty(contentList) ? (
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={9}>
                   <Typography variant="subtitle1" color="text.primary">
@@ -92,17 +93,25 @@ const SocialContentTable = () => {
                 </StyledTableCell>
               </StyledTableRow>
             ) : (
-              schoolList.map((row, index) => (
+              contentList.map((row, index) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell scope="row">{row.id}</StyledTableCell>
+                  <StyledTableCell align="left">{row.title}</StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.school_name}
+                    <Box sx={{ width: 80, height: 80 }}>
+                      <Box
+                        component="img"
+                        src={row.file}
+                        className="img-cover w-100 h-100"
+                      />
+                    </Box>
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    <Box component="img" src={imageObj.logo} className="w-25" />
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {row.school_admin}
+                    <Box
+                      className="text-break"
+                      sx={{ fontSize: 12, fontWeight: 500 }}
+                      dangerouslySetInnerHTML={createMarkup(row.description)}
+                    />
                   </StyledTableCell>
 
                   <StyledTableCell
@@ -126,8 +135,11 @@ const SocialContentTable = () => {
                         </CMIconButton>
                       </Box>
 
-                      <Box onClick={() => handleDelete(row.id)}>
-                        <CMIconButton color="error">
+                      <Box>
+                        <CMIconButton
+                          color="error"
+                          onClick={() => handleDelete(row.id)}
+                        >
                           <Iconify icon="uiw:delete" />
                         </CMIconButton>
                       </Box>

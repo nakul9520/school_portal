@@ -6,6 +6,8 @@ import AxiosDefault from "services/AxiosDefault";
 const initialState = {
   bookListInfo: {},
   bookDetail: {},
+
+  contentListInfo: {},
   loading: false,
 };
 
@@ -141,6 +143,64 @@ export const addVoiceTask = createAsyncThunk(
     }
   }
 );
+
+export const addEditContentFile = createAsyncThunk(
+  "content/addEditContentFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.ADD_EDIT_CONTENT_FILE,
+        data: data,
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const deleteContentFile = createAsyncThunk(
+  "content/deleteContentFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.DELETE_CONTENT_FILE,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const getAllContentList = createAsyncThunk(
+  "auth/getAllContentList",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: `${Api.ADD_ALL_CONTENT_LIST}?page=${data.page}`,
+        data: data.payload,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
 const contentSlice = createSlice({
   name: "content",
   initialState,
@@ -210,6 +270,34 @@ const contentSlice = createSlice({
         state.loading = false;
       })
       .addCase(addVoiceTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(addEditContentFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addEditContentFile.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(addEditContentFile.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteContentFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteContentFile.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteContentFile.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getAllContentList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllContentList.fulfilled, (state, { payload }) => {
+        state.contentListInfo = payload ?? {};
+        state.loading = false;
+      })
+      .addCase(getAllContentList.rejected, (state) => {
         state.loading = false;
       });
   },

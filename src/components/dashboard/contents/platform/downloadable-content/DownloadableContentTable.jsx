@@ -18,9 +18,10 @@ import { toast } from "react-toastify";
 import CMIconButton from "components/common/CMIconButton";
 import Iconify from "components/common/iconify/Iconify";
 import {
-  deleteSchool,
-  getSchoolList,
-} from "redux/store/slice/dashboard/userSlice";
+  deleteContentFile,
+  getAllContentList,
+} from "redux/store/slice/dashboard/contentSlice";
+import { CONTENT_TYPE } from "services/constant";
 import {
   StyledTable,
   StyledTableCell,
@@ -31,19 +32,19 @@ const DownloadableContentTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { schoolListInfo, loading } = useSelector((state) => state.users);
-  const schoolList = schoolListInfo.data ?? [];
+  const { contentListInfo, loading } = useSelector((state) => state.content);
+  const contentList = contentListInfo.data ?? [];
 
   const handleDelete = (id) => {
-    dispatch(deleteSchool({ id: [id] }))
+    dispatch(deleteContentFile({ id: id }))
       .unwrap()
       .then((result) => {
         if (result.success) {
-          console.log(result);
           toast.success(result.message);
           dispatch(
-            getSchoolList({
+            getAllContentList({
               payload: {
+                type: CONTENT_TYPE.downloadadble,
                 search: "",
                 per_page: 10,
               },
@@ -82,7 +83,7 @@ const DownloadableContentTable = () => {
                   <LinearProgress />
                 </StyledTableCell>
               </StyledTableRow>
-            ) : isEmpty(schoolList) ? (
+            ) : isEmpty(contentList) ? (
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={9}>
                   <Typography variant="subtitle1" color="text.primary">
@@ -91,17 +92,21 @@ const DownloadableContentTable = () => {
                 </StyledTableCell>
               </StyledTableRow>
             ) : (
-              schoolList.map((row, index) => (
+              contentList.map((row, index) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell scope="row">{row.id}</StyledTableCell>
+                  <StyledTableCell align="left">{row.title}</StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.school_name}
+                    <Box sx={{ width: 80, height: 80 }}>
+                      <Box
+                        component="img"
+                        src={row.file}
+                        className="img-cover w-100 h-100"
+                      />
+                    </Box>
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.school_admin}
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {row.school_admin}
+                    {row.description}
                   </StyledTableCell>
 
                   <StyledTableCell
@@ -115,7 +120,7 @@ const DownloadableContentTable = () => {
                       <Box
                         onClick={() =>
                           navigate(
-                            "/dashboard/contents/platform-design/add-social-content",
+                            "/dashboard/contents/platform-design/add-downloadable-content",
                             { state: row }
                           )
                         }
@@ -125,8 +130,11 @@ const DownloadableContentTable = () => {
                         </CMIconButton>
                       </Box>
 
-                      <Box onClick={() => handleDelete(row.id)}>
-                        <CMIconButton color="error">
+                      <Box>
+                        <CMIconButton
+                          color="error"
+                          onClick={() => handleDelete(row.id)}
+                        >
                           <Iconify icon="uiw:delete" />
                         </CMIconButton>
                       </Box>

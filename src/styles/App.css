@@ -48,6 +48,13 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+/* Light box */
+.lightbox :global(.yarl__container) {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Light box */
+
 .header_search fieldset {
   border: none;
 }
