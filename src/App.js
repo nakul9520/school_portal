@@ -13,6 +13,8 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
 //css
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "yet-another-react-lightbox/styles.css";
+import "react-lazy-load-image-component/src/effects/blur.css";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {

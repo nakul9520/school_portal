@@ -19,7 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Iconify from "components/common/iconify/Iconify";
-import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
+import { getAllContentList } from "redux/store/slice/dashboard/contentSlice";
+import { CONTENT_TYPE } from "services/constant";
 import SocialContentTable from "./SocialContentTable";
 
 const SocialContent = () => {
@@ -27,7 +28,7 @@ const SocialContent = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  const { schoolListInfo } = useSelector((state) => state.users);
+  const { contentListInfo } = useSelector((state) => state.content);
 
   const [filterOptions, setFilterOptions] = useState({
     search: "",
@@ -37,24 +38,25 @@ const SocialContent = () => {
   const [page, setPage] = useState(1);
   const [perPageData, setperPageData] = useState(10);
 
-  const getSchoolListData = useCallback(
+  const getContentListData = useCallback(
     async (data, pageNumber) => {
       const param = {
         payload: {
+          type: CONTENT_TYPE.socialContent,
           search: get(data, "search", ""),
           per_page: get(data, "per_page", 10),
         },
         page: pageNumber,
       };
 
-      dispatch(getSchoolList(param));
+      dispatch(getAllContentList(param));
     },
     [dispatch]
   );
 
   const debounceFn = useMemo(
-    () => debounce(getSchoolListData, 1000),
-    [getSchoolListData]
+    () => debounce(getContentListData, 1000),
+    [getContentListData]
   );
 
   useEffect(() => {
@@ -67,7 +69,7 @@ const SocialContent = () => {
 
   const handlePageChange = (e, value) => {
     setPage(value);
-    getSchoolListData(filterOptions, value);
+    getContentListData(filterOptions, value);
   };
 
   const handlePerPageData = (e) => {
@@ -82,7 +84,7 @@ const SocialContent = () => {
         per_page: 10,
       });
     }
-    getSchoolListData(filterOptions, page);
+    getContentListData(filterOptions, page);
   };
   return (
     <>
@@ -100,7 +102,7 @@ const SocialContent = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              Sosyal İçerik
+              Sosyal Ekle
             </Typography>
           </Grid>
         </Grid>
@@ -148,7 +150,7 @@ const SocialContent = () => {
               value={filterOptions.search}
               onChange={(e) => {
                 setFilterOptions({ ...filterOptions, search: e.target.value });
-                getSchoolListData({
+                getContentListData({
                   ...filterOptions,
                   search: e.target.value,
                 });
@@ -196,12 +198,12 @@ const SocialContent = () => {
           mt={3}
         >
           <Typography variant="body2" color="secondary.disabled">
-            {schoolListInfo.total_record} sonuçtan 1 ile{" "}
-            {size(schoolListInfo.data)} arası gösteriliyor
+            {contentListInfo.total_record} sonuçtan 1 ile{" "}
+            {size(contentListInfo.data)} arası gösteriliyor
           </Typography>
-          {schoolListInfo.total_record > 0 && (
+          {contentListInfo.total_record > 0 && (
             <Pagination
-              count={schoolListInfo.last_page}
+              count={contentListInfo.last_page}
               page={page}
               onChange={handlePageChange}
             />
