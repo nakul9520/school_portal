@@ -73,6 +73,8 @@ import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import VoiceTask from "components/dashboard/contents/book/task/voice-task/VoiceTask";
 import MCQTask from "components/dashboard/contents/book/task/mcq-task/MCQTask";
+import DragDropTask from "components/dashboard/contents/book/task/drag-drop/DragDropTask";
+import MatchingTask from "components/dashboard/contents/book/task/matching-task/MatchingTask";
 
 // private
 // const DashboardLayout = Loadable(
@@ -271,6 +273,8 @@ const AppRoutes = () => {
                 />
                 <Route path="voice-task" element={<VoiceTask />} />
                 <Route path="mcq-task" element={<MCQTask />} />
+                <Route path="drag-drop-task" element={<DragDropTask />} />
+                <Route path="matching-task" element={<MatchingTask />} />
               </Route>
             </Route>
             {/* System Setting */}

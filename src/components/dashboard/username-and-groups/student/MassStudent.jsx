@@ -17,10 +17,13 @@ import { useDispatch } from "react-redux";
 import Iconify from "components/common/iconify/Iconify";
 import MassStudentTable from "./MassStudentTable";
 import { getStudentCSVFile } from "redux/store/slice/dashboard/userSlice";
+import { importStudentFile } from "redux/store/slice/dashboard/userSlice";
+import { useRef } from "react";
 
 const MassStudent = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const mediaInputRef = useRef(null);
 
   const handleDownloadCSV = () => {
     dispatch(getStudentCSVFile())
@@ -50,6 +53,19 @@ const MassStudent = () => {
         toast.error(err.message);
         console.log("Error: ", err);
       });
+  };
+  
+  // import class file
+  const onImageChange = (event) => {
+    const file = event.target.files[0];
+    console.log("file: ", file);
+    dispatch(importStudentFile({ file })).then((result) => {
+      if (result.success) {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    });
   };
   return (
     <>
@@ -157,6 +173,7 @@ const MassStudent = () => {
             variant="contained"
             color="info"
             startIcon={<Iconify icon="ph:arrow-up" />}
+            onClick={() => mediaInputRef.current.click()}
           >
             Toplu Formu Yükle
           </Button>
@@ -165,6 +182,14 @@ const MassStudent = () => {
             Kaydet
           </Button>
         </Stack>
+        <input
+          ref={mediaInputRef}
+          hidden
+          accept=".csv"
+          onChange={(e) => onImageChange(e)}
+          name="image"
+          type="file"
+        />
         <Stack
           direction="row"
           justifyContent="space-between"

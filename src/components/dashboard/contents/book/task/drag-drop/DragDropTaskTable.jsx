@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-import { isEmpty } from "lodash";
+import { isEmpty, map } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -19,17 +19,17 @@ import CMIconButton from "components/common/CMIconButton";
 import Iconify from "components/common/iconify/Iconify";
 import { useState } from "react";
 import {
-  deleteVoiceTask,
-  getVoiceTaskList,
+  deleteDragDropTask,
+  getDragDropTaskList,
 } from "redux/store/slice/dashboard/contentSlice";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import AddVoiceRecording from "./AddVoiceRecording";
+import QuestionsWrittenHere from "./QuestionsWrittenHere";
 
-const VoiceTaskTable = () => {
+const DragDropTaskTable = () => {
   const dispatch = useDispatch();
   const book_id = localStorage.getItem("bookId");
 
@@ -40,11 +40,11 @@ const VoiceTaskTable = () => {
     setOpen(false);
   };
 
-  const { voiceTaskInfo, loading } = useSelector((state) => state.content);
-  const voiceTaskList = voiceTaskInfo.data ?? [];
+  const { dragDropTaskInfo, loading } = useSelector((state) => state.content);
+  const dragDropTaskList = dragDropTaskInfo.data ?? [];
 
   const handleDelete = (id) => {
-    dispatch(deleteVoiceTask({ id: id }))
+    dispatch(deleteDragDropTask({ id: id }))
       .unwrap()
       .then((result) => {
         if (result.success) {
@@ -54,7 +54,9 @@ const VoiceTaskTable = () => {
             page: 1,
           };
 
-          dispatch(getVoiceTaskList(param));
+          dispatch(getDragDropTaskList(param));
+        } else {
+          toast.error(result.message);
         }
       })
       .catch((err) => {
@@ -88,7 +90,8 @@ const VoiceTaskTable = () => {
                 Sıra
               </StyledTableCell>
               <StyledTableCell align="left">Question</StyledTableCell>
-              <StyledTableCell align="left">File</StyledTableCell>
+              <StyledTableCell align="left">Options</StyledTableCell>
+              <StyledTableCell align="left">Answers</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -99,7 +102,7 @@ const VoiceTaskTable = () => {
                   <LinearProgress />
                 </StyledTableCell>
               </StyledTableRow>
-            ) : isEmpty(voiceTaskList) ? (
+            ) : isEmpty(dragDropTaskList) ? (
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={9}>
                   <Typography variant="subtitle1" color="text.primary">
@@ -108,16 +111,24 @@ const VoiceTaskTable = () => {
                 </StyledTableCell>
               </StyledTableRow>
             ) : (
-              voiceTaskList.map((row, index) => (
+              dragDropTaskList.map((row, index) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell scope="row">{row.id}</StyledTableCell>
                   <StyledTableCell align="left">{row.question}</StyledTableCell>
                   <StyledTableCell align="left">
-                    <audio controls>
-                      <source src={row.file} type="audio/mpeg" />
-                    </audio>
+                    {map(row.options, (item, optionIndex) => (
+                      <Typography variant="body2" key={optionIndex}>
+                        {item}
+                      </Typography>
+                    ))}
                   </StyledTableCell>
-
+                  <StyledTableCell align="left">
+                    {map(row.answer, (item, optionIndex) => (
+                      <Typography variant="body2" key={optionIndex}>
+                        {item}
+                      </Typography>
+                    ))}
+                  </StyledTableCell>
                   <StyledTableCell
                     align="left"
                     className="d-flex align-items-center"
@@ -154,9 +165,13 @@ const VoiceTaskTable = () => {
           </TableBody>
         </StyledTable>
       </TableContainer>
-      <AddVoiceRecording open={open} onClose={handleClose} data={editContent} />
+      <QuestionsWrittenHere
+        open={open}
+        onClose={handleClose}
+        data={editContent}
+      />
     </>
   );
 };
 
-export default VoiceTaskTable;
+export default DragDropTaskTable;

@@ -19,6 +19,7 @@ const Api = {
   GET_CLASS_DETAIL: "getclass",
   DELETE_CLASS: "classDelete",
   GET_CLASS_CSV_FILE: "classCsv",
+  IMPORT_CLASS_FILE: "classImport",
 
   //Techers & students
   ADD_EDIT_USERS: "addEditUser",
@@ -29,6 +30,7 @@ const Api = {
   GET_TEACHER_CSV_FILE: "teacherCsv",
   GET_STUDENT_CSV_FILE: "studentCsv",
   IMPORT_TEACHER_FILE: "teacherImport",
+  IMPORT_STUDENT_FILE: "studentImport",
 
   // Book
   ADD_BOOK_TITLE: "addEditBook",
@@ -47,6 +49,14 @@ const Api = {
   ADD_MCQ_TASK: "addMcqTask",
   MCQ_TASK_DETAIL: "getMcqTaskDetails",
   DELETE_MCQ_TASK: "deleteMcqTask",
+
+  ADD_DRAG_DROP_TASK: "addDragDropTask",
+  DRAG_DROP_TASK_DETAIL: "getDragDropTaskDetails",
+  DELETE_DRAG_DROP_TASK: "deleteDragDropTask",
+
+  ADD_MATCHING_TASK: "addMatchingTask",
+  MATCHING_TASK_DETAIL: "getMatchingTaskDetails",
+  DELETE_MATCHING_TASK: "deleteMatchingTask",
   // filter
   GET_FILTER_LIST: "getfilterlist",
   ADD_EDIT_FILTER: "addEditFilter",

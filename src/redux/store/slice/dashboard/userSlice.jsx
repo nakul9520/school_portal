@@ -214,6 +214,25 @@ export const getClassCSVFile = createAsyncThunk(
     }
   }
 );
+export const importClassFile = createAsyncThunk(
+  "auth/importClassFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.IMPORT_CLASS_FILE,
+        data: data,
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
 
 // Techer & Student
 export const addEditUsers = createAsyncThunk(
@@ -346,6 +365,25 @@ export const importTeacherFile = createAsyncThunk(
       const response = await AxiosDefault({
         method: "POST",
         url: Api.IMPORT_TEACHER_FILE,
+        data: data,
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+export const importStudentFile = createAsyncThunk(
+  "auth/importStudentFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.IMPORT_STUDENT_FILE,
         data: data,
         contentType: "multipart/form-data",
       });

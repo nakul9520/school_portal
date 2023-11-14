@@ -71,7 +71,10 @@ const MCQTaskTable = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            setEditContent({});
+            setOpen(true);
+          }}
         >
           Add Task
         </Button>

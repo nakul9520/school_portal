@@ -3,23 +3,13 @@ import { useState } from "react";
 import { Box, Grid } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import AddMatchingQuestions from "./model/AddMatchingQuestions";
 import AddPuzzel from "./model/AddPuzzel";
-import QuestionsWrittenHere from "./model/QuestionsWrittenHere";
 
 const CreateBookAndEvent = () => {
   const navigate = useNavigate();
 
-  const [open3, setOpen3] = useState(false);
-  const [open4, setOpen4] = useState(false);
   const [open5, setOpen5] = useState(false);
 
-  const handleClose3 = () => {
-    setOpen3(false);
-  };
-  const handleClose4 = () => {
-    setOpen4(false);
-  };
   const handleClose5 = () => {
     setOpen5(false);
   };
@@ -53,7 +43,9 @@ const CreateBookAndEvent = () => {
           <Box
             className="common_multi_box"
             sx={{ backgroundColor: "success.main" }}
-            onClick={() => setOpen3(true)}
+            onClick={() =>
+              navigate("/dashboard/contents/create-book-event/matching-task")
+            }
           >
             Eşleştirme Ekle
           </Box>
@@ -62,7 +54,9 @@ const CreateBookAndEvent = () => {
           <Box
             className="common_multi_box"
             sx={{ backgroundColor: "info.main" }}
-            onClick={() => setOpen4(true)}
+            onClick={() =>
+              navigate("/dashboard/contents/create-book-event/drag-drop-task")
+            }
           >
             Sürükle Bırak Etkinlik Ekle
           </Box>
@@ -78,8 +72,6 @@ const CreateBookAndEvent = () => {
         </Grid>
       </Grid>
 
-      <AddMatchingQuestions open={open3} onClose={handleClose3} />
-      <QuestionsWrittenHere open={open4} onClose={handleClose4} />
       <AddPuzzel open={open5} onClose={handleClose5} />
     </>
   );
