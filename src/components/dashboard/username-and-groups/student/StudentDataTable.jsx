@@ -65,7 +65,6 @@ const StudentDataTable = () => {
       .unwrap()
       .then((result) => {
         if (result.success) {
-          console.log(result);
           toast.success(result.message);
           dispatch(
             getUsersList({
@@ -89,6 +88,7 @@ const StudentDataTable = () => {
       <TableContainer
         component={Paper}
         className="rounded-0 mt-3 scrollbar-none"
+        sx={{ maxHeight: 350 }}
       >
         <StyledTable stickyHeader>
           <TableHead>

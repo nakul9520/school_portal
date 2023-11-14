@@ -88,6 +88,42 @@ export const deleteSchool = createAsyncThunk(
     }
   }
 );
+export const getSchoolCSVFile = createAsyncThunk(
+  "auth/getSchoolCSVFile",
+  async () => {
+    try {
+      const response = await AxiosDefault({
+        method: "GET",
+        url: Api.GET_SCHOOL_CSV_FILE,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+export const importSchoolFile = createAsyncThunk(
+  "auth/importSchoolFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.IMPORT_SCHOOL_FILE,
+        data: data,
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
 
 // classs
 export const addEditClass = createAsyncThunk(
@@ -151,6 +187,23 @@ export const deleteClass = createAsyncThunk(
         method: "POST",
         url: Api.DELETE_CLASS,
         data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+export const getClassCSVFile = createAsyncThunk(
+  "auth/getClassCSVFile",
+  async () => {
+    try {
+      const response = await AxiosDefault({
+        method: "GET",
+        url: Api.GET_CLASS_CSV_FILE,
       });
       return response.data;
     } catch (err) {
@@ -252,6 +305,59 @@ export const getClassesBySchool = createAsyncThunk(
     }
   }
 );
+export const getTeacherCSVFile = createAsyncThunk(
+  "auth/getTeacherCSVFile",
+  async () => {
+    try {
+      const response = await AxiosDefault({
+        method: "GET",
+        url: Api.GET_TEACHER_CSV_FILE,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+export const getStudentCSVFile = createAsyncThunk(
+  "auth/getStudentCSVFile",
+  async () => {
+    try {
+      const response = await AxiosDefault({
+        method: "GET",
+        url: Api.GET_STUDENT_CSV_FILE,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+export const importTeacherFile = createAsyncThunk(
+  "auth/importTeacherFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.IMPORT_TEACHER_FILE,
+        data: data,
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: "users",
@@ -291,10 +397,19 @@ const userSlice = createSlice({
       .addCase(deleteSchool.pending, (state) => {
         state.loading = true;
       })
-      .addCase(deleteSchool.fulfilled, (state, { payload }) => {
+      .addCase(deleteSchool.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(deleteSchool.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getSchoolCSVFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getSchoolCSVFile.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(getSchoolCSVFile.rejected, (state) => {
         state.loading = false;
       })
       .addCase(addEditClass.pending, (state) => {
@@ -333,6 +448,15 @@ const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(deleteClass.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getClassCSVFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getClassCSVFile.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(getClassCSVFile.rejected, (state) => {
         state.loading = false;
       })
       .addCase(addEditUsers.pending, (state) => {
@@ -380,6 +504,24 @@ const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(getClassesBySchool.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getTeacherCSVFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getTeacherCSVFile.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(getTeacherCSVFile.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getStudentCSVFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getStudentCSVFile.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(getStudentCSVFile.rejected, (state) => {
         state.loading = false;
       });
   },

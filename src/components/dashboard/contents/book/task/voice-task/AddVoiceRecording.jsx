@@ -5,6 +5,7 @@ import {
   Grid,
   IconButton,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import CMDialog from "components/common/dialog/CMDialog";
@@ -14,12 +15,20 @@ import { Formik } from "formik";
 import { map, truncate } from "lodash";
 import React, { useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addEditVoiceTask } from "redux/store/slice/dashboard/contentSlice";
+import { getVoiceTaskList } from "redux/store/slice/dashboard/contentSlice";
 
-const VoiceRecording = (props) => {
-  const { open, onClose } = props;
+const AddVoiceRecording = (props) => {
+  const { data, open, onClose } = props;
+  const dispatch = useDispatch();
+  const book_id = localStorage.getItem("bookId");
+
   const [voiceList, setVoiceList] = useState([]);
   const mediaInputRef = useRef(null);
   const theme = useTheme();
+
   const handleRemoveFile = (formikProp, index) => {
     const updatedFiles = voiceList.filter(
       (file, fileIndex) => fileIndex !== index
@@ -27,7 +36,35 @@ const VoiceRecording = (props) => {
     setVoiceList(updatedFiles);
     formikProp.setFieldValue("file", updatedFiles);
   };
-  const handleVoiceUpload = (values, action) => {};
+
+  const handleVoiceUpload = (values, action) => {
+    const payload = {
+      ...values,
+      file: typeof values.file === "object" ? values.file[0] : "",
+      id: data ? data.id : "",
+      book_id: book_id,
+    };
+    dispatch(addEditVoiceTask(payload))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          toast.success(result.message);
+          const param = {
+            book_id: book_id,
+            page: 1,
+          };
+
+          dispatch(getVoiceTaskList(param));
+          onClose();
+        } else {
+          toast.error(result.message);
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
+  };
   return (
     <>
       <CMDialog
@@ -38,8 +75,10 @@ const VoiceRecording = (props) => {
       >
         <DialogContent>
           <Formik
-            initialValues={{ file: "" }}
-            // validationSchema={loginValidation}
+            initialValues={{
+              question: data.question ?? "",
+              file: data.file ?? "",
+            }}
             onSubmit={(value, action) => {
               handleVoiceUpload(value, action);
             }}
@@ -53,9 +92,26 @@ const VoiceRecording = (props) => {
                       color="text.secondary"
                       className="my-2"
                     >
-                      Ses kaydetme sorularınızı buraya ekleyin. Lütfen maximum
-                      sınırı (20 mb) aşmayın.
+                      Add Question
                     </Typography>
+                    <TextField
+                      name="question"
+                      value={props.values.question}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      fullWidth
+                      size="small"
+                      error={
+                        props.errors.question && props.touched.question
+                          ? true
+                          : false
+                      }
+                      helperText={
+                        props.errors.question && props.touched.question
+                          ? props.errors.question
+                          : null
+                      }
+                    />
                   </Grid>
 
                   <Grid item xs={12}>
@@ -148,4 +204,4 @@ const VoiceRecording = (props) => {
   );
 };
 
-export default VoiceRecording;
+export default AddVoiceRecording;

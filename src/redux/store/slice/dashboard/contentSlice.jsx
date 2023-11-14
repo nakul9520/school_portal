@@ -6,8 +6,15 @@ import AxiosDefault from "services/AxiosDefault";
 const initialState = {
   bookListInfo: {},
   bookDetail: {},
+  filterList: {},
+
+  voiceTaskInfo: {},
+  MCQTaskInfo: {},
 
   contentListInfo: {},
+  guideLinesData: {},
+  supportTicketListInfo: [],
+  supportTicketMessage: [],
   loading: false,
 };
 
@@ -125,13 +132,107 @@ export const deleteToLibrary = createAsyncThunk(
   }
 );
 
-export const addVoiceTask = createAsyncThunk(
-  "content/addVoiceTask",
+export const addEditVoiceTask = createAsyncThunk(
+  "content/addEditVoiceTask",
   async (data) => {
     try {
       const response = await AxiosDefault({
         method: "POST",
         url: Api.ADD_VOICE_TASK,
+        data: data,
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const getVoiceTaskList = createAsyncThunk(
+  "content/getVoiceTaskList",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: `${Api.VOICE_TASK_DETAIL}/${data.book_id}/?page=${data.page}`,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const deleteVoiceTask = createAsyncThunk(
+  "content/deleteVoiceTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.DELETE_VOICE_TASK,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const addEditMCQTask = createAsyncThunk(
+  "content/addEditMCQTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.ADD_MCQ_TASK,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const getMCQTaskList = createAsyncThunk(
+  "content/getMCQTaskList",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: `${Api.MCQ_TASK_DETAIL}/${data.book_id}/?page=${data.page}`,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const deleteMCQTask = createAsyncThunk(
+  "content/deleteMCQTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.DELETE_MCQ_TASK,
         data: data,
       });
       return response.data;
@@ -201,6 +302,159 @@ export const getAllContentList = createAsyncThunk(
     }
   }
 );
+
+export const addEditGuideLine = createAsyncThunk(
+  "content/addEditGuideLine",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.ADD_EDIT_GUIDE_LINES,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const getGuideLineList = createAsyncThunk(
+  "content/getGuideLineList",
+  async (id) => {
+    try {
+      const response = await AxiosDefault({
+        method: "GET",
+        url: `${Api.GET_GUIDE_LINES}/${id}`,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const deleteFAQ = createAsyncThunk("content/deleteFAQ", async (data) => {
+  try {
+    const response = await AxiosDefault({
+      method: "POST",
+      url: Api.DELETE_FAQ,
+      data: data,
+    });
+    return response.data;
+  } catch (err) {
+    return {
+      status: err.response.data.status,
+      message: err.response.data.message,
+    };
+  }
+});
+
+// support
+
+export const getSupportTicketList = createAsyncThunk(
+  "content/getSupportTicketList",
+  async (pageNumber) => {
+    try {
+      const response = await AxiosDefault({
+        method: "GET",
+        url: `${Api.GET_SUPPORT_TICKET_LIST}/?page=${pageNumber}`,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const getSupportTicketChat = createAsyncThunk(
+  "content/getSupportTicketChat",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.GET_SUPPORT_MESSAGE_LIST,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+// filter
+
+export const getFilterList = createAsyncThunk(
+  "content/getFilterList",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.GET_FILTER_LIST,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const filterAddEdit = createAsyncThunk(
+  "content/filterAddEdit",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.ADD_EDIT_FILTER,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const postAddChatForAdmin = createAsyncThunk(
+  "content/postAddChatForAdmin",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.POST_ADD_CHAT_MESSAGE,
+        data: data,
+        // contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
 const contentSlice = createSlice({
   name: "content",
   initialState,
@@ -263,13 +517,60 @@ const contentSlice = createSlice({
       .addCase(deleteToLibrary.rejected, (state) => {
         state.loading = false;
       })
-      .addCase(addVoiceTask.pending, (state) => {
+      .addCase(addEditVoiceTask.pending, (state) => {
         state.loading = true;
       })
-      .addCase(addVoiceTask.fulfilled, (state) => {
+      .addCase(addEditVoiceTask.fulfilled, (state) => {
         state.loading = false;
       })
-      .addCase(addVoiceTask.rejected, (state) => {
+      .addCase(addEditVoiceTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getVoiceTaskList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getVoiceTaskList.fulfilled, (state, { payload }) => {
+        state.voiceTaskInfo = payload ?? {};
+        state.loading = false;
+      })
+      .addCase(getVoiceTaskList.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteVoiceTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteVoiceTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteVoiceTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(addEditMCQTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addEditMCQTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(addEditMCQTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getMCQTaskList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getMCQTaskList.fulfilled, (state, { payload }) => {
+        state.MCQTaskInfo = payload ?? {};
+        state.loading = false;
+      })
+      .addCase(getMCQTaskList.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteMCQTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteMCQTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteMCQTask.rejected, (state) => {
         state.loading = false;
       })
       .addCase(addEditContentFile.pending, (state) => {
@@ -298,6 +599,64 @@ const contentSlice = createSlice({
         state.loading = false;
       })
       .addCase(getAllContentList.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getGuideLineList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getGuideLineList.fulfilled, (state, { payload }) => {
+        state.guideLinesData = payload.data ?? {};
+        state.loading = false;
+      })
+      .addCase(getGuideLineList.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteFAQ.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteFAQ.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteFAQ.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getSupportTicketList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getSupportTicketList.fulfilled, (state, { payload }) => {
+        state.supportTicketListInfo = payload ?? {};
+        state.loading = false;
+      })
+      .addCase(getSupportTicketList.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(postAddChatForAdmin.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(postAddChatForAdmin.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(postAddChatForAdmin.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getSupportTicketChat.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getSupportTicketChat.fulfilled, (state, { payload }) => {
+        state.supportTicketMessage = payload.data ?? {};
+        state.loading = false;
+      })
+      .addCase(getSupportTicketChat.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getFilterList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getFilterList.fulfilled, (state, { payload }) => {
+        state.filterList = payload ?? {};
+        state.loading = false;
+      })
+      .addCase(getFilterList.rejected, (state) => {
         state.loading = false;
       });
   },

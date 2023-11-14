@@ -113,7 +113,7 @@ const navConfig = [
   {
     id: 7,
     title: "Oyunlaştırma",
-    path: "/dashboard/dramatization",
+    path: "/dashboard/badges",
     icon: icon("dramatization"),
   },
 ];

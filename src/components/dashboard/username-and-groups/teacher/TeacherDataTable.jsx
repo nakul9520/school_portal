@@ -13,7 +13,10 @@ import { toast } from "react-toastify";
 import CMIconButton from "components/common/CMIconButton";
 import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
 import Iconify from "components/common/iconify/Iconify";
-import { deleteUsers, getUsersList } from "redux/store/slice/dashboard/userSlice";
+import {
+  deleteUsers,
+  getUsersList,
+} from "redux/store/slice/dashboard/userSlice";
 import { USER_TYPE } from "services/constant";
 import {
   StyledTable,
@@ -33,7 +36,6 @@ const TeacherDataTable = () => {
       .unwrap()
       .then((result) => {
         if (result.success) {
-          console.log(result);
           toast.success(result.message);
           dispatch(
             getUsersList({
@@ -57,6 +59,7 @@ const TeacherDataTable = () => {
       <TableContainer
         component={Paper}
         className="rounded-0 mt-3 scrollbar-none"
+        sx={{ maxHeight: 350 }}
       >
         <StyledTable stickyHeader>
           <TableHead>

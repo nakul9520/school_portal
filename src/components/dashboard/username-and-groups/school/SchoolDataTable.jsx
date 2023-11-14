@@ -38,7 +38,6 @@ const SchoolDataTable = () => {
       .unwrap()
       .then((result) => {
         if (result.success) {
-          console.log(result);
           toast.success(result.message);
           dispatch(
             getSchoolList({
@@ -61,6 +60,7 @@ const SchoolDataTable = () => {
       <TableContainer
         component={Paper}
         className="rounded-0 mt-3 scrollbar-none"
+        sx={{ maxHeight: 350 }}
       >
         <StyledTable stickyHeader>
           <TableHead>
@@ -143,8 +143,11 @@ const SchoolDataTable = () => {
                       <Box>
                         <SelectCheckbox color="success" />
                       </Box>
-                      <Box onClick={() => handleDelete(row.id)}>
-                        <CMIconButton color="error">
+                      <Box>
+                        <CMIconButton
+                          color="error"
+                          onClick={() => handleDelete(row.id)}
+                        >
                           <Iconify icon="uiw:delete" />
                         </CMIconButton>
                       </Box>

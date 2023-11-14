@@ -79,9 +79,9 @@ const PlatFormDesign = () => {
             Legal Documents and Permissions
           </Box>
         </Grid>
-        <Grid item xs={10} sm={4} md={3} lg={2}>
+        {/* <Grid item xs={10} sm={4} md={3} lg={2}>
           <Box className="common_multi_box yellow-stagshorn">Archive</Box>
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   );

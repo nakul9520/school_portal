@@ -19,7 +19,7 @@ const QuestionsWrittenHere = (props) => {
         dialogClose={onClose}
         dialogTitle="Sürükle bırak sorularını buradan ekleyin"
         // closeIcon={true}
-        mxWidth="sm"
+        maxWidth="sm"
       >
         <DialogContent>
           <Typography

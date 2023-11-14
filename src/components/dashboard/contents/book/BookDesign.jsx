@@ -128,7 +128,10 @@ const BookDesign = () => {
               variant="contained"
               color="primary"
               startIcon={<Iconify icon="bi:plus" />}
-              onClick={() => navigate("/dashboard/contents/add-book-topic")}
+              onClick={() => {
+                localStorage.removeItem("bookId");
+                navigate("/dashboard/contents/add-book-topic");
+              }}
             >
               Kitap Ekle
             </Button>

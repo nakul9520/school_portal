@@ -63,6 +63,7 @@ const DownloadableContentTable = () => {
       <TableContainer
         component={Paper}
         className="rounded-0 mt-3 scrollbar-none"
+        sx={{ maxHeight: 350 }}
       >
         <StyledTable stickyHeader>
           <TableHead>

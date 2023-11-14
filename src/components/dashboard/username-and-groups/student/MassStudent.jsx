@@ -10,11 +10,47 @@ import {
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+
 import Iconify from "components/common/iconify/Iconify";
 import MassStudentTable from "./MassStudentTable";
+import { getStudentCSVFile } from "redux/store/slice/dashboard/userSlice";
 
 const MassStudent = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+
+  const handleDownloadCSV = () => {
+    dispatch(getStudentCSVFile())
+      .unwrap()
+      .then((result) => {
+        if (result) {
+          const blob = new Blob([result], {
+            type: "data:text/csv;charset=utf-8,",
+          });
+          const blobURL = window.URL.createObjectURL(blob);
+          const anchor = document.createElement("a");
+          anchor.download = `mass-student-list.csv`;
+          anchor.href = blobURL;
+          anchor.dataset.downloadurl = [
+            "text/csv",
+            anchor.download,
+            anchor.href,
+          ].join(":");
+          anchor.click();
+          anchor.remove();
+          toast.success("File downloaded successfully");
+        } else {
+          toast.error("Try again later");
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
+  };
   return (
     <>
       <Box
@@ -39,7 +75,11 @@ const MassStudent = () => {
             alignItems="center"
             className="gap-2"
           >
-            <Button variant="contained" color="success">
+            <Button
+              variant="contained"
+              color="success"
+              onClick={handleDownloadCSV}
+            >
               Excel
             </Button>
 
@@ -113,23 +153,14 @@ const MassStudent = () => {
           mt={3}
           className="table_bottom_tabs"
         >
-          <Stack direction="row" alignItems="center" className="gap-2">
-            <Button
-              variant="contained"
-              color="info"
-              startIcon={<Iconify icon="ph:arrow-up" />}
-            >
-              Toplu Formu Yükle
-            </Button>
+          <Button
+            variant="contained"
+            color="info"
+            startIcon={<Iconify icon="ph:arrow-up" />}
+          >
+            Toplu Formu Yükle
+          </Button>
 
-            <Button
-              variant="contained"
-              color="success"
-              startIcon={<Iconify icon="ph:arrow-down" />}
-            >
-              Toplu Formu İndir
-            </Button>
-          </Stack>
           <Button variant="contained" color="primary">
             Kaydet
           </Button>

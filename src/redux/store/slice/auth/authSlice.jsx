@@ -25,12 +25,11 @@ export const postLogin = createAsyncThunk("auth/postLogin", async (data) => {
   }
 });
 
-export const postLogout = createAsyncThunk("auth/postLogout", async (data) => {
+export const postLogout = createAsyncThunk("auth/postLogout", async () => {
   try {
     const response = await AxiosDefault({
       method: "GET",
       url: Api.ADMIN_LOGOUT,
-      data: data,
     });
     return response.data;
   } catch (err) {
@@ -40,6 +39,25 @@ export const postLogout = createAsyncThunk("auth/postLogout", async (data) => {
     };
   }
 });
+export const updateProfile = createAsyncThunk(
+  "auth/updateProfile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.UPDATE_PROFILE,
+        data: data,
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
 export const getProfileInfo = createAsyncThunk(
   "auth/getProfileInfo",
   async (data) => {
@@ -86,6 +104,15 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(postLogout.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateProfile.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(updateProfile.rejected, (state) => {
         state.loading = false;
       })
       .addCase(getProfileInfo.pending, (state) => {

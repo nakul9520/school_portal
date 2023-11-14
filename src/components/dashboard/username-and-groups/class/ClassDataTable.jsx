@@ -30,14 +30,11 @@ const ClassDataTable = () => {
   const { classListInfo, loading } = useSelector((state) => state.users);
   const classList = classListInfo.data ?? [];
 
-  console.log("classList", classList);
-
   const handleDelete = (id) => {
     dispatch(deleteClass({ id: [id] }))
       .unwrap()
       .then((result) => {
         if (result.success) {
-          console.log(result);
           toast.success(result.message);
           dispatch(
             getClassList({
@@ -61,6 +58,7 @@ const ClassDataTable = () => {
       <TableContainer
         component={Paper}
         className="rounded-0 mt-3 scrollbar-none"
+        sx={{ maxHeight: 350 }}
       >
         <StyledTable stickyHeader>
           <TableHead>

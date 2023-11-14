@@ -119,7 +119,6 @@ const AddSchoolForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="school_admin"
                     error={
                       errors.school_admin && touched.school_admin ? true : false
                     }
@@ -144,7 +143,6 @@ const AddSchoolForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="school_email"
                     error={
                       errors.school_email && touched.school_email ? true : false
                     }
@@ -169,7 +167,6 @@ const AddSchoolForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="user_name"
                     error={errors.user_name && touched.user_name ? true : false}
                     helperText={
                       errors.user_name && touched.user_name
@@ -192,7 +189,6 @@ const AddSchoolForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="school_code"
                     error={
                       errors.school_code && touched.school_code ? true : false
                     }
