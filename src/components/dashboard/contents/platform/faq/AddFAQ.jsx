@@ -2,13 +2,12 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 import { Formik } from "formik";
-import moment from "moment";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { addEditGuideLine } from "redux/store/slice/dashboard/contentSlice";
 
-import { addEditSchool } from "redux/store/slice/dashboard/userSlice";
-import { addEditSchoolValidation } from "services/validations";
+import { GUIDELINE_TYPE } from "services/constant";
 
 const AddFAQ = () => {
   const theme = useTheme();
@@ -16,21 +15,20 @@ const AddFAQ = () => {
   const dispatch = useDispatch();
 
   const { state } = useLocation();
-  const schoolData = state ?? {};
+  const guideLineData = state ?? {};
 
-  const handleAddEdit = (values, action) => {
+  const handleAddEdit = (values) => {
     const data = {
       ...values,
-      id: schoolData.id ? schoolData.id : "",
-      activation_date: moment(values.activation_date).format("YYYY-MM-DD"),
-      expired_at: moment(values.expired_at).format("YYYY-MM-DD"),
+      id: guideLineData.id ? guideLineData.id : "",
+      type: GUIDELINE_TYPE.faq,
     };
-    dispatch(addEditSchool(data))
+    dispatch(addEditGuideLine(data))
       .unwrap()
       .then((result) => {
         if (result.success) {
           toast.success(result.message);
-          navigate("/dashboard/contents/platform-design/creating-page");
+          navigate("/dashboard/contents/platform-design/faq");
         } else {
           toast.error(result.message);
         }
@@ -55,11 +53,9 @@ const AddFAQ = () => {
 
         <Formik
           initialValues={{
-            school_name: schoolData.school_name ?? "",
-            description: schoolData.description ?? "",
-            file: "",
+            title: guideLineData.title ?? "",
+            description: guideLineData.description ?? "",
           }}
-          validationSchema={addEditSchoolValidation}
           onSubmit={(value, action) => {
             handleAddEdit(value, action);
           }}
@@ -76,19 +72,17 @@ const AddFAQ = () => {
                     Başlık
                   </Typography>
                   <TextField
-                    name="school_name"
-                    value={props.values.school_name}
+                    name="title"
+                    value={props.values.title}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     fullWidth
                     error={
-                      props.errors.school_name && props.touched.school_name
-                        ? true
-                        : false
+                      props.errors.title && props.touched.title ? true : false
                     }
                     helperText={
-                      props.errors.school_name && props.touched.school_name
-                        ? props.errors.school_name
+                      props.errors.title && props.touched.title
+                        ? props.errors.title
                         : null
                     }
                   />

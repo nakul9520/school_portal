@@ -1,26 +1,28 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   Box,
   Button,
-  Checkbox,
+  FormControl,
   Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   Pagination,
+  Select,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 
-import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
-import { useDispatch, useSelector } from "react-redux";
 import { debounce, get, size } from "lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import Iconify from "components/common/iconify/Iconify";
-import SchoolDataTable from "./SchoolDataTable";
 import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
+import SchoolDataTable from "./SchoolDataTable";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -71,18 +73,18 @@ const Dashboard = () => {
   };
 
   const handlePerPageData = (e) => {
-    if (e.target.checked) {
-      setFilterOptions({
+    setperPageData(e.target.value);
+    setFilterOptions({
+      ...filterOptions,
+      per_page: e.target.value,
+    });
+    getSchoolListData(
+      {
         ...filterOptions,
-        per_page: perPageData,
-      });
-    } else {
-      setFilterOptions({
-        ...filterOptions,
-        per_page: 10,
-      });
-    }
-    getSchoolListData(filterOptions, page);
+        per_page: e.target.value,
+      },
+      page
+    );
   };
   return (
     <>
@@ -133,29 +135,21 @@ const Dashboard = () => {
               <Typography variant="caption" color="text.secondary">
                 Sayfada Göster
               </Typography>
-              <Box className="d-flex align-items-center border">
-                <TextField
-                  variant="outlined"
+
+              <FormControl>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
                   value={perPageData}
-                  onChange={(e) => setperPageData(e.target.value)}
+                  onChange={handlePerPageData}
                   size="small"
-                  placeholder="10"
-                  sx={{
-                    width: "50px",
-                    ".MuiInputBase-root": {
-                      backgroundColor: "transparent",
-                      ".MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                      },
-                    },
-                  }}
-                />
-                <Box
-                  sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
                 >
-                  <Checkbox onChange={handlePerPageData} />
-                </Box>
-              </Box>
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={50}>50</MenuItem>
+                  <MenuItem value={100}>100</MenuItem>
+                </Select>
+              </FormControl>
             </Stack>
           </Grid>
           <Grid item sm={6} xs={12} className="text-right">

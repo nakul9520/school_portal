@@ -22,7 +22,7 @@ const AddMatchingQuestions = (props) => {
         dialogOpen={open}
         dialogClose={onClose}
         dialogTitle="Eşleştirme sorularını buradan ekleyin"
-        mxWidth="sm"
+        maxWidth="sm"
       >
         <DialogContent>
           <Grid container className="gap-2">

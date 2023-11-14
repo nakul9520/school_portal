@@ -252,7 +252,6 @@ const AddTeacherForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="name"
                     error={errors.name && touched.name ? true : false}
                     helperText={
                       errors.name && touched.name ? errors.name : null
@@ -274,7 +273,6 @@ const AddTeacherForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="email"
                     error={errors.email && touched.email ? true : false}
                     helperText={
                       errors.email && touched.email ? errors.email : null

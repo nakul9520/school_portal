@@ -17,7 +17,7 @@ const AddPuzzel = (props) => {
         dialogOpen={open}
         dialogClose={onClose}
         dialogTitle="Sürükle bırak sorularını buradan ekleyin"
-        mxWidth="sm"
+        maxWidth="sm"
       >
         <DialogContent>
           <Typography variant="subtitle1" color="text.primary" className="my-3">

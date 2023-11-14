@@ -52,7 +52,15 @@ const breadcrumbNameMap = {
   "/dashboard/contents/platform-design/video-content": "Video İçerik",
   "/dashboard/contents/platform-design/add-video-content": "Video İçerik",
 
+  "/dashboard/contents/library-categories": "Kitaplık Kategorileri",
+  "/dashboard/contents/book-design": "Kitap Tasarımı",
+  "/dashboard/contents/add-book-topic": "Kitap Ekle",
+  "/dashboard/contents/create-book-event": "Kitap Etkinlikleri",
+
   "/dashboard/system-settings": "Sistem Ayarları",
+  "/dashboard/system-settings/edit": "edit",
+  "/dashboard/system-settings/sub-admin": "sub admin",
+  "/dashboard/system-settings/add-sub-admin": "sub admin",
 
   "/dashboard/dramatization": "Oyunlaştırma",
 };

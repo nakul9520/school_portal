@@ -1,8 +1,10 @@
 import {
   Box,
   Button,
+  Chip,
   Grid,
   IconButton,
+  LinearProgress,
   Stack,
   TextField,
   Typography,
@@ -16,11 +18,12 @@ import TableRow from "@mui/material/TableRow";
 import { useTheme } from "@mui/material/styles";
 import Iconify from "components/common/iconify";
 import { FieldArray, Formik, getIn } from "formik";
-import { get, isEmpty } from "lodash";
+import { filter, get, isEmpty } from "lodash";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getFilterList } from "redux/store/slice/dashboard/contentSlice";
 import {
   addBookFiles,
   addBookTitle,
@@ -41,40 +44,79 @@ const AddBookTopic = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [categoryId, setCategoryId] = useState(1);
   const bookId = localStorage.getItem("bookId");
   const [activeTaskBtn, setActiveTaskBtn] = useState(true);
-
-  console.log("activeTaskBtn", activeTaskBtn);
-  console.log("book empty", isEmpty(bookId));
   const { state } = useLocation();
   const bookData = state ?? {};
+  console.log("bookData", bookData);
+  const { filterList, loading } = useSelector((state) => state.content);
+  const filterListData = filterList.data ?? [];
 
-  //remove book id when component is unmounted
+  const categoryName = [
+    { title: "Sınıf Düzeyi Ekle/Çıkar", categoryId: 1, key: "grade" },
+    { title: "PYP Temaları Ekle/Çıkar", categoryId: 2, key: "pypthemes" },
+    { title: "Genel Temalar Ekle/Çıkar", categoryId: 3, key: "generalthemes" },
+    { title: "Kazanımlar Ekle/Çıkar", categoryId: 4, key: "objectives" },
+    { title: "Seriler Ekle/Çıkar", categoryId: 5, key: "series" },
+  ];
+
+  const handleCategoryChange = (id) => {
+    setCategoryId(id);
+    dispatch(
+      getFilterList({
+        category_id: id,
+        search: "",
+        per_page: 10,
+      })
+    );
+  };
+
   useEffect(() => {
-    return () => {
-      localStorage.removeItem("bookId");
-    };
-  }, []);
+    dispatch(
+      getFilterList({
+        category_id: 1,
+        search: "",
+        per_page: 10,
+      })
+    );
+  }, [dispatch]);
+  //remove book id when component is unmounted
+  // useEffect(() => {
+  //   return () => {
+  //     localStorage.removeItem("bookId");
+  //   };
+  // }, []);
 
   const handleAddBookTitle = (values) => {
-    const payload = {
-      ...values,
-      id: bookData.id ?? "",
-    };
-    dispatch(addBookTitle(payload))
-      .unwrap()
-      .then((result) => {
-        if (result.success) {
-          toast.success(result.message);
-          setActiveTaskBtn(false);
-          localStorage.setItem("bookId", result.data);
-        } else {
-          toast.error(result.message);
-        }
-      })
-      .catch((err) => {
-        console.log("Error: ", err);
-      });
+    if (
+      values.grade ||
+      values.generalthemes ||
+      values.objectives ||
+      values.pypthemes ||
+      values.series === 0
+    ) {
+      toast.error("You need to select must one filter in all category");
+    } else {
+      const payload = {
+        ...values,
+        id: bookData.id ?? "",
+      };
+      dispatch(addBookTitle(payload))
+        .unwrap()
+        .then((result) => {
+          if (result.success) {
+            toast.success(result.message);
+            setActiveTaskBtn(false);
+            localStorage.setItem("bookId", result.data);
+          } else {
+            toast.error(result.message);
+          }
+        })
+        .catch((err) => {
+          console.log("Error: ", err);
+        });
+    }
   };
 
   const handleAddBookFile = (values, fileType) => {
@@ -111,6 +153,14 @@ const AddBookTopic = () => {
     }
   };
 
+  const handleClickFilter = (id, setFieldValue) => {
+    const category_id = filter(
+      categoryName,
+      (item) => item.categoryId === categoryId
+    );
+    setFieldValue(category_id[0].key, id);
+  };
+
   return (
     <>
       <Grid container spacing={2}>
@@ -118,6 +168,12 @@ const AddBookTopic = () => {
           <Formik
             initialValues={{
               book_name: bookData.book_name ?? "",
+              book_description: bookData.book_description ?? "",
+              grade: bookData.grade ?? 0,
+              generalthemes: bookData.generalthemes ?? 0,
+              objectives: bookData.objectives ?? 0,
+              pypthemes: bookData.pypthemes ?? 0,
+              series: bookData.series ?? 0,
             }}
             validationSchema={addFileTitleValidation}
             onSubmit={(value) => {
@@ -129,10 +185,12 @@ const AddBookTopic = () => {
               handleSubmit,
               handleChange,
               handleBlur,
+              setFieldValue,
               errors,
               touched,
             }) => (
               <form onSubmit={handleSubmit}>
+                {console.log(values)}
                 <Box
                   sx={{
                     p: 2,
@@ -140,28 +198,130 @@ const AddBookTopic = () => {
                   }}
                   className="mb-3"
                 >
-                  <Typography
-                    variant="subtitle1"
-                    color="text.primary"
-                    className="mb-3"
-                  >
-                    Kitap Konusu Ekle
-                  </Typography>
-                  <TextField
-                    name="book_name"
-                    value={values.book_name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    fullWidth
-                    size="small"
-                    placeholder="Kitap konusu"
-                    error={errors.book_name && touched.book_name ? true : false}
-                    helperText={
-                      errors.book_name && touched.book_name
-                        ? errors.book_name
-                        : null
-                    }
-                  />
+                  <Box className="mb-3">
+                    <Typography
+                      variant="subtitle1"
+                      color="text.primary"
+                      className="mb-2"
+                    >
+                      Kitap Konusu Ekle
+                    </Typography>
+                    <TextField
+                      name="book_name"
+                      value={values.book_name}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      fullWidth
+                      size="small"
+                      placeholder="Kitap konusu"
+                      error={
+                        errors.book_name && touched.book_name ? true : false
+                      }
+                      helperText={
+                        errors.book_name && touched.book_name
+                          ? errors.book_name
+                          : null
+                      }
+                    />
+                  </Box>
+                  <Box className="mb-3">
+                    <Typography
+                      variant="subtitle1"
+                      color="text.primary"
+                      className="mb-2"
+                    >
+                      Kitap Description
+                    </Typography>
+                    <TextField
+                      name="book_description"
+                      value={values.book_description}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      fullWidth
+                      multiline
+                      rows={4}
+                      size="small"
+                      placeholder="Kitap Description"
+                      error={
+                        errors.book_description && touched.book_description
+                          ? true
+                          : false
+                      }
+                      helperText={
+                        errors.book_description && touched.book_description
+                          ? errors.book_description
+                          : null
+                      }
+                    />
+                  </Box>
+                  <Box className="mb-3">
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      className="gap-2 overflow-scroll scrollbar-none"
+                      mt={2}
+                    >
+                      {categoryName.map((item, index) => (
+                        <Box
+                          className="table_bottom_tabs text-right"
+                          key={index}
+                        >
+                          <Button
+                            variant="contained"
+                            size="small"
+                            color={
+                              categoryId === index + 1 ? "secondary" : "primary"
+                            }
+                            onClick={() => handleCategoryChange(index + 1)}
+                          >
+                            {item.title}
+                          </Button>
+                        </Box>
+                      ))}
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      className="gap-2 mt-2 flex-wrap "
+                    >
+                      {loading ? (
+                        <LinearProgress />
+                      ) : isEmpty(filterListData) ? (
+                        <Typography variant="subtitle1" color="text.primary">
+                          No Filters Available
+                        </Typography>
+                      ) : (
+                        filterListData.map((row, index) => (
+                          <Chip
+                            icon={
+                              (values.grade ||
+                                values.generalthemes ||
+                                values.objectives ||
+                                values.pypthemes ||
+                                values.series) === row.id ? (
+                                <Iconify icon="ic:round-done-all" />
+                              ) : null
+                            }
+                            label={row.filter_name}
+                            key={index}
+                            className="cursor-pointer p-2"
+                            onClick={() => {
+                              handleClickFilter(row.id, setFieldValue);
+                            }}
+                            variant={
+                              (values.grade ||
+                                values.generalthemes ||
+                                values.objectives ||
+                                values.pypthemes ||
+                                values.series) === row.id
+                                ? "contained"
+                                : "outlined"
+                            }
+                          />
+                        ))
+                      )}
+                    </Stack>
+                  </Box>
                   <Box className="mt-3">
                     <Button
                       variant="contained"

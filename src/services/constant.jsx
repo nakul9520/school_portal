@@ -6,6 +6,7 @@ export const USER_TYPE = {
   admin: "1",
   student: "2",
   teacher: "3",
+  subAdmin: "4",
 };
 
 export const FILE_TYPE = {
@@ -19,4 +20,10 @@ export const CONTENT_TYPE = {
   downloadadble: 2,
   socialContent: 3,
   creatingPage: 4,
+};
+
+export const GUIDELINE_TYPE = {
+  terms: 1,
+  privacy: 2,
+  faq: 3,
 };

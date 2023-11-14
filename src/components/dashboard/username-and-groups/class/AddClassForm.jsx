@@ -182,7 +182,6 @@ const AddClassForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="class_name"
                     error={
                       errors.class_name && touched.class_name ? true : false
                     }
@@ -207,7 +206,6 @@ const AddClassForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="class_code"
                     error={
                       errors.class_code && touched.class_code ? true : false
                     }
@@ -232,7 +230,6 @@ const AddClassForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="teacher_name1"
                     error={
                       errors.teacher_name1 && touched.teacher_name1
                         ? true
@@ -259,7 +256,6 @@ const AddClassForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="teacher_email1"
                     error={
                       errors.teacher_email1 && touched.teacher_email1
                         ? true
@@ -286,7 +282,7 @@ const AddClassForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="teacher_password1"
+                    type="password"
                     error={
                       errors.teacher_password1 && touched.teacher_password1
                         ? true
@@ -313,7 +309,6 @@ const AddClassForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="teacher_name2"
                     error={
                       errors.teacher_name2 && touched.teacher_name2
                         ? true
@@ -340,7 +335,6 @@ const AddClassForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="teacher_email2"
                     error={
                       errors.teacher_email2 && touched.teacher_email2
                         ? true
@@ -367,7 +361,7 @@ const AddClassForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="teacher_password2"
+                    type="password"
                     error={
                       errors.teacher_password2 && touched.teacher_password2
                         ? true
@@ -394,7 +388,6 @@ const AddClassForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    type="no_of_student"
                     error={
                       errors.no_of_student && touched.no_of_student
                         ? true

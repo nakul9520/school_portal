@@ -1,13 +1,29 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  LinearProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import MuiAccordion from "@mui/material/Accordion";
-import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
+import { styled } from "@mui/material/styles";
 
 import { useTheme } from "@mui/material/styles";
 import Iconify from "components/common/iconify";
+import { isEmpty, map } from "lodash";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { toast } from "react-toastify";
+import {
+  deleteFAQ,
+  getGuideLineList,
+} from "redux/store/slice/dashboard/contentSlice";
+import { GUIDELINE_TYPE } from "services/constant";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -47,13 +63,33 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 const FAQList = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const theme = useTheme();
-  const [expanded, setExpanded] = useState("panel1");
+  const [expanded, setExpanded] = useState();
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
 
+  const { guideLinesData, loading } = useSelector((state) => state.content);
+  useEffect(() => {
+    dispatch(getGuideLineList(GUIDELINE_TYPE.faq));
+  }, [dispatch]);
+
+  const handleDelete = (id) => {
+    dispatch(deleteFAQ({ id: id }))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          toast.success(result.message);
+          dispatch(getGuideLineList(GUIDELINE_TYPE.faq));
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
+  };
   return (
     <>
       <Box
@@ -86,51 +122,56 @@ const FAQList = () => {
           </Grid>
         </Grid>
 
-        <Grid container alignItems="center" className="mt-2" spacing={2}>
-          <Grid item md={6} xs={12}>
-            <Accordion
-              expanded={expanded === "panel1"}
-              onChange={handleChange("panel1")}
-            >
-              <AccordionSummary
-                aria-controls="panel1d-content"
-                id="panel1d-header"
-              >
-                <Typography>Collapsible Group Item #1</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-          <Grid item md={6} xs={12}>
-            <Accordion
-              expanded={expanded === "panel1"}
-              onChange={handleChange("panel1")}
-            >
-              <AccordionSummary
-                aria-controls="panel1d-content"
-                id="panel1d-header"
-              >
-                <Typography>Collapsible Group Item #1</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
+        <Grid container className="mt-2" spacing={2}>
+          {loading ? (
+            <LinearProgress />
+          ) : isEmpty(guideLinesData) ? (
+            <Typography variant="subtitle1" color="text.primary">
+              No Data Available
+            </Typography>
+          ) : (
+            map(guideLinesData, (item, index) => (
+              <Grid item md={6} xs={12} key={index}>
+                <Accordion
+                  expanded={expanded === item.id}
+                  onChange={handleChange(item.id)}
+                >
+                  <AccordionSummary
+                    aria-controls="panel1d-content"
+                    id="panel1d-header"
+                  >
+                    <Stack
+                      direction="row"
+                      className="align-items-center justify-content-between w-100"
+                    >
+                      <Typography>{item.title}</Typography>
+                      <Stack
+                        direction="row"
+                        className="align-items-center justify-content-between"
+                      >
+                        <IconButton
+                          onClick={() =>
+                            navigate(
+                              "/dashboard/contents/platform-design/add-faq",
+                              { state: item }
+                            )
+                          }
+                        >
+                          <Iconify icon="ic:baseline-edit" />
+                        </IconButton>
+                        <IconButton onClick={() => handleDelete(item.id)}>
+                          <Iconify icon="fluent:delete-12-filled" />
+                        </IconButton>
+                      </Stack>
+                    </Stack>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>{item.description}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </Grid>
+            ))
+          )}
         </Grid>
       </Box>
     </>

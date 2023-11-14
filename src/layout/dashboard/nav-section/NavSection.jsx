@@ -97,7 +97,8 @@ function NavItem({ item, handleToggle }) {
       "/dashboard/contents/library-categories": 5.2,
       "/dashboard/contents/book-design": 5.3,
       "/dashboard/system-settings": 6,
-      "/dashboard/dramatization": 7,
+      "/dashboard/badges": 7,
+      "/dashboard/add-badges": 7,
     };
     // Find the parent id of the current pathname
     let parentItem = null;

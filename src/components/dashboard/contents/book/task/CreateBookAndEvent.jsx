@@ -1,29 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { Box, Grid } from "@mui/material";
 
-import AddPuzzel from "./model/AddPuzzel";
-import VoiceRecording from "./model/VoiceRecording";
-import AddMultipleChoiceQuestions from "./model/AddMultipleChoiceQuestions";
+import { useNavigate } from "react-router-dom";
 import AddMatchingQuestions from "./model/AddMatchingQuestions";
+import AddPuzzel from "./model/AddPuzzel";
 import QuestionsWrittenHere from "./model/QuestionsWrittenHere";
-import { useLocation } from "react-router-dom";
 
 const CreateBookAndEvent = () => {
-  const { state } = useLocation();
-  console.log(state);
-  const [open1, setOpen1] = useState(false);
-  const [open2, setOpen2] = useState(false);
+  const navigate = useNavigate();
+
   const [open3, setOpen3] = useState(false);
   const [open4, setOpen4] = useState(false);
   const [open5, setOpen5] = useState(false);
 
-  const handleClose1 = () => {
-    setOpen1(false);
-  };
-  const handleClose2 = () => {
-    setOpen2(false);
-  };
   const handleClose3 = () => {
     setOpen3(false);
   };
@@ -41,7 +31,9 @@ const CreateBookAndEvent = () => {
           <Box
             className="common_multi_box"
             sx={{ backgroundColor: "mint.main" }}
-            onClick={() => setOpen1(true)}
+            onClick={() =>
+              navigate("/dashboard/contents/create-book-event/voice-task")
+            }
           >
             Ses Kaydetme Görevi
           </Box>
@@ -50,7 +42,9 @@ const CreateBookAndEvent = () => {
           <Box
             className="common_multi_box"
             sx={{ backgroundColor: "sainsbury.main" }}
-            onClick={() => setOpen2(true)}
+            onClick={() =>
+              navigate("/dashboard/contents/create-book-event/mcq-task")
+            }
           >
             Quiz Ekle
           </Box>
@@ -84,8 +78,6 @@ const CreateBookAndEvent = () => {
         </Grid>
       </Grid>
 
-      <VoiceRecording open={open1} onClose={handleClose1} />
-      <AddMultipleChoiceQuestions open={open2} onClose={handleClose2} />
       <AddMatchingQuestions open={open3} onClose={handleClose3} />
       <QuestionsWrittenHere open={open4} onClose={handleClose4} />
       <AddPuzzel open={open5} onClose={handleClose5} />
