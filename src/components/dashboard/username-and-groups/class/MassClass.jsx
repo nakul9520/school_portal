@@ -15,10 +15,13 @@ import MassClassTable from "./MassClassTable";
 import { getClassCSVFile } from "redux/store/slice/dashboard/userSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { useRef } from "react";
+import { importClassFile } from "redux/store/slice/dashboard/userSlice";
 
 const MassClass = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const mediaInputRef = useRef(null);
 
   const handleDownloadCSV = () => {
     dispatch(getClassCSVFile())
@@ -48,6 +51,19 @@ const MassClass = () => {
         toast.error(err.message);
         console.log("Error: ", err);
       });
+  };
+
+  // import class file
+  const onImageChange = (event) => {
+    const file = event.target.files[0];
+    console.log("file: ", file);
+    dispatch(importClassFile({ file })).then((result) => {
+      if (result.success) {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    });
   };
   return (
     <>
@@ -155,6 +171,7 @@ const MassClass = () => {
             variant="contained"
             color="info"
             startIcon={<Iconify icon="ph:arrow-up" />}
+            onClick={() => mediaInputRef.current.click()}
           >
             Toplu Formu Yükle
           </Button>
@@ -163,6 +180,14 @@ const MassClass = () => {
             Kaydet
           </Button>
         </Stack>
+        <input
+          ref={mediaInputRef}
+          hidden
+          accept=".csv"
+          onChange={(e) => onImageChange(e)}
+          name="image"
+          type="file"
+        />
         <Stack
           direction="row"
           justifyContent="space-between"

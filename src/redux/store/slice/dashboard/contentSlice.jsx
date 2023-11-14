@@ -10,6 +10,8 @@ const initialState = {
 
   voiceTaskInfo: {},
   MCQTaskInfo: {},
+  dragDropTaskInfo: {},
+  matchingTaskInfo: {},
 
   contentListInfo: {},
   guideLinesData: {},
@@ -233,6 +235,118 @@ export const deleteMCQTask = createAsyncThunk(
       const response = await AxiosDefault({
         method: "POST",
         url: Api.DELETE_MCQ_TASK,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const addEditDragDropTask = createAsyncThunk(
+  "content/addEditDragDropTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.ADD_DRAG_DROP_TASK,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const getDragDropTaskList = createAsyncThunk(
+  "content/getDragDropTaskList",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: `${Api.DRAG_DROP_TASK_DETAIL}/${data.book_id}/?page=${data.page}`,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const deleteDragDropTask = createAsyncThunk(
+  "content/deleteDragDropTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.DELETE_DRAG_DROP_TASK,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const addEditMatchingTask = createAsyncThunk(
+  "content/addEditMatchingTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.ADD_MATCHING_TASK,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const getMatchingTaskList = createAsyncThunk(
+  "content/getMatchingTaskList",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: `${Api.MATCHING_TASK_DETAIL}/${data.book_id}/?page=${data.page}`,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const deleteMatchingTask = createAsyncThunk(
+  "content/deleteMatchingTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.DELETE_MATCHING_TASK,
         data: data,
       });
       return response.data;
@@ -571,6 +685,62 @@ const contentSlice = createSlice({
         state.loading = false;
       })
       .addCase(deleteMCQTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(addEditDragDropTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addEditDragDropTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(addEditDragDropTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getDragDropTaskList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getDragDropTaskList.fulfilled, (state, { payload }) => {
+        state.dragDropTaskInfo = payload ?? {};
+        state.loading = false;
+      })
+      .addCase(getDragDropTaskList.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteDragDropTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteDragDropTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteDragDropTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(addEditMatchingTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addEditMatchingTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(addEditMatchingTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getMatchingTaskList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getMatchingTaskList.fulfilled, (state, { payload }) => {
+        state.matchingTaskInfo = payload ?? {};
+        state.loading = false;
+      })
+      .addCase(getMatchingTaskList.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteMatchingTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteMatchingTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteMatchingTask.rejected, (state) => {
         state.loading = false;
       })
       .addCase(addEditContentFile.pending, (state) => {
