@@ -18,38 +18,61 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import MenuPopover from "components/common/MenuPopover";
 
+import { useTheme } from "@mui/material/styles";
 import Iconify from "components/common/iconify/Iconify";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
 import CMCheckBox from "components/common/checkbox/CMCheckBox";
-import { useTheme } from "@mui/material/styles";
 
 const BooksSelect = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
-  const anchorRef = useRef(null);
+  const [anchorEl, setAnchorEl] = useState({
+    school: null,
+    class: null,
+    branch: null,
+    level: null,
+  });
 
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
+  const handleClick = (event, fieldName) => {
+    setAnchorEl((prevstate) => ({
+      ...prevstate,
+      [fieldName]: event.currentTarget,
+    }));
+  };
+  const handleClose = (fieldName) => {
+    setAnchorEl((prevstate) => ({
+      ...prevstate,
+      [fieldName]: null,
+    }));
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
   const rows = [
     {
-      books: "Book 1",
+      school: "school 1",
+      class: "class 1",
+      branch: "student 1",
+      level: "stdent 1",
     },
     {
-      books: "Book 2",
+      school: "school 2",
+      class: "class 2",
+      branch: "student 2",
+      level: "stdent 2",
     },
     {
-      books: "Book 3",
+      school: "school 3",
+      class: "class 3",
+      branch: "student 3",
+      level: "stdent 3",
     },
   ];
 
@@ -124,15 +147,50 @@ const BooksSelect = () => {
             <TableHead>
               <TableRow>
                 <StyledTableCell align="left">
-                  Kitaplar
-                  <IconButton ref={anchorRef} onClick={handleOpen}>
+                  Okul
+                  <IconButton
+                    onClick={(e) => {
+                      handleClick(e, "school");
+                    }}
+                  >
                     <Iconify icon="ep:arrow-down" color="text.secondary" />
                   </IconButton>
                   <MenuPopover
-                    open={open}
-                    onClose={handleClose}
-                    anchorEl={anchorRef.current}
-                    sx={{ width: 130 }}
+                    open={Boolean(anchorEl.school)}
+                    onClose={() => handleClose("school")}
+                    anchorEl={anchorEl.school}
+                    sx={{ width: 180, padding: 1 }}
+                  >
+                    <FormGroup className="">
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="Tümünü Seç"
+                      />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label={
+                          <Typography variant="body2" color="text.secondary">
+                            School 1
+                          </Typography>
+                        }
+                      />
+                    </FormGroup>
+                  </MenuPopover>
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  Sınıf
+                  <IconButton
+                    onClick={(e) => {
+                      handleClick(e, "class");
+                    }}
+                  >
+                    <Iconify icon="ep:arrow-down" color="text.secondary" />
+                  </IconButton>
+                  <MenuPopover
+                    open={Boolean(anchorEl.class)}
+                    onClose={() => handleClose("class")}
+                    anchorEl={anchorEl.class}
+                    sx={{ width: 180, padding: 1 }}
                   >
                     <FormGroup>
                       <FormControlLabel
@@ -146,31 +204,70 @@ const BooksSelect = () => {
                     </FormGroup>
                   </MenuPopover>
                 </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  className="d-flex align-items-center justify-content-between"
-                >
-                  Seç
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    disabled
+
+                <StyledTableCell align="left">
+                  Şube
+                  <IconButton
+                    onClick={(e) => {
+                      handleClick(e, "branch");
+                    }}
                   >
-                    Tümünü Seç
-                  </Button>
+                    <Iconify icon="ep:arrow-down" color="text.secondary" />
+                  </IconButton>
+                  <MenuPopover
+                    open={Boolean(anchorEl.branch)}
+                    onClose={() => handleClose("branch")}
+                    anchorEl={anchorEl.branch}
+                    sx={{ width: 180, padding: 1 }}
+                  >
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="Tümünü Seç"
+                      />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="School 1"
+                      />
+                    </FormGroup>
+                  </MenuPopover>
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  Seviye
+                  <IconButton
+                    onClick={(e) => {
+                      handleClick(e, "level");
+                    }}
+                  >
+                    <Iconify icon="ep:arrow-down" color="text.secondary" />
+                  </IconButton>
+                  <MenuPopover
+                    open={Boolean(anchorEl.level)}
+                    onClose={() => handleClose("level")}
+                    anchorEl={anchorEl.level}
+                    sx={{ width: 180, padding: 1 }}
+                  >
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="Tümünü Seç"
+                      />
+                      <FormControlLabel
+                        control={<CMCheckBox />}
+                        label="School 1"
+                      />
+                    </FormGroup>
+                  </MenuPopover>
                 </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row, index) => (
                 <StyledTableRow key={index}>
-                  <StyledTableCell align="left" scope="row">
-                    {row.books}
-                  </StyledTableCell>
-                  <StyledTableCell style={{ width: 250 }}>
-                    <CMCheckBox />
-                  </StyledTableCell>
+                  <StyledTableCell align="left">{row.school}</StyledTableCell>
+                  <StyledTableCell scope="row">{row.class}</StyledTableCell>
+                  <StyledTableCell align="left">{row.branch}</StyledTableCell>
+                  <StyledTableCell scope="row">{row.level}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -194,8 +291,13 @@ const BooksSelect = () => {
           <Pagination count={10} />
         </Stack>
         <Box className="table_bottom_tabs text-right mt-3">
-          <Button variant="contained" color="primary" className="rounded-0">
-            Kaydet
+          <Button
+            variant="contained"
+            color="success"
+            className="rounded-0"
+            onClick={() => navigate("/dashboard/leveling/book-select")}
+          >
+            Göster
           </Button>
         </Box>
       </Box>

@@ -4,38 +4,32 @@ import {
   Button,
   CircularProgress,
   FormControl,
-  FormControlLabel,
-  FormGroup,
   Grid,
   IconButton,
   InputAdornment,
   MenuItem,
   Pagination,
-  Paper,
   Select,
   Stack,
-  TableBody,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
-
-import MenuPopover from "components/common/MenuPopover";
+import Paper from "@mui/material/Paper";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 import { useTheme } from "@mui/material/styles";
 import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import Iconify from "components/common/iconify/Iconify";
 import { Formik } from "formik";
-import { get, isEmpty, size, uniq } from "lodash";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { get, isEmpty, map, size } from "lodash";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  getBookListForAssign,
-  postAssignBook,
-} from "redux/store/slice/dashboard/leavingSlice";
+import { getAssignmentListForAssign } from "redux/store/slice/dashboard/assignmentSlice";
+import { postAssignBook } from "redux/store/slice/dashboard/leavingSlice";
 import {
   getClassesBySchool,
   getSchoolList,
@@ -45,11 +39,17 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-const LevelingUp = () => {
-  const theme = useTheme();
-  const anchorRef = useRef(null);
-  const dispatch = useDispatch();
 
+const Assignment = () => {
+  const theme = useTheme();
+  const dispatch = useDispatch();
+  const categoryName = [
+    { title: "Sınıf Düzeyi Ekle/Çıkar", categoryId: 1, key: "grade" },
+    { title: "PYP Temaları Ekle/Çıkar", categoryId: 2, key: "pypthemes" },
+    { title: "Genel Temalar Ekle/Çıkar", categoryId: 3, key: "generalthemes" },
+    { title: "Kazanımlar Ekle/Çıkar", categoryId: 4, key: "objectives" },
+    { title: "Seriler Ekle/Çıkar", categoryId: 5, key: "series" },
+  ];
   const [filterOptions, setFilterOptions] = useState({
     search: "",
     per_page: 10,
@@ -60,43 +60,22 @@ const LevelingUp = () => {
   );
   const schoolList = schoolListInfo.data ?? [];
 
-  const { assignBookListInfo, listLoading } = useSelector(
-    (state) => state.leaving
+  const { assignAssignmentListInfo, listLoading } = useSelector(
+    (state) => state.assignment
   );
-  const bookList = assignBookListInfo.data ?? [];
-  const defaultSelectBook = bookList.reduce((acc, obj) => {
-    if (obj.assignedStatus === 1) {
-      acc.push(obj.id);
-    }
-    return acc;
-  }, []);
+  const assignmentList = assignAssignmentListInfo.data ?? [];
+  // const defaultSelectBook = assignmentList.reduce((acc, obj) => {
+  //   if (obj.assignedStatus === 1) {
+  //     acc.push(obj.id);
+  //   }
+  //   return acc;
+  // }, []);
   const [schoolData, setSchoolData] = useState({});
   const [classData, setClassData] = useState({});
+  const [categoryId, setCategoryId] = useState("");
 
   const [page, setPage] = useState(1);
   const [perPageData, setperPageData] = useState(10);
-  const [open, setOpen] = useState(false);
-  const [isSelectAll, setIsSelectAll] = useState(false);
-
-  // const handleOpen = () => {
-  //   setOpen(true);
-  // };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleAllSelect = (e, setFieldValue) => {
-    setIsSelectAll(e.target.checked);
-    if (e.target.checked) {
-      const updatedObjects = bookList.map(function (obj) {
-        return obj.id;
-      });
-      setFieldValue("selectedBook", uniq(updatedObjects));
-    } else {
-      setFieldValue("selectedBook", []);
-    }
-  };
 
   useEffect(() => {
     const payload = {
@@ -108,26 +87,27 @@ const LevelingUp = () => {
     dispatch(getSchoolList(payload));
   }, [dispatch]);
 
-  const getAssignBookListData = useCallback(
+  const getAssignAssignmentListData = useCallback(
     async (data, pageNumber) => {
       const param = {
         payload: {
           school_id: get(data, "school_id", ""),
           class_id: get(data, "class_id", ""),
-          // search: get(data, "search", ""),
+          category_id: get(data, "category_id", ""),
+          search: get(data, "search", ""),
           per_page: get(data, "per_page", 10),
         },
         page: pageNumber,
       };
 
-      dispatch(getBookListForAssign(param));
+      dispatch(getAssignmentListForAssign(param));
     },
     [dispatch]
   );
 
   const handlePageChange = (e, value) => {
     setPage(value);
-    getAssignBookListData(filterOptions, value);
+    getAssignAssignmentListData(filterOptions, value);
   };
 
   const handlePerPageData = (e) => {
@@ -136,7 +116,7 @@ const LevelingUp = () => {
       ...filterOptions,
       per_page: e.target.value,
     });
-    getAssignBookListData(
+    getAssignAssignmentListData(
       {
         ...filterOptions,
         per_page: e.target.value,
@@ -144,13 +124,25 @@ const LevelingUp = () => {
       page
     );
   };
-
+  const handleCategoryChange = (e) => {
+    setCategoryId(e.target.value);
+    getAssignAssignmentListData(
+      {
+        school_id: schoolData.id,
+        class_id: classData.id,
+        category_id: e.target.value,
+        search: "",
+        per_page: 10,
+      },
+      1
+    );
+  };
   const handleSchoolChange = (data) => {
     dispatch(getClassesBySchool(data.id));
   };
 
   const handleClassChange = (data) => {
-    getAssignBookListData(
+    getAssignAssignmentListData(
       {
         school_id: schoolData.id,
         class_id: data.id,
@@ -161,7 +153,7 @@ const LevelingUp = () => {
     );
   };
 
-  const handleAssignBook = (values) => {
+  const handleAssignAssignment = (values) => {
     const payload = {
       school_id: schoolData.id,
       class_id: classData.id,
@@ -172,7 +164,7 @@ const LevelingUp = () => {
       .then((result) => {
         if (result.success) {
           toast.success(result.message);
-          getAssignBookListData(
+          getAssignAssignmentListData(
             {
               school_id: schoolData.id,
               class_id: classData.id,
@@ -200,7 +192,7 @@ const LevelingUp = () => {
         }}
       >
         <Typography variant="subtitle2" color="text.secondary">
-          Seviyelendirme
+          Görevlendirme
         </Typography>
         <Grid
           container
@@ -240,7 +232,7 @@ const LevelingUp = () => {
                   ...filterOptions,
                   search: e.target.value,
                 });
-                getAssignBookListData({
+                getAssignAssignmentListData({
                   ...filterOptions,
                   search: e.target.value,
                 });
@@ -356,15 +348,36 @@ const LevelingUp = () => {
               )}
             />
           </Box>
+          <Box className="w-100">
+            <Typography variant="body2" color="text.secondary">
+              Class
+            </Typography>
+            <FormControl fullWidth>
+              <Select
+                value={categoryId}
+                onChange={handleCategoryChange}
+                size="small"
+              >
+                <MenuItem value="">No Category</MenuItem>
+                {map(categoryName, (item, index) => (
+                  <MenuItem key={index} value={item.categoryId}>
+                    {item.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
         </Stack>
 
         {!listLoading ? (
           <Formik
-            initialValues={{
-              selectedBook: defaultSelectBook ?? [],
-            }}
+            initialValues={
+              {
+                // selectedBook: defaultSelectBook ?? [],
+              }
+            }
             onSubmit={(value, action) => {
-              handleAssignBook(value, action);
+              handleAssignAssignment(value, action);
             }}
           >
             {({ values, handleSubmit, setFieldValue }) => (
@@ -373,63 +386,25 @@ const LevelingUp = () => {
 
                 <TableContainer
                   component={Paper}
-                  className="rounded-0 mt-3 scrollbar-none"
-                  sx={{ maxHeight: 350 }}
+                  className="rounded-0 mt-3"
+                  sx={{ minHeight: 350 }}
                 >
                   <StyledTable stickyHeader>
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell align="left">
-                          Kitaplar
-                          {/* <IconButton ref={anchorRef} onClick={handleOpen}>
-                    <Iconify icon="ep:arrow-down" color="text.secondary" />
-                  </IconButton> */}
-                          <IconButton>
-                            <Iconify
-                              icon="ep:arrow-down"
-                              color="text.secondary"
-                            />
-                          </IconButton>
-                          <MenuPopover
-                            open={open}
-                            onClose={handleClose}
-                            anchorEl={anchorRef.current}
-                            sx={{ width: 130 }}
-                          >
-                            <FormGroup>
-                              <FormControlLabel
-                                control={<CMCheckBox />}
-                                label="Tümünü Seç"
-                              />
-                              <FormControlLabel
-                                control={<CMCheckBox />}
-                                label="School 1"
-                              />
-                            </FormGroup>
-                          </MenuPopover>
-                        </StyledTableCell>
-                        <StyledTableCell align="left">
-                          <Box className="d-flex align-items-center justify-content-between">
-                            Seç
-                            <FormControlLabel
-                              control={
-                                <CMCheckBox
-                                  checked={isSelectAll}
-                                  onChange={(e) =>
-                                    handleAllSelect(e, setFieldValue)
-                                  }
-                                />
-                              }
-                              label="Tümünü Seç"
-                            />
-                          </Box>
-                        </StyledTableCell>
+                        <StyledTableCell align="left">Kitaplar</StyledTableCell>
+                        <StyledTableCell>Okuma </StyledTableCell>
+                        <StyledTableCell>Dinleme </StyledTableCell>
+                        <StyledTableCell>Etkinlik </StyledTableCell>
+                        <StyledTableCell>Başlangıç Tarihi </StyledTableCell>
+                        <StyledTableCell>Teslim Tarihi </StyledTableCell>
+                        <StyledTableCell>Kitaplıkta Görünümü </StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {isEmpty(bookList) ? (
+                      {isEmpty(assignmentList) ? (
                         <StyledTableRow>
-                          <StyledTableCell align="center" colSpan={2}>
+                          <StyledTableCell align="center" colSpan={7}>
                             <Typography
                               variant="subtitle1"
                               color="text.primary"
@@ -439,43 +414,37 @@ const LevelingUp = () => {
                           </StyledTableCell>
                         </StyledTableRow>
                       ) : (
-                        bookList.map((row, index) => {
-                          const listItem = (
-                            <StyledTableRow key={index}>
-                              <StyledTableCell align="left" scope="row">
-                                {row.book_name}
-                              </StyledTableCell>
-                              <StyledTableCell style={{ width: 250 }}>
-                                <CMCheckBox
-                                  checked={values.selectedBook.includes(row.id)}
-                                  onChange={(e) => {
-                                    if (e.target.checked) {
-                                      setFieldValue(
-                                        "selectedBook",
-                                        uniq([...values.selectedBook, row.id])
-                                      );
-                                    } else {
-                                      const updatedObjects =
-                                        values.selectedBook.filter(
-                                          (obj) => obj !== row.id
-                                        );
-                                      setFieldValue(
-                                        "selectedBook",
-                                        updatedObjects
-                                      );
-                                    }
-                                  }}
-                                />
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          );
-                          return listItem;
-                        })
+                        assignmentList.map((row, index) => (
+                          <StyledTableRow key={index}>
+                            <StyledTableCell align="left">
+                              {row.book_name}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                              {row.reading_assignment} <CMCheckBox />
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                              {row.listening_assignment} <CMCheckBox />
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                              {row.activities_assignment} <CMCheckBox />
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                              {row.start_date}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                              {row.end_date}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">
+                              <CMCheckBox /> {row.is_general}
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ))
                       )}
                     </TableBody>
                   </StyledTable>
                 </TableContainer>
-                {assignBookListInfo ? (
+
+                {assignAssignmentListInfo ? (
                   <Stack
                     direction={{ md: "row", xs: "column" }}
                     justifyContent="space-between"
@@ -484,12 +453,12 @@ const LevelingUp = () => {
                     mt={3}
                   >
                     <Typography variant="body2" color="secondary.disabled">
-                      {assignBookListInfo.total_record} sonuçtan 1 ile{" "}
-                      {size(assignBookListInfo.data)} arası gösteriliyor
+                      {assignAssignmentListInfo.total_record} sonuçtan 1 ile{" "}
+                      {size(assignAssignmentListInfo.data)} arası gösteriliyor
                     </Typography>
-                    {assignBookListInfo.total_record > 0 && (
+                    {assignAssignmentListInfo.total_record > 0 && (
                       <Pagination
-                        count={assignBookListInfo.last_page}
+                        count={assignAssignmentListInfo.last_page}
                         page={page}
                         onChange={handlePageChange}
                       />
@@ -510,4 +479,4 @@ const LevelingUp = () => {
   );
 };
 
-export default LevelingUp;
+export default Assignment;

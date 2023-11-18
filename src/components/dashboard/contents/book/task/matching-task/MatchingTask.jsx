@@ -61,7 +61,7 @@ const MatchingTask = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              Drag Drop Task
+              Matching Task
             </Typography>
           </Grid>
         </Grid>
