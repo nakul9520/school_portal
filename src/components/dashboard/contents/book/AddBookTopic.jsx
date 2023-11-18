@@ -89,34 +89,34 @@ const AddBookTopic = () => {
   // }, []);
 
   const handleAddBookTitle = (values) => {
-    if (
-      values.grade ||
-      values.generalthemes ||
-      values.objectives ||
-      values.pypthemes ||
-      values.series === 0
-    ) {
-      toast.error("You need to select must one filter in all category");
-    } else {
-      const payload = {
-        ...values,
-        id: bookData.id ?? "",
-      };
-      dispatch(addBookTitle(payload))
-        .unwrap()
-        .then((result) => {
-          if (result.success) {
-            toast.success(result.message);
-            setActiveTaskBtn(false);
-            localStorage.setItem("bookId", result.data);
-          } else {
-            toast.error(result.message);
-          }
-        })
-        .catch((err) => {
-          console.log("Error: ", err);
-        });
-    }
+    // if (
+    //   values.grade ||
+    //   values.generalthemes ||
+    //   values.objectives ||
+    //   values.pypthemes ||
+    //   values.series === 0
+    // ) {
+    //   toast.error("You need to select must one filter in all category");
+    // } else {
+    const payload = {
+      ...values,
+      id: bookData.id ?? "",
+    };
+    dispatch(addBookTitle(payload))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          toast.success(result.message);
+          setActiveTaskBtn(false);
+          localStorage.setItem("bookId", result.data);
+        } else {
+          toast.error(result.message);
+        }
+      })
+      .catch((err) => {
+        console.log("Error: ", err);
+      });
+    // }
   };
 
   const handleAddBookFile = (values, fileType) => {

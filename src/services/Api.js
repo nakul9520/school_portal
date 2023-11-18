@@ -32,6 +32,14 @@ const Api = {
   IMPORT_TEACHER_FILE: "teacherImport",
   IMPORT_STUDENT_FILE: "studentImport",
 
+  // Leaving
+  GET_BOOK_LIST_FOR_ASSIGN: "getContentBookList",
+  ASSIGNED_BOOK_FOR_CLASS: "assignedBook",
+
+  // Assignment
+  GET_ASSIGNMENT_LIST_FOR_ASSIGN: "getBookListCalender",
+  ASSIGNED_ASSIGNMENT_FOR_CLASS: "assignedBook",
+
   // Book
   ADD_BOOK_TITLE: "addEditBook",
   ADD_BOOK_FILE: "addBookFile",

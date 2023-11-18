@@ -159,7 +159,7 @@ const AddTeacherForm = () => {
                         inputProps={{
                           ...params.inputProps,
                           autoComplete: "new-password",
-                          endAdornment: (
+                          endadornment: (
                             <React.Fragment>
                               {loading ? (
                                 <CircularProgress color="inherit" size={20} />
@@ -169,7 +169,9 @@ const AddTeacherForm = () => {
                           ),
                         }}
                         error={
-                          errors.school_name && touched.school_name ? true : false
+                          errors.school_name && touched.school_name
+                            ? true
+                            : false
                         }
                         helperText={
                           errors.school_name && touched.school_name
@@ -216,7 +218,7 @@ const AddTeacherForm = () => {
                         inputProps={{
                           ...params.inputProps,
                           autoComplete: "new-password",
-                          endAdornment: (
+                          endadornment: (
                             <React.Fragment>
                               {loading ? (
                                 <CircularProgress color="inherit" size={20} />
