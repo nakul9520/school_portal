@@ -38,7 +38,11 @@ const Api = {
 
   // Assignment
   GET_ASSIGNMENT_LIST_FOR_ASSIGN: "getBookListCalender",
-  ASSIGNED_ASSIGNMENT_FOR_CLASS: "assignedBook",
+  ASSIGNED_ASSIGNMENT_FOR_CLASS: "assignedBookForDate",
+
+  // Reports
+  GET_BOOK_REPORTS: "GetBookReports",
+  GET_SCHOOL_REPORTS: "GetSchoolReports",
 
   // Book
   ADD_BOOK_TITLE: "addEditBook",

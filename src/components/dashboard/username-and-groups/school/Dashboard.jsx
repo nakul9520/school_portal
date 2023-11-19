@@ -115,10 +115,6 @@ const Dashboard = () => {
               <Button variant="contained" color="success">
                 Excel
               </Button>
-
-              <Button variant="contained" color="error">
-                PDF
-              </Button>
             </Stack>
           </Grid>
         </Grid>
