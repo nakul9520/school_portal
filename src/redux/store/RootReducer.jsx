@@ -6,6 +6,7 @@ import systemSliceReducer from "./slice/dashboard/systemSlice";
 import badgeSliceReducer from "./slice/dashboard/badgeSlice";
 import leavingSliceReducer from "./slice/dashboard/leavingSlice";
 import assignmentSliceReducer from "./slice/dashboard/assignmentSlice";
+import reportSliceReducer from "./slice/dashboard/reportSlice";
 
 const combinedReducer = combineReducers({
   auth: authReducers,
@@ -13,6 +14,7 @@ const combinedReducer = combineReducers({
   content: contentSliceReducer,
   system: systemSliceReducer,
   badge: badgeSliceReducer,
+  report: reportSliceReducer,
   leaving: leavingSliceReducer,
   assignment: assignmentSliceReducer,
 });

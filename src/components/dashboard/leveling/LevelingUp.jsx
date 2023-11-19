@@ -28,7 +28,7 @@ import { useTheme } from "@mui/material/styles";
 import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import Iconify from "components/common/iconify/Iconify";
 import { Formik } from "formik";
-import { get, isEmpty, size, uniq } from "lodash";
+import { get, isEmpty, map, size, uniq } from "lodash";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -49,7 +49,13 @@ const LevelingUp = () => {
   const theme = useTheme();
   const anchorRef = useRef(null);
   const dispatch = useDispatch();
-
+  const categoryName = [
+    { title: "Sınıf Düzeyi Ekle/Çıkar", categoryId: 1, key: "grade" },
+    { title: "PYP Temaları Ekle/Çıkar", categoryId: 2, key: "pypthemes" },
+    { title: "Genel Temalar Ekle/Çıkar", categoryId: 3, key: "generalthemes" },
+    { title: "Kazanımlar Ekle/Çıkar", categoryId: 4, key: "objectives" },
+    { title: "Seriler Ekle/Çıkar", categoryId: 5, key: "series" },
+  ];
   const [filterOptions, setFilterOptions] = useState({
     search: "",
     per_page: 10,
@@ -72,6 +78,7 @@ const LevelingUp = () => {
   }, []);
   const [schoolData, setSchoolData] = useState({});
   const [classData, setClassData] = useState({});
+  const [categoryId, setCategoryId] = useState("");
 
   const [page, setPage] = useState(1);
   const [perPageData, setperPageData] = useState(10);
@@ -114,7 +121,7 @@ const LevelingUp = () => {
         payload: {
           school_id: get(data, "school_id", ""),
           class_id: get(data, "class_id", ""),
-          // search: get(data, "search", ""),
+          search: get(data, "search", ""),
           per_page: get(data, "per_page", 10),
         },
         page: pageNumber,
@@ -127,7 +134,10 @@ const LevelingUp = () => {
 
   const handlePageChange = (e, value) => {
     setPage(value);
-    getAssignBookListData(filterOptions, value);
+    getAssignBookListData(
+      { school_id: schoolData.id, class_id: classData.id, ...filterOptions },
+      value
+    );
   };
 
   const handlePerPageData = (e) => {
@@ -138,6 +148,8 @@ const LevelingUp = () => {
     });
     getAssignBookListData(
       {
+        school_id: schoolData.id,
+        class_id: classData.id,
         ...filterOptions,
         per_page: e.target.value,
       },
@@ -154,6 +166,20 @@ const LevelingUp = () => {
       {
         school_id: schoolData.id,
         class_id: data.id,
+        search: "",
+        per_page: 10,
+      },
+      1
+    );
+  };
+
+  const handleCategoryChange = (e) => {
+    setCategoryId(e.target.value);
+    getAssignBookListData(
+      {
+        school_id: schoolData.id,
+        class_id: classData.id,
+        category_id: e.target.value,
         search: "",
         per_page: 10,
       },
@@ -241,6 +267,8 @@ const LevelingUp = () => {
                   search: e.target.value,
                 });
                 getAssignBookListData({
+                  school_id: schoolData.id,
+                  class_id: classData.id,
                   ...filterOptions,
                   search: e.target.value,
                 });
@@ -356,6 +384,25 @@ const LevelingUp = () => {
               )}
             />
           </Box>
+          <Box className="w-100">
+            <Typography variant="body2" color="text.secondary">
+              Category
+            </Typography>
+            <FormControl fullWidth>
+              <Select
+                value={categoryId}
+                onChange={handleCategoryChange}
+                size="small"
+              >
+                <MenuItem value="">No Category</MenuItem>
+                {map(categoryName, (item, index) => (
+                  <MenuItem key={index} value={item.categoryId}>
+                    {item.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
         </Stack>
 
         {!listLoading ? (
@@ -369,8 +416,6 @@ const LevelingUp = () => {
           >
             {({ values, handleSubmit, setFieldValue }) => (
               <form onSubmit={handleSubmit} className="h-100">
-                {console.log("validate", values)}
-
                 <TableContainer
                   component={Paper}
                   className="rounded-0 mt-3 scrollbar-none"

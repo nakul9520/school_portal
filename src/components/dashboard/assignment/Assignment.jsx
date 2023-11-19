@@ -23,13 +23,15 @@ import TableRow from "@mui/material/TableRow";
 import { useTheme } from "@mui/material/styles";
 import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import Iconify from "components/common/iconify/Iconify";
-import { Formik } from "formik";
-import { get, isEmpty, map, size } from "lodash";
+import { FieldArray, Formik } from "formik";
+import { get, isEmpty, map, size, uniq } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { getAssignmentListForAssign } from "redux/store/slice/dashboard/assignmentSlice";
-import { postAssignBook } from "redux/store/slice/dashboard/leavingSlice";
+import {
+  getAssignmentListForAssign,
+  postAssignAssignment,
+} from "redux/store/slice/dashboard/assignmentSlice";
 import {
   getClassesBySchool,
   getSchoolList,
@@ -64,12 +66,7 @@ const Assignment = () => {
     (state) => state.assignment
   );
   const assignmentList = assignAssignmentListInfo.data ?? [];
-  // const defaultSelectBook = assignmentList.reduce((acc, obj) => {
-  //   if (obj.assignedStatus === 1) {
-  //     acc.push(obj.id);
-  //   }
-  //   return acc;
-  // }, []);
+
   const [schoolData, setSchoolData] = useState({});
   const [classData, setClassData] = useState({});
   const [categoryId, setCategoryId] = useState("");
@@ -107,7 +104,15 @@ const Assignment = () => {
 
   const handlePageChange = (e, value) => {
     setPage(value);
-    getAssignAssignmentListData(filterOptions, value);
+    getAssignAssignmentListData(
+      {
+        school_id: schoolData.id,
+        class_id: classData.id,
+        category_id: categoryId,
+        ...filterOptions,
+      },
+      value
+    );
   };
 
   const handlePerPageData = (e) => {
@@ -118,6 +123,9 @@ const Assignment = () => {
     });
     getAssignAssignmentListData(
       {
+        school_id: schoolData.id,
+        class_id: classData.id,
+        category_id: categoryId,
         ...filterOptions,
         per_page: e.target.value,
       },
@@ -146,6 +154,7 @@ const Assignment = () => {
       {
         school_id: schoolData.id,
         class_id: data.id,
+        category_id: categoryId,
         search: "",
         per_page: 10,
       },
@@ -157,9 +166,9 @@ const Assignment = () => {
     const payload = {
       school_id: schoolData.id,
       class_id: classData.id,
-      book_id: values.selectedBook,
+      data: values.selectedBook,
     };
-    dispatch(postAssignBook(payload))
+    dispatch(postAssignAssignment(payload))
       .unwrap()
       .then((result) => {
         if (result.success) {
@@ -168,6 +177,7 @@ const Assignment = () => {
             {
               school_id: schoolData.id,
               class_id: classData.id,
+              category_id: categoryId,
               search: "",
               per_page: 10,
             },
@@ -233,6 +243,9 @@ const Assignment = () => {
                   search: e.target.value,
                 });
                 getAssignAssignmentListData({
+                  school_id: schoolData.id,
+                  class_id: classData.id,
+                  category_id: categoryId,
                   ...filterOptions,
                   search: e.target.value,
                 });
@@ -350,7 +363,7 @@ const Assignment = () => {
           </Box>
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
-              Class
+              Category
             </Typography>
             <FormControl fullWidth>
               <Select
@@ -371,11 +384,10 @@ const Assignment = () => {
 
         {!listLoading ? (
           <Formik
-            initialValues={
-              {
-                // selectedBook: defaultSelectBook ?? [],
-              }
-            }
+            initialValues={{
+              data: assignmentList ?? [],
+              selectedBook: [],
+            }}
             onSubmit={(value, action) => {
               handleAssignAssignment(value, action);
             }}
@@ -384,92 +396,191 @@ const Assignment = () => {
               <form onSubmit={handleSubmit} className="h-100">
                 {console.log("validate", values)}
 
-                <TableContainer
-                  component={Paper}
-                  className="rounded-0 mt-3"
-                  sx={{ minHeight: 350 }}
-                >
-                  <StyledTable stickyHeader>
-                    <TableHead>
-                      <TableRow>
-                        <StyledTableCell align="left">Kitaplar</StyledTableCell>
-                        <StyledTableCell>Okuma </StyledTableCell>
-                        <StyledTableCell>Dinleme </StyledTableCell>
-                        <StyledTableCell>Etkinlik </StyledTableCell>
-                        <StyledTableCell>Başlangıç Tarihi </StyledTableCell>
-                        <StyledTableCell>Teslim Tarihi </StyledTableCell>
-                        <StyledTableCell>Kitaplıkta Görünümü </StyledTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {isEmpty(assignmentList) ? (
-                        <StyledTableRow>
-                          <StyledTableCell align="center" colSpan={7}>
-                            <Typography
-                              variant="subtitle1"
-                              color="text.primary"
-                            >
-                              No Data Available
-                            </Typography>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ) : (
-                        assignmentList.map((row, index) => (
-                          <StyledTableRow key={index}>
-                            <StyledTableCell align="left">
-                              {row.book_name}
-                            </StyledTableCell>
-                            <StyledTableCell align="left">
-                              {row.reading_assignment} <CMCheckBox />
-                            </StyledTableCell>
-                            <StyledTableCell align="left">
-                              {row.listening_assignment} <CMCheckBox />
-                            </StyledTableCell>
-                            <StyledTableCell align="left">
-                              {row.activities_assignment} <CMCheckBox />
-                            </StyledTableCell>
-                            <StyledTableCell align="left">
-                              {row.start_date}
-                            </StyledTableCell>
-                            <StyledTableCell align="left">
-                              {row.end_date}
-                            </StyledTableCell>
-                            <StyledTableCell align="left">
-                              <CMCheckBox /> {row.is_general}
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ))
-                      )}
-                    </TableBody>
-                  </StyledTable>
-                </TableContainer>
+                <FieldArray
+                  name="data"
+                  render={(arrayHelpers) => (
+                    <>
+                      <TableContainer
+                        component={Paper}
+                        className="rounded-0 mt-3"
+                        sx={{ minHeight: 250 }}
+                      >
+                        <StyledTable stickyHeader>
+                          <TableHead>
+                            <TableRow>
+                              <StyledTableCell align="left">
+                                Kitaplar
+                              </StyledTableCell>
+                              <StyledTableCell>Okuma </StyledTableCell>
+                              <StyledTableCell>Dinleme </StyledTableCell>
+                              <StyledTableCell>Etkinlik </StyledTableCell>
+                              <StyledTableCell>
+                                Başlangıç Tarihi
+                              </StyledTableCell>
+                              <StyledTableCell>Teslim Tarihi </StyledTableCell>
+                              <StyledTableCell>
+                                Kitaplıkta Görünümü
+                              </StyledTableCell>
+                              <StyledTableCell>Edit</StyledTableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {isEmpty(values.data) ? (
+                              <StyledTableRow>
+                                <StyledTableCell align="center" colSpan={8}>
+                                  <Typography
+                                    variant="subtitle1"
+                                    color="text.primary"
+                                  >
+                                    No Data Available
+                                  </Typography>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            ) : values.data && values.data.length > 0 ? (
+                              values.data.map((item, index) => {
+                                const reading_assignment = `data[${index}].reading_assignment`;
+                                const listening_assignment = `data[${index}].listening_assignment`;
+                                const activities_assignment = `data[${index}].activities_assignment`;
+                                const is_general = `data[${index}].is_general`;
 
-                {assignAssignmentListInfo ? (
-                  <Stack
-                    direction={{ md: "row", xs: "column" }}
-                    justifyContent="space-between"
-                    alignItems="center"
-                    spacing={1}
-                    mt={3}
-                  >
-                    <Typography variant="body2" color="secondary.disabled">
-                      {assignAssignmentListInfo.total_record} sonuçtan 1 ile{" "}
-                      {size(assignAssignmentListInfo.data)} arası gösteriliyor
-                    </Typography>
-                    {assignAssignmentListInfo.total_record > 0 && (
-                      <Pagination
-                        count={assignAssignmentListInfo.last_page}
-                        page={page}
-                        onChange={handlePageChange}
-                      />
-                    )}
-                  </Stack>
-                ) : null}
-                <Box className="table_bottom_tabs text-right mt-3">
-                  <Button variant="contained" color="primary" type="submit">
-                    Kaydet
-                  </Button>
-                </Box>
+                                return (
+                                  <StyledTableRow key={index}>
+                                    <StyledTableCell align="left">
+                                      {item.book_name}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      <CMCheckBox
+                                        checked={
+                                          item.reading_assignment === "1"
+                                            ? true
+                                            : false
+                                        }
+                                        onChange={(e) =>
+                                          setFieldValue(
+                                            reading_assignment,
+                                            e.target.checked ? "1" : "0"
+                                          )
+                                        }
+                                      />
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      <CMCheckBox
+                                        checked={
+                                          item.listening_assignment === "1"
+                                            ? true
+                                            : false
+                                        }
+                                        onChange={(e) =>
+                                          setFieldValue(
+                                            listening_assignment,
+                                            e.target.checked ? "1" : "0"
+                                          )
+                                        }
+                                      />
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      <CMCheckBox
+                                        checked={
+                                          item.activities_assignment === "1"
+                                            ? true
+                                            : false
+                                        }
+                                        onChange={(e) =>
+                                          setFieldValue(
+                                            activities_assignment,
+                                            e.target.checked ? "1" : "0"
+                                          )
+                                        }
+                                      />
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      {item.start_date}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      {item.end_date}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      <CMCheckBox
+                                        checked={
+                                          item.is_general === "1" ? true : false
+                                        }
+                                        onChange={(e) =>
+                                          setFieldValue(
+                                            is_general,
+                                            e.target.checked ? "1" : "0"
+                                          )
+                                        }
+                                      />
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      <CMCheckBox
+                                        onChange={(e) => {
+                                          if (e.target.checked) {
+                                            setFieldValue(
+                                              "selectedBook",
+                                              uniq([
+                                                ...values.selectedBook,
+                                                item,
+                                              ])
+                                            );
+                                          } else {
+                                            const updatedObjects =
+                                              values.selectedBook.filter(
+                                                (obj) => obj.id !== item.id
+                                              );
+                                            setFieldValue(
+                                              "selectedBook",
+                                              updatedObjects
+                                            );
+                                          }
+                                        }}
+                                      />
+                                    </StyledTableCell>
+                                  </StyledTableRow>
+                                );
+                              })
+                            ) : null}
+                          </TableBody>
+                        </StyledTable>
+                      </TableContainer>
+
+                      {assignAssignmentListInfo ? (
+                        <Stack
+                          direction={{ md: "row", xs: "column" }}
+                          justifyContent="space-between"
+                          alignItems="center"
+                          spacing={1}
+                          mt={3}
+                        >
+                          <Typography
+                            variant="body2"
+                            color="secondary.disabled"
+                          >
+                            {assignAssignmentListInfo.total_record} sonuçtan 1
+                            ile {size(assignAssignmentListInfo.data)} arası
+                            gösteriliyor
+                          </Typography>
+                          {assignAssignmentListInfo.total_record > 0 && (
+                            <Pagination
+                              count={assignAssignmentListInfo.last_page}
+                              page={page}
+                              onChange={handlePageChange}
+                            />
+                          )}
+                        </Stack>
+                      ) : null}
+                      <Box className="table_bottom_tabs text-right mt-3">
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          type="submit"
+                        >
+                          Kaydet
+                        </Button>
+                      </Box>
+                    </>
+                  )}
+                />
               </form>
             )}
           </Formik>
