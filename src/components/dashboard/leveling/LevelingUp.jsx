@@ -457,6 +457,7 @@ const LevelingUp = () => {
                           <Box className="d-flex align-items-center justify-content-between">
                             Seç
                             <FormControlLabel
+                              labelPlacement="start"
                               control={
                                 <CMCheckBox
                                   checked={isSelectAll}

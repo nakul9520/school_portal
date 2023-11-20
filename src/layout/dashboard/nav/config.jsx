@@ -61,11 +61,11 @@ const navConfig = [
         title: "Kitap Raporları",
         path: "/dashboard/reports/book-reports",
       },
-      {
-        id: 2.3,
-        title: "Sistem Raporları",
-        path: "/dashboard/reports/system-reports",
-      },
+      // {
+      //   id: 2.3,
+      //   title: "Sistem Raporları",
+      //   path: "/dashboard/reports/system-reports",
+      // },
     ],
   },
   {
