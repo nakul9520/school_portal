@@ -4,6 +4,7 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  FormControlLabel,
   Grid,
   IconButton,
   InputAdornment,
@@ -193,6 +194,24 @@ const Assignment = () => {
       });
   };
 
+  const handleAllSelect = (e, allData, setFieldValue, key) => {
+    let updatedArray;
+    if (e.target.checked) {
+      updatedArray = allData.map((item) => {
+        const updatedItem = { ...item };
+        updatedItem[key] = "1";
+        return updatedItem;
+      });
+    } else {
+      updatedArray = allData.map((item) => {
+        const updatedItem = { ...item };
+        updatedItem[key] = "0";
+        return updatedItem;
+      });
+    }
+
+    setFieldValue("data", updatedArray);
+  };
   return (
     <>
       <Box
@@ -394,8 +413,7 @@ const Assignment = () => {
           >
             {({ values, handleSubmit, setFieldValue }) => (
               <form onSubmit={handleSubmit} className="h-100">
-                {console.log("validate", values)}
-
+                {console.log("values", values)}
                 <FieldArray
                   name="data"
                   render={(arrayHelpers) => (
@@ -411,17 +429,104 @@ const Assignment = () => {
                               <StyledTableCell align="left">
                                 Kitaplar
                               </StyledTableCell>
-                              <StyledTableCell>Okuma </StyledTableCell>
-                              <StyledTableCell>Dinleme </StyledTableCell>
-                              <StyledTableCell>Etkinlik </StyledTableCell>
-                              <StyledTableCell>
+                              <StyledTableCell align="center">
+                                <FormControlLabel
+                                  labelPlacement="start"
+                                  control={
+                                    <CMCheckBox
+                                      onChange={(e) =>
+                                        handleAllSelect(
+                                          e,
+                                          values.data,
+                                          setFieldValue,
+                                          "reading_assignment"
+                                        )
+                                      }
+                                    />
+                                  }
+                                  label="Okuma"
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                <FormControlLabel
+                                  labelPlacement="start"
+                                  control={
+                                    <CMCheckBox
+                                      onChange={(e) =>
+                                        handleAllSelect(
+                                          e,
+                                          values.data,
+                                          setFieldValue,
+                                          "listening_assignment"
+                                        )
+                                      }
+                                    />
+                                  }
+                                  label="Dinleme"
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                <FormControlLabel
+                                  labelPlacement="start"
+                                  control={
+                                    <CMCheckBox
+                                      onChange={(e) =>
+                                        handleAllSelect(
+                                          e,
+                                          values.data,
+                                          setFieldValue,
+                                          "activities_assignment"
+                                        )
+                                      }
+                                    />
+                                  }
+                                  label="Etkinlik"
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
                                 Başlangıç Tarihi
                               </StyledTableCell>
-                              <StyledTableCell>Teslim Tarihi </StyledTableCell>
-                              <StyledTableCell>
-                                Kitaplıkta Görünümü
+                              <StyledTableCell align="center">
+                                Teslim Tarihi
                               </StyledTableCell>
-                              <StyledTableCell>Edit</StyledTableCell>
+                              <StyledTableCell align="center">
+                                <FormControlLabel
+                                  labelPlacement="start"
+                                  control={
+                                    <CMCheckBox
+                                      onChange={(e) =>
+                                        handleAllSelect(
+                                          e,
+                                          values.data,
+                                          setFieldValue,
+                                          "is_general"
+                                        )
+                                      }
+                                    />
+                                  }
+                                  label="Kitaplıkta Görünümü"
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                <FormControlLabel
+                                  labelPlacement="start"
+                                  control={
+                                    <CMCheckBox
+                                      onChange={(e) => {
+                                        if (e.target.checked) {
+                                          setFieldValue(
+                                            "selectedBook",
+                                            values.data
+                                          );
+                                        } else {
+                                          setFieldValue("selectedBook", []);
+                                        }
+                                      }}
+                                    />
+                                  }
+                                  label="Edit"
+                                />
+                              </StyledTableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -448,7 +553,7 @@ const Assignment = () => {
                                     <StyledTableCell align="left">
                                       {item.book_name}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">
+                                    <StyledTableCell align="center">
                                       <CMCheckBox
                                         checked={
                                           item.reading_assignment === "1"
@@ -463,7 +568,7 @@ const Assignment = () => {
                                         }
                                       />
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">
+                                    <StyledTableCell align="center">
                                       <CMCheckBox
                                         checked={
                                           item.listening_assignment === "1"
@@ -478,7 +583,7 @@ const Assignment = () => {
                                         }
                                       />
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">
+                                    <StyledTableCell align="center">
                                       <CMCheckBox
                                         checked={
                                           item.activities_assignment === "1"
@@ -493,13 +598,13 @@ const Assignment = () => {
                                         }
                                       />
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">
+                                    <StyledTableCell align="center">
                                       {item.start_date}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">
+                                    <StyledTableCell align="center">
                                       {item.end_date}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">
+                                    <StyledTableCell align="center">
                                       <CMCheckBox
                                         checked={
                                           item.is_general === "1" ? true : false
@@ -512,7 +617,7 @@ const Assignment = () => {
                                         }
                                       />
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">
+                                    <StyledTableCell align="center">
                                       <CMCheckBox
                                         onChange={(e) => {
                                           if (e.target.checked) {

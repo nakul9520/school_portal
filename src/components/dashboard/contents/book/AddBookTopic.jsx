@@ -204,7 +204,7 @@ const AddBookTopic = () => {
                       color="text.primary"
                       className="mb-2"
                     >
-                      Kitap Konusu Ekle
+                      kitap adi ekle
                     </Typography>
                     <TextField
                       name="book_name"
@@ -230,7 +230,7 @@ const AddBookTopic = () => {
                       color="text.primary"
                       className="mb-2"
                     >
-                      Kitap Description
+                      kitap konusu ekle
                     </Typography>
                     <TextField
                       name="book_description"
