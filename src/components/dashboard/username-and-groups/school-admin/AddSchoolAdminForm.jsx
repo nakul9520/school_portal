@@ -1,13 +1,8 @@
-import React, { useEffect } from "react";
-
 import {
   Autocomplete,
   Box,
   Button,
   CircularProgress,
-  FormControl,
-  MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -16,61 +11,25 @@ import { MobileDatePicker } from "@mui/x-date-pickers";
 
 import { Formik } from "formik";
 import moment from "moment";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { addEditTeacherValidation } from "services/validations";
+import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
+import { addEditSchoolAdmin } from "redux/store/slice/dashboard/userSlice";
 
-import {
-  addEditUsers,
-  getClassesBySchool,
-  getSchoolList,
-} from "redux/store/slice/dashboard/userSlice";
-import { USER_TYPE } from "services/constant";
-import { map, omit } from "lodash";
-import { gradeList } from "services/constant";
+import { addEditSchoolValidation } from "services/validations";
 
-const AddStudentForm = () => {
+const AddSchoolAdminForm = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { state } = useLocation();
-  const userData = state ?? {};
+  const schoolAdminData = state ?? {};
 
-  const { schoolListInfo, loading, classBySchoolList } = useSelector(
-    (state) => state.users
-  );
+  const { schoolListInfo, loading } = useSelector((state) => state.users);
   const schoolList = schoolListInfo.data ?? [];
-
-  const handleAddEdit = (values, action) => {
-    console.log("edit");
-    const data = {
-      ...values,
-      user_type: USER_TYPE.student,
-      id: userData.id ? userData.id : "",
-      school_id: values.school_id,
-      class_id: values.class_id,
-      activation_date: moment(values.activation_date).format("YYYY-MM-DD"),
-      expired_at: moment(values.expired_at).format("YYYY-MM-DD"),
-    };
-    const payload = omit(data, "school_name", "class_name");
-    dispatch(addEditUsers(payload))
-      .unwrap()
-      .then((result) => {
-        if (result.success) {
-          console.log(result);
-          toast.success(result.message);
-          navigate("/dashboard/username-and-groups/student");
-        } else {
-          toast.error(result.message);
-        }
-      })
-      .catch((err) => {
-        toast.error(err.message);
-        console.log("Error: ", err);
-      });
-  };
 
   useEffect(() => {
     const payload = {
@@ -82,10 +41,28 @@ const AddStudentForm = () => {
     dispatch(getSchoolList(payload));
   }, [dispatch]);
 
-  const handleSchoolChange = (data) => {
-    dispatch(getClassesBySchool(data.id));
+  const handleAddEdit = (values, action) => {
+    const data = {
+      ...values,
+      id: schoolAdminData.id ? schoolAdminData.id : "",
+      activation_date: moment(values.activation_date).format("YYYY-MM-DD"),
+      expired_at: moment(values.expired_at).format("YYYY-MM-DD"),
+    };
+    dispatch(addEditSchoolAdmin(data))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          toast.success(result.message);
+          navigate("/dashboard/username-and-groups/school-admin");
+        } else {
+          toast.error(result.message);
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
   };
-
   return (
     <>
       <Box
@@ -96,23 +73,21 @@ const AddStudentForm = () => {
         }}
       >
         <Typography variant="body1" color="secondary.disabled" className="mb-4">
-          Öğrenci Ekle
+          Okul Yöneticisi
         </Typography>
+
         <Formik
           initialValues={{
-            school_id: userData.school_id ?? "",
-            school_name: userData.school_name ?? "",
-            branch_id: userData.branch_id ?? "",
-            class_id: userData.class_id ?? "",
-            class_name: userData.class_name ?? "",
-            email: userData.email ?? "",
-            name: userData.name ?? "",
-            password: userData.password ?? "",
-            code: userData.code ?? "",
-            activation_date: moment(userData.activation_date) ?? moment(),
-            expired_at: moment(userData.expired_at) ?? moment(),
+            school_id: schoolAdminData.school_id ?? [],
+            school_name: schoolAdminData.school_name ?? [],
+            name: schoolAdminData.name ?? "",
+            email: schoolAdminData.email ?? "",
+            password: schoolAdminData.password ?? "",
+            activation_date:
+              moment(schoolAdminData.activation_date) ?? moment(),
+            expired_at: moment(schoolAdminData.expired_at) ?? moment(),
           }}
-          validationSchema={addEditTeacherValidation}
+          validationSchema={addEditSchoolValidation}
           onSubmit={(value, action) => {
             handleAddEdit(value, action);
           }}
@@ -149,10 +124,8 @@ const AddStudentForm = () => {
                     onChange={(e, value) => {
                       setFieldValue("school_id", value.id);
                       setFieldValue("school_name", value.school_name);
-                      handleSchoolChange(value);
-                      setFieldValue("class_id", value.class_id);
-                      // setFieldValue("class_name", value.class_name);
                     }}
+                    multiple
                     autoHighlight
                     disableClearable
                     noOptionsText="No Data"
@@ -189,84 +162,6 @@ const AddStudentForm = () => {
                     )}
                   />
                 </Box>
-                <Box className="custom_form_row d-flex align-items-center border-bottom">
-                  <Typography
-                    variant="body2"
-                    color="secondary.disabled"
-                    className="ms-4 w-25"
-                  >
-                    Seviye
-                  </Typography>
-                  <FormControl fullWidth>
-                    <Select
-                      name="branch_id"
-                      value={values.branch_id}
-                      onChange={handleChange}
-                    >
-                      {map(gradeList, (item, index) => (
-                        <MenuItem key={index} value={item.id}>
-                          {item.title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-                <Box className="custom_form_row d-flex align-items-center border-bottom">
-                  <Typography
-                    variant="body2"
-                    color="secondary.disabled"
-                    className="ms-4 w-25"
-                  >
-                    Sınıfları
-                  </Typography>
-                  <Autocomplete
-                    getOptionLabel={(option) => option.class_name ?? option}
-                    options={classBySchoolList}
-                    name="class_name"
-                    value={values.class_name}
-                    isOptionEqualToValue={(option, value) => {
-                      if (value === "" || option.class_name === value) {
-                        return true;
-                      }
-                    }}
-                    onChange={(e, value) => {
-                      setFieldValue("class_id", value.id);
-                      setFieldValue("class_name", value.class_name);
-                    }}
-                    autoHighlight
-                    disableClearable
-                    noOptionsText="No Data"
-                    loading={loading}
-                    className="w-100"
-                    renderInput={(params) => (
-                      <TextField
-                        fullWidth
-                        {...params}
-                        name="class_name"
-                        inputProps={{
-                          ...params.inputProps,
-                          autoComplete: "new-password",
-                          endadornment: (
-                            <React.Fragment>
-                              {loading ? (
-                                <CircularProgress color="inherit" size={20} />
-                              ) : null}
-                              {params.InputProps.endadornment}
-                            </React.Fragment>
-                          ),
-                        }}
-                        error={
-                          errors.class_name && touched.class_name ? true : false
-                        }
-                        helperText={
-                          errors.class_name && touched.class_name
-                            ? errors.class_name
-                            : null
-                        }
-                      />
-                    )}
-                  />
-                </Box>
 
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
@@ -274,7 +169,7 @@ const AddStudentForm = () => {
                     color="secondary.disabled"
                     className="ms-4 w-25"
                   >
-                    Öğrenci Adı
+                    Okul Yöneticisi
                   </Typography>
                   <TextField
                     name="name"
@@ -288,14 +183,13 @@ const AddStudentForm = () => {
                     }
                   />
                 </Box>
-
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
                     variant="body2"
                     color="secondary.disabled"
                     className="ms-4 w-25"
                   >
-                    E-mail
+                    Email
                   </Typography>
                   <TextField
                     name="email"
@@ -309,7 +203,6 @@ const AddStudentForm = () => {
                     }
                   />
                 </Box>
-
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
                     variant="body2"
@@ -323,8 +216,8 @@ const AddStudentForm = () => {
                     value={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    fullWidth
                     type="password"
+                    fullWidth
                     error={errors.password && touched.password ? true : false}
                     helperText={
                       errors.password && touched.password
@@ -351,7 +244,6 @@ const AddStudentForm = () => {
                     }
                   />
                 </Box>
-
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
                     variant="body2"
@@ -389,4 +281,4 @@ const AddStudentForm = () => {
   );
 };
 
-export default AddStudentForm;
+export default AddSchoolAdminForm;

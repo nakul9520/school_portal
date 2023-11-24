@@ -57,10 +57,6 @@ const AddSchoolForm = () => {
         <Formik
           initialValues={{
             school_name: schoolData.school_name ?? "",
-            user_name: schoolData.user_name ?? "",
-            school_admin: schoolData.school_admin ?? "",
-            school_email: schoolData.school_email ?? "",
-            school_code: schoolData.school_code ?? "",
             activation_date: moment(schoolData.activation_date) ?? moment(),
             expired_at: moment(schoolData.expired_at) ?? moment(),
           }}
@@ -78,7 +74,7 @@ const AddSchoolForm = () => {
             errors,
             touched,
           }) => (
-            <form onSubmit={handleSubmit} className="h-100">         
+            <form onSubmit={handleSubmit} className="h-100">
               <Box className="custom_form border">
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
@@ -100,100 +96,6 @@ const AddSchoolForm = () => {
                     helperText={
                       errors.school_name && touched.school_name
                         ? errors.school_name
-                        : null
-                    }
-                  />
-                </Box>
-                <Box className="custom_form_row d-flex align-items-center border-bottom">
-                  <Typography
-                    variant="body2"
-                    color="secondary.disabled"
-                    className="ms-4 w-25"
-                  >
-                    Okul Yöneticisi
-                  </Typography>
-                  <TextField
-                    name="school_admin"
-                    value={values.school_admin}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    fullWidth
-                    error={
-                      errors.school_admin && touched.school_admin ? true : false
-                    }
-                    helperText={
-                      errors.school_admin && touched.school_admin
-                        ? errors.school_admin
-                        : null
-                    }
-                  />
-                </Box>
-                <Box className="custom_form_row d-flex align-items-center border-bottom">
-                  <Typography
-                    variant="body2"
-                    color="secondary.disabled"
-                    className="ms-4 w-25"
-                  >
-                    Email
-                  </Typography>
-                  <TextField
-                    name="school_email"
-                    value={values.school_email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    fullWidth
-                    error={
-                      errors.school_email && touched.school_email ? true : false
-                    }
-                    helperText={
-                      errors.school_email && touched.school_email
-                        ? errors.school_email
-                        : null
-                    }
-                  />
-                </Box>{" "}
-                <Box className="custom_form_row d-flex align-items-center border-bottom">
-                  <Typography
-                    variant="body2"
-                    color="secondary.disabled"
-                    className="ms-4 w-25"
-                  >
-                    Kullanıcı Adı
-                  </Typography>
-                  <TextField
-                    name="user_name"
-                    value={values.user_name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    fullWidth
-                    error={errors.user_name && touched.user_name ? true : false}
-                    helperText={
-                      errors.user_name && touched.user_name
-                        ? errors.user_name
-                        : null
-                    }
-                  />
-                </Box>
-                <Box className="custom_form_row d-flex align-items-center border-bottom">
-                  <Typography
-                    variant="body2"
-                    color="secondary.disabled"
-                    className="ms-4 w-25"
-                  >
-                    Şifre
-                  </Typography>
-                  <TextField
-                    name="school_code"
-                    value={values.school_code}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    fullWidth
-                    error={
-                      errors.school_code && touched.school_code ? true : false
-                    }
-                    helperText={
-                      errors.school_code && touched.school_code
-                        ? errors.school_code
                         : null
                     }
                   />

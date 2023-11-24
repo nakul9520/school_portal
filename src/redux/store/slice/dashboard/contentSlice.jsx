@@ -399,7 +399,7 @@ export const deleteContentFile = createAsyncThunk(
 );
 
 export const getAllContentList = createAsyncThunk(
-  "auth/getAllContentList",
+  "content/getAllContentList",
   async (data) => {
     try {
       const response = await AxiosDefault({

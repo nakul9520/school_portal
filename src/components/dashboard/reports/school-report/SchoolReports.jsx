@@ -24,7 +24,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useTheme } from "@mui/material/styles";
 
-import { get, isEmpty, size } from "lodash";
+import { get, isEmpty, map, size } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 
 import Iconify from "components/common/iconify/Iconify";
@@ -38,6 +38,7 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
+import { gradeList } from "services/constant";
 
 const SchoolReports = () => {
   const theme = useTheme();
@@ -56,7 +57,7 @@ const SchoolReports = () => {
     (state) => state.report
   );
   const schoolReportList = schoolReportInfo.data ?? [];
-
+  const [branchId, setBranchId] = useState("");
   const [schoolData, setSchoolData] = useState({});
   const [classData, setClassData] = useState({});
 
@@ -210,7 +211,7 @@ const SchoolReports = () => {
               className="header_search"
               size="small"
               InputProps={{
-                endAdornment: (
+                endadornment: (
                   <InputAdornment position="start">
                     <IconButton sx={{ color: "text.secondary" }}>
                       <Iconify icon="iconamoon:search-light" width={20} />
@@ -267,13 +268,32 @@ const SchoolReports = () => {
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
-                        {params.InputProps.endAdornment}
+                        {params.InputProps.endadornment}
                       </React.Fragment>
                     ),
                   }}
                 />
               )}
             />
+          </Box>
+          <Box className="w-100">
+            <Typography variant="body2" color="text.secondary">
+              Seviye
+            </Typography>
+            <FormControl fullWidth>
+              <Select
+                name="branch_id"
+                value={branchId}
+                onChange={(e) => setBranchId(e.target.value)}
+                size="small"
+              >
+                {map(gradeList, (item, index) => (
+                  <MenuItem key={index} value={item.id}>
+                    {item.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
@@ -310,7 +330,7 @@ const SchoolReports = () => {
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
-                        {params.InputProps.endAdornment}
+                        {params.InputProps.endadornment}
                       </React.Fragment>
                     ),
                   }}

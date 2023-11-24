@@ -1,3 +1,5 @@
+import React, { useCallback, useEffect, useState } from "react";
+
 import {
   Autocomplete,
   Box,
@@ -20,23 +22,25 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-
 import { useTheme } from "@mui/material/styles";
-import CMCheckBox from "components/common/checkbox/CMCheckBox";
-import Iconify from "components/common/iconify/Iconify";
+
 import { FieldArray, Formik } from "formik";
 import { get, isEmpty, map, size, uniq } from "lodash";
-import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+
+import CMCheckBox from "components/common/checkbox/CMCheckBox";
+import Iconify from "components/common/iconify/Iconify";
 import {
   getAssignmentListForAssign,
   postAssignAssignment,
 } from "redux/store/slice/dashboard/assignmentSlice";
+import { getFilterList } from "redux/store/slice/dashboard/contentSlice";
 import {
   getClassesBySchool,
   getSchoolList,
 } from "redux/store/slice/dashboard/userSlice";
+import { categoryName } from "services/constant";
 import {
   StyledTable,
   StyledTableCell,
@@ -46,13 +50,7 @@ import {
 const Assignment = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const categoryName = [
-    { title: "Sınıf Düzeyi Ekle/Çıkar", categoryId: 1, key: "grade" },
-    { title: "PYP Temaları Ekle/Çıkar", categoryId: 2, key: "pypthemes" },
-    { title: "Genel Temalar Ekle/Çıkar", categoryId: 3, key: "generalthemes" },
-    { title: "Kazanımlar Ekle/Çıkar", categoryId: 4, key: "objectives" },
-    { title: "Seriler Ekle/Çıkar", categoryId: 5, key: "series" },
-  ];
+
   const [filterOptions, setFilterOptions] = useState({
     search: "",
     per_page: 10,
@@ -71,9 +69,12 @@ const Assignment = () => {
   const [schoolData, setSchoolData] = useState({});
   const [classData, setClassData] = useState({});
   const [categoryId, setCategoryId] = useState("");
-
+  const [subCategoryData, setSubCategoryData] = useState({});
   const [page, setPage] = useState(1);
   const [perPageData, setperPageData] = useState(10);
+
+  const { filterList } = useSelector((state) => state.content);
+  const filterListData = filterList.data ?? [];
 
   useEffect(() => {
     const payload = {
@@ -133,19 +134,7 @@ const Assignment = () => {
       page
     );
   };
-  const handleCategoryChange = (e) => {
-    setCategoryId(e.target.value);
-    getAssignAssignmentListData(
-      {
-        school_id: schoolData.id,
-        class_id: classData.id,
-        category_id: e.target.value,
-        search: "",
-        per_page: 10,
-      },
-      1
-    );
-  };
+
   const handleSchoolChange = (data) => {
     dispatch(getClassesBySchool(data.id));
   };
@@ -158,6 +147,42 @@ const Assignment = () => {
         category_id: categoryId,
         search: "",
         per_page: 10,
+      },
+      1
+    );
+  };
+
+  const handleCategoryChange = (e) => {
+    setCategoryId(e.target.value);
+    setSubCategoryData({});
+    dispatch(
+      getFilterList({
+        category_id: e.target.value,
+        search: "",
+        per_page: 10,
+      })
+    );
+    if (e.target.value === "") {
+      getAssignAssignmentListData(
+        {
+          school_id: schoolData.id,
+          class_id: classData.id,
+          category_id: "",
+          search: "",
+          per_page: 10,
+        },
+        1
+      );
+    }
+  };
+
+  const handleClickCategory = (value) => {
+    getAssignAssignmentListData(
+      {
+        school_id: schoolData.id,
+        class_id: classData.id,
+        category_id: value.id,
+        ...filterOptions,
       },
       1
     );
@@ -261,19 +286,22 @@ const Assignment = () => {
                   ...filterOptions,
                   search: e.target.value,
                 });
-                getAssignAssignmentListData({
-                  school_id: schoolData.id,
-                  class_id: classData.id,
-                  category_id: categoryId,
-                  ...filterOptions,
-                  search: e.target.value,
-                });
+                getAssignAssignmentListData(
+                  {
+                    school_id: schoolData.id,
+                    class_id: classData.id,
+                    category_id: categoryId,
+                    ...filterOptions,
+                    search: e.target.value,
+                  },
+                  1
+                );
               }}
               placeholder="Arama…"
               className="header_search"
               size="small"
               InputProps={{
-                endAdornment: (
+                endadornment: (
                   <InputAdornment position="start">
                     <IconButton sx={{ color: "text.secondary" }}>
                       <Iconify icon="iconamoon:search-light" width={20} />
@@ -329,7 +357,7 @@ const Assignment = () => {
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
-                        {params.InputProps.endAdornment}
+                        {params.InputProps.endadornment}
                       </React.Fragment>
                     ),
                   }}
@@ -344,6 +372,7 @@ const Assignment = () => {
             <Autocomplete
               getOptionLabel={(option) => option.class_name ?? option}
               options={classBySchoolList}
+              disabled={isEmpty(classBySchoolList) || isEmpty(schoolData)}
               value={classData.class_name ?? ""}
               isOptionEqualToValue={(option, value) => {
                 if (value === "" || option.class_name === value.class_name) {
@@ -372,7 +401,7 @@ const Assignment = () => {
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
-                        {params.InputProps.endAdornment}
+                        {params.InputProps.endadornment}
                       </React.Fragment>
                     ),
                   }}
@@ -389,6 +418,7 @@ const Assignment = () => {
                 value={categoryId}
                 onChange={handleCategoryChange}
                 size="small"
+                disabled={isEmpty(classBySchoolList) || isEmpty(classData)}
               >
                 <MenuItem value="">No Category</MenuItem>
                 {map(categoryName, (item, index) => (
@@ -398,6 +428,50 @@ const Assignment = () => {
                 ))}
               </Select>
             </FormControl>
+          </Box>
+          <Box className="w-100">
+            <Typography variant="body2" color="text.secondary">
+              Sub Category
+            </Typography>
+            <Autocomplete
+              getOptionLabel={(option) => option.filter_name ?? option}
+              options={filterListData}
+              disabled={categoryId === ""}
+              value={subCategoryData.filter_name ?? ""}
+              isOptionEqualToValue={(option, value) => {
+                if (value === "" || option.filter_name === value.filter_name) {
+                  return true;
+                }
+              }}
+              onChange={(e, value) => {
+                setSubCategoryData(value);
+                handleClickCategory(value);
+              }}
+              autoHighlight
+              disableClearable
+              noOptionsText="No Data"
+              loading={loading}
+              className="w-100"
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  size="small"
+                  inputProps={{
+                    ...params.inputProps,
+                    autoComplete: "new-password",
+                    endadornment: (
+                      <React.Fragment>
+                        {loading ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
+                        {params.InputProps.endadornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )}
+            />
           </Box>
         </Stack>
 
@@ -508,24 +582,7 @@ const Assignment = () => {
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center">
-                                <FormControlLabel
-                                  labelPlacement="start"
-                                  control={
-                                    <CMCheckBox
-                                      onChange={(e) => {
-                                        if (e.target.checked) {
-                                          setFieldValue(
-                                            "selectedBook",
-                                            values.data
-                                          );
-                                        } else {
-                                          setFieldValue("selectedBook", []);
-                                        }
-                                      }}
-                                    />
-                                  }
-                                  label="Edit"
-                                />
+                                Edit
                               </StyledTableCell>
                             </TableRow>
                           </TableHead>

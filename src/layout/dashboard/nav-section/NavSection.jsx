@@ -5,6 +5,7 @@ import {
   Box,
   Collapse,
   Divider,
+  IconButton,
   List,
   ListItemText,
   Typography,
@@ -13,6 +14,7 @@ import {
 import { useTheme } from "@emotion/react";
 import React, { useEffect, useState } from "react";
 import { StyledNavItem, StyledNavItemIcon } from "./styles";
+import Iconify from "components/common/iconify/Iconify";
 
 // ----------------------------------------------------------------------
 
@@ -21,7 +23,7 @@ NavSection.propTypes = {
 };
 
 export default function NavSection({ data = [], ...other }) {
-  const [open, setOpen] = useState(0);
+  const [open, setOpen] = useState(1);
 
   const handleToggle = (id) => {
     setOpen((preId) => (preId === id ? 0 : id));
@@ -56,7 +58,7 @@ export default function NavSection({ data = [], ...other }) {
                   <NavItem
                     key={index}
                     item={childItem}
-                    handleToggle={handleToggle}
+                    // handleToggle={handleToggle}
                   />
                 ))}
               </Collapse>
@@ -84,9 +86,10 @@ function NavItem({ item, handleToggle }) {
     const pathStatusMappings = {
       "/dashboard/username-and-groups": 1,
       "/dashboard/username-and-groups/school": 1.1,
-      "/dashboard/username-and-groups/class": 1.2,
-      "/dashboard/username-and-groups/teacher": 1.3,
-      "/dashboard/username-and-groups/student": 1.4,
+      "/dashboard/username-and-groups/school-admin": 1.2,
+      "/dashboard/username-and-groups/class": 1.3,
+      "/dashboard/username-and-groups/teacher": 1.4,
+      "/dashboard/username-and-groups/student": 1.5,
       "/dashboard/reports": 2,
       "/dashboard/reports/school-reports": 2.1,
       "/dashboard/reports/book-reports": 2.2,
@@ -129,6 +132,11 @@ function NavItem({ item, handleToggle }) {
       <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
 
       <ListItemText disableTypography primary={title} />
+      {item.type && (
+        <IconButton>
+          <Iconify icon="ep:arrow-down" />
+        </IconButton>
+      )}
     </StyledNavItem>
   );
 }

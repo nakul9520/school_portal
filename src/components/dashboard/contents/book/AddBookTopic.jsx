@@ -1,10 +1,10 @@
 import {
+  Autocomplete,
   Box,
   Button,
-  Chip,
+  CircularProgress,
   Grid,
   IconButton,
-  LinearProgress,
   Stack,
   TextField,
   Typography,
@@ -19,20 +19,20 @@ import { useTheme } from "@mui/material/styles";
 import Iconify from "components/common/iconify";
 import { FieldArray, Formik, getIn } from "formik";
 import { filter, get, isEmpty } from "lodash";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getFilterList } from "redux/store/slice/dashboard/contentSlice";
 import {
   addBookFiles,
   addBookTitle,
+  getFilterList,
 } from "redux/store/slice/dashboard/contentSlice";
-import { FILE_TYPE } from "services/constant";
+import { FILE_TYPE, categoryName } from "services/constant";
 
 import {
-  addFileTitleValidation,
   addAudioFileValidation,
+  addFileTitleValidation,
 } from "services/validations";
 import {
   StyledTable,
@@ -44,7 +44,7 @@ const AddBookTopic = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [categoryId, setCategoryId] = useState(1);
+  const [categoryData, setCategoryData] = useState({ categoryId: 1 });
   const bookId = localStorage.getItem("bookId");
   const [activeTaskBtn, setActiveTaskBtn] = useState(true);
   const { state } = useLocation();
@@ -52,24 +52,25 @@ const AddBookTopic = () => {
   console.log("bookData", bookData);
   const { filterList, loading } = useSelector((state) => state.content);
   const filterListData = filterList.data ?? [];
+  const [subCategoryData, setSubCategoryData] = useState({});
 
-  const categoryName = [
-    { title: "Sınıf Düzeyi Ekle/Çıkar", categoryId: 1, key: "grade" },
-    { title: "PYP Temaları Ekle/Çıkar", categoryId: 2, key: "pypthemes" },
-    { title: "Genel Temalar Ekle/Çıkar", categoryId: 3, key: "generalthemes" },
-    { title: "Kazanımlar Ekle/Çıkar", categoryId: 4, key: "objectives" },
-    { title: "Seriler Ekle/Çıkar", categoryId: 5, key: "series" },
-  ];
-
-  const handleCategoryChange = (id) => {
-    setCategoryId(id);
+  const handleCategoryChange = (data) => {
+    setCategoryData(data);
     dispatch(
       getFilterList({
-        category_id: id,
+        category_id: data.categoryId,
         search: "",
         per_page: 10,
       })
     );
+  };
+
+  const handleClickCategory = (value, setFieldValue) => {
+    const result = filter(
+      categoryName,
+      (item) => item.categoryId === categoryData.categoryId
+    );
+    setFieldValue(result[0].key, value.id);
   };
 
   useEffect(() => {
@@ -81,6 +82,7 @@ const AddBookTopic = () => {
       })
     );
   }, [dispatch]);
+
   //remove book id when component is unmounted
   // useEffect(() => {
   //   return () => {
@@ -153,14 +155,6 @@ const AddBookTopic = () => {
     }
   };
 
-  const handleClickFilter = (id, setFieldValue) => {
-    const category_id = filter(
-      categoryName,
-      (item) => item.categoryId === categoryId
-    );
-    setFieldValue(category_id[0].key, id);
-  };
-
   return (
     <>
       <Grid container spacing={2}>
@@ -170,9 +164,9 @@ const AddBookTopic = () => {
               book_name: bookData.book_name ?? "",
               book_description: bookData.book_description ?? "",
               grade: bookData.grade ?? 0,
+              pypthemes: bookData.pypthemes ?? 0,
               generalthemes: bookData.generalthemes ?? 0,
               objectives: bookData.objectives ?? 0,
-              pypthemes: bookData.pypthemes ?? 0,
               series: bookData.series ?? 0,
             }}
             validationSchema={addFileTitleValidation}
@@ -190,7 +184,6 @@ const AddBookTopic = () => {
               touched,
             }) => (
               <form onSubmit={handleSubmit}>
-                {console.log(values)}
                 <Box
                   sx={{
                     p: 2,
@@ -213,7 +206,7 @@ const AddBookTopic = () => {
                       onBlur={handleBlur}
                       fullWidth
                       size="small"
-                      placeholder="Kitap konusu"
+                      placeholder="kitap adi ekle"
                       error={
                         errors.book_name && touched.book_name ? true : false
                       }
@@ -241,7 +234,7 @@ const AddBookTopic = () => {
                       multiline
                       rows={4}
                       size="small"
-                      placeholder="Kitap Description"
+                      placeholder="kitap konusu ekle"
                       error={
                         errors.book_description && touched.book_description
                           ? true
@@ -270,57 +263,70 @@ const AddBookTopic = () => {
                             variant="contained"
                             size="small"
                             color={
-                              categoryId === index + 1 ? "secondary" : "primary"
+                              categoryData.categoryId === item.categoryId
+                                ? "secondary"
+                                : "primary"
                             }
-                            onClick={() => handleCategoryChange(index + 1)}
+                            onClick={() => handleCategoryChange(item)}
                           >
                             {item.title}
                           </Button>
                         </Box>
                       ))}
                     </Stack>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      className="gap-2 mt-2 flex-wrap "
-                    >
-                      {loading ? (
-                        <LinearProgress />
-                      ) : isEmpty(filterListData) ? (
-                        <Typography variant="subtitle1" color="text.primary">
-                          No Filters Available
-                        </Typography>
-                      ) : (
-                        filterListData.map((row, index) => (
-                          <Chip
-                            icon={
-                              (values.grade ||
-                                values.generalthemes ||
-                                values.objectives ||
-                                values.pypthemes ||
-                                values.series) === row.id ? (
-                                <Iconify icon="ic:round-done-all" />
-                              ) : null
-                            }
-                            label={row.filter_name}
-                            key={index}
-                            className="cursor-pointer p-2"
-                            onClick={() => {
-                              handleClickFilter(row.id, setFieldValue);
+
+                    <Box className="w-100 pt-2">
+                      <Typography variant="body2" color="text.secondary">
+                        Sub Category
+                      </Typography>
+                      <Autocomplete
+                        getOptionLabel={(option) =>
+                          option.filter_name ?? option
+                        }
+                        options={filterListData}
+                        disabled={categoryData.categoryId === ""}
+                        value={subCategoryData.filter_name ?? ""}
+                        isOptionEqualToValue={(option, value) => {
+                          if (
+                            value === "" ||
+                            option.filter_name === value.filter_name
+                          ) {
+                            return true;
+                          }
+                        }}
+                        onChange={(e, value) => {
+                          setSubCategoryData(value);
+                          handleClickCategory(value, setFieldValue);
+                        }}
+                        autoHighlight
+                        disableClearable
+                        noOptionsText="No Data"
+                        loading={loading}
+                        className="w-100"
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            fullWidth
+                            size="small"
+                            inputProps={{
+                              ...params.inputProps,
+                              autoComplete: "new-password",
+                              endadornment: (
+                                <React.Fragment>
+                                  {loading ? (
+                                    <CircularProgress
+                                      color="inherit"
+                                      size={20}
+                                    />
+                                  ) : null}
+                                  {params.InputProps.endadornment}
+                                </React.Fragment>
+                              ),
                             }}
-                            variant={
-                              (values.grade ||
-                                values.generalthemes ||
-                                values.objectives ||
-                                values.pypthemes ||
-                                values.series) === row.id
-                                ? "contained"
-                                : "outlined"
-                            }
                           />
-                        ))
-                      )}
-                    </Stack>
+                        )}
+                      />
+                    </Box>
                   </Box>
                   <Box className="mt-3">
                     <Button

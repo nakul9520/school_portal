@@ -26,18 +26,23 @@ const navConfig = [
       },
       {
         id: 1.2,
+        title: "Okul Yöneticisi",
+        path: "/dashboard/username-and-groups/school-admin",
+      },
+      {
+        id: 1.3,
         title: "Sınıf",
         path: "/dashboard/username-and-groups/class",
         // icon: icon("class"),
       },
       {
-        id: 1.3,
+        id: 1.4,
         title: "Öğretmen",
         path: "/dashboard/username-and-groups/teacher",
         // icon: icon("teachers"),
       },
       {
-        id: 1.4,
+        id: 1.5,
         title: "Öğrenci",
         path: "/dashboard/username-and-groups/student",
         // icon: icon("students"),

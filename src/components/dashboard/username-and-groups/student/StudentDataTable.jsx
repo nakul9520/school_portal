@@ -1,9 +1,4 @@
-import { useState } from "react";
-
 import Box from "@mui/material/Box";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
-import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
@@ -13,14 +8,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 
-import { isEmpty, map } from "lodash";
+import { isEmpty, uniq } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import CMIconButton from "components/common/CMIconButton";
-import MenuPopover from "components/common/MenuPopover";
-import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
 import Iconify from "components/common/iconify/Iconify";
 import {
@@ -33,32 +26,14 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import { MenuItem } from "@mui/material";
 
-const StudentDataTable = () => {
+const StudentDataTable = (props) => {
+  const { selected, setSelected } = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [anchorEl, setAnchorEl] = useState({
-    school: null,
-    class: null,
-  });
-  const ITEM_HEIGHT = 48;
   const { userListInfo, loading } = useSelector((state) => state.users);
   const usersList = userListInfo.data ?? [];
-
-  const handleClick = (event, fieldName) => {
-    setAnchorEl((prevstate) => ({
-      ...prevstate,
-      [fieldName]: event.currentTarget,
-    }));
-  };
-  const handleClose = (fieldName) => {
-    setAnchorEl((prevstate) => ({
-      ...prevstate,
-      [fieldName]: null,
-    }));
-  };
 
   const handleDelete = (id) => {
     dispatch(deleteUsers({ id: [id] }))
@@ -96,79 +71,12 @@ const StudentDataTable = () => {
               <StyledTableCell align="left">Sıra</StyledTableCell>
               <StyledTableCell align="left" style={{ minWidth: 150 }}>
                 Okul Adı
-                <IconButton
-                  onClick={(e) => {
-                    handleClick(e, "school");
-                  }}
-                >
-                  <Iconify icon="ep:arrow-down" color="text.secondary" />
-                </IconButton>
-                <MenuPopover
-                  open={Boolean(anchorEl.school)}
-                  onClose={() => handleClose("school")}
-                  anchorEl={anchorEl.school}
-                  PaperProps={{
-                    style: {
-                      maxHeight: ITEM_HEIGHT * 4.5,
-                      width: "18ch",
-                    },
-                  }}
-                >
-                  <FormGroup>
-                    {map([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], (item, index) => (
-                      <MenuItem
-                        key={item}
-                        // onClick={() =>
-                        //   handleSelectOption(option.name, props, "agency")
-                        // }
-                      >
-                        <FormControlLabel
-                          key={index}
-                          control={<CMCheckBox />}
-                          label={`School ${item}`}
-                        />
-                      </MenuItem>
-                    ))}
-                  </FormGroup>
-                </MenuPopover>
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Seviye
               </StyledTableCell>
               <StyledTableCell align="left" style={{ minWidth: 150 }}>
                 Öğretmen Adı
-                <IconButton
-                  onClick={(e) => {
-                    handleClick(e, "class");
-                  }}
-                >
-                  <Iconify icon="ep:arrow-down" color="text.secondary" />
-                </IconButton>
-                <MenuPopover
-                  open={Boolean(anchorEl.class)}
-                  onClose={() => handleClose("class")}
-                  anchorEl={anchorEl.class}
-                  PaperProps={{
-                    style: {
-                      maxHeight: ITEM_HEIGHT * 4.5,
-                      width: "18ch",
-                    },
-                  }}
-                >
-                  <FormGroup>
-                    {map([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], (item, index) => (
-                      <MenuItem
-                        key={item}
-                        // onClick={() =>
-                        //   handleSelectOption(option.name, props, "agency")
-                        // }
-                      >
-                        <FormControlLabel
-                          key={index}
-                          control={<CMCheckBox />}
-                          label={`School ${item}`}
-                        />
-                      </MenuItem>
-                    ))}
-                  </FormGroup>
-                </MenuPopover>
               </StyledTableCell>
               <StyledTableCell align="left" style={{ minWidth: 150 }}>
                 Öğrenci Adı
@@ -212,6 +120,9 @@ const StudentDataTable = () => {
                     {row.school_name}
                   </StyledTableCell>
                   <StyledTableCell align="left">
+                    {row.branch_id}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
                     {row.class_name}
                   </StyledTableCell>
                   <StyledTableCell align="left">{row.name}</StyledTableCell>
@@ -246,7 +157,20 @@ const StudentDataTable = () => {
                         </CMIconButton>
                       </Box>
                       <Box>
-                        <SelectCheckbox color="success" />
+                        <SelectCheckbox
+                          color="success"
+                          checked={selected.includes(row.id)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelected(uniq([...selected, row.id]));
+                            } else {
+                              const updatedObjects = selected.filter(
+                                (obj) => obj !== row.id
+                              );
+                              setSelected(updatedObjects);
+                            }
+                          }}
+                        />
                       </Box>
                       <Box onClick={() => handleDelete(row.id)}>
                         <CMIconButton color="error">

@@ -18,7 +18,7 @@ const initialState = {
 
 // School
 export const addEditSchool = createAsyncThunk(
-  "auth/addEditSchool",
+  "users/addEditSchool",
   async (data) => {
     try {
       const response = await AxiosDefault({
@@ -36,7 +36,7 @@ export const addEditSchool = createAsyncThunk(
   }
 );
 export const getSchoolList = createAsyncThunk(
-  "auth/getSchoolList",
+  "users/getSchoolList",
   async (data) => {
     try {
       const response = await AxiosDefault({
@@ -54,7 +54,7 @@ export const getSchoolList = createAsyncThunk(
   }
 );
 export const getSchoolDetail = createAsyncThunk(
-  "auth/getSchoolDetail",
+  "users/getSchoolDetail",
   async (id) => {
     try {
       const response = await AxiosDefault({
@@ -71,7 +71,7 @@ export const getSchoolDetail = createAsyncThunk(
   }
 );
 export const deleteSchool = createAsyncThunk(
-  "auth/deleteSchool",
+  "users/deleteSchool",
   async (data, id) => {
     try {
       const response = await AxiosDefault({
@@ -89,7 +89,7 @@ export const deleteSchool = createAsyncThunk(
   }
 );
 export const getSchoolCSVFile = createAsyncThunk(
-  "auth/getSchoolCSVFile",
+  "users/getSchoolCSVFile",
   async () => {
     try {
       const response = await AxiosDefault({
@@ -105,8 +105,28 @@ export const getSchoolCSVFile = createAsyncThunk(
     }
   }
 );
+
+export const getSpecificSchoolCSVFile = createAsyncThunk(
+  "users/getSpecificSchoolCSVFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.GET_SPECIFIC_SCHOOL_CSV_FILE,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
 export const importSchoolFile = createAsyncThunk(
-  "auth/importSchoolFile",
+  "users/importSchoolFile",
   async (data) => {
     try {
       const response = await AxiosDefault({
@@ -125,9 +145,29 @@ export const importSchoolFile = createAsyncThunk(
   }
 );
 
+// school Admin
+export const addEditSchoolAdmin = createAsyncThunk(
+  "users/addEditSchoolAdmin",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.ADD_EDIT_SCHOOL_ADMIN,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
 // classs
 export const addEditClass = createAsyncThunk(
-  "auth/addEditClass",
+  "users/addEditClass",
   async (data) => {
     try {
       const response = await AxiosDefault({
@@ -145,7 +185,7 @@ export const addEditClass = createAsyncThunk(
   }
 );
 export const getClassList = createAsyncThunk(
-  "auth/getClassList",
+  "users/getClassList",
   async (data) => {
     try {
       const response = await AxiosDefault({
@@ -163,7 +203,7 @@ export const getClassList = createAsyncThunk(
   }
 );
 export const getClassDetail = createAsyncThunk(
-  "auth/getClassDetail",
+  "users/getClassDetail",
   async (id) => {
     try {
       const response = await AxiosDefault({
@@ -180,7 +220,7 @@ export const getClassDetail = createAsyncThunk(
   }
 );
 export const deleteClass = createAsyncThunk(
-  "auth/deleteClass",
+  "users/deleteClass",
   async (data, id) => {
     try {
       const response = await AxiosDefault({
@@ -198,7 +238,7 @@ export const deleteClass = createAsyncThunk(
   }
 );
 export const getClassCSVFile = createAsyncThunk(
-  "auth/getClassCSVFile",
+  "users/getClassCSVFile",
   async () => {
     try {
       const response = await AxiosDefault({
@@ -214,8 +254,28 @@ export const getClassCSVFile = createAsyncThunk(
     }
   }
 );
+
+export const getSpecificClassCSVFile = createAsyncThunk(
+  "users/getSpecificClassCSVFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.GET_SPECIFIC_CLASS_CSV_FILE,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
 export const importClassFile = createAsyncThunk(
-  "auth/importClassFile",
+  "users/importClassFile",
   async (data) => {
     try {
       const response = await AxiosDefault({
@@ -236,7 +296,7 @@ export const importClassFile = createAsyncThunk(
 
 // Techer & Student
 export const addEditUsers = createAsyncThunk(
-  "auth/addEditUsers",
+  "users/addEditUsers",
   async (data) => {
     try {
       const response = await AxiosDefault({
@@ -254,7 +314,7 @@ export const addEditUsers = createAsyncThunk(
   }
 );
 export const getUsersList = createAsyncThunk(
-  "auth/getUsersList",
+  "users/getUsersList",
   async (data) => {
     try {
       const response = await AxiosDefault({
@@ -272,7 +332,7 @@ export const getUsersList = createAsyncThunk(
   }
 );
 export const getUsersDetail = createAsyncThunk(
-  "auth/getUsersDetail",
+  "users/getUsersDetail",
   async (data, id) => {
     try {
       const response = await AxiosDefault({
@@ -290,7 +350,7 @@ export const getUsersDetail = createAsyncThunk(
   }
 );
 export const deleteUsers = createAsyncThunk(
-  "auth/deleteUsers",
+  "users/deleteUsers",
   async (data, id) => {
     try {
       const response = await AxiosDefault({
@@ -308,7 +368,7 @@ export const deleteUsers = createAsyncThunk(
   }
 );
 export const getClassesBySchool = createAsyncThunk(
-  "auth/getClassesBySchool",
+  "users/getClassesBySchool",
   async (id) => {
     try {
       const response = await AxiosDefault({
@@ -325,7 +385,7 @@ export const getClassesBySchool = createAsyncThunk(
   }
 );
 export const getTeacherCSVFile = createAsyncThunk(
-  "auth/getTeacherCSVFile",
+  "users/getTeacherCSVFile",
   async () => {
     try {
       const response = await AxiosDefault({
@@ -342,7 +402,7 @@ export const getTeacherCSVFile = createAsyncThunk(
   }
 );
 export const getStudentCSVFile = createAsyncThunk(
-  "auth/getStudentCSVFile",
+  "users/getStudentCSVFile",
   async () => {
     try {
       const response = await AxiosDefault({
@@ -358,8 +418,47 @@ export const getStudentCSVFile = createAsyncThunk(
     }
   }
 );
+
+export const getSpecificTeacherCSVFile = createAsyncThunk(
+  "users/getSpecificTeacherCSVFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.GET_SPECIFIC_TEACHER_CSV_FILE,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const getSpecificStudentCSVFile = createAsyncThunk(
+  "users/getSpecificStudentCSVFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.GET_SPECIFIC_STUDENT_CSV_FILE,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
 export const importTeacherFile = createAsyncThunk(
-  "auth/importTeacherFile",
+  "users/importTeacherFile",
   async (data) => {
     try {
       const response = await AxiosDefault({
@@ -378,7 +477,7 @@ export const importTeacherFile = createAsyncThunk(
   }
 );
 export const importStudentFile = createAsyncThunk(
-  "auth/importStudentFile",
+  "users/importStudentFile",
   async (data) => {
     try {
       const response = await AxiosDefault({
@@ -450,10 +549,19 @@ const userSlice = createSlice({
       .addCase(getSchoolCSVFile.rejected, (state) => {
         state.loading = false;
       })
+      .addCase(addEditSchoolAdmin.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addEditSchoolAdmin.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(addEditSchoolAdmin.rejected, (state) => {
+        state.loading = false;
+      })
       .addCase(addEditClass.pending, (state) => {
         state.loading = true;
       })
-      .addCase(addEditClass.fulfilled, (state, { payload }) => {
+      .addCase(addEditClass.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(addEditClass.rejected, (state) => {

@@ -19,11 +19,12 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import { isEmpty } from "lodash";
+import { isEmpty, uniq } from "lodash";
 import CMIconButton from "components/common/CMIconButton";
 import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
 
-const ClassDataTable = () => {
+const ClassDataTable = (props) => {
+  const { selected, setSelected } = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -66,6 +67,9 @@ const ClassDataTable = () => {
               <StyledTableCell align="left">Sıra</StyledTableCell>
               <StyledTableCell align="left" style={{ minWidth: 150 }}>
                 Okul Adı
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Seviye
               </StyledTableCell>
               <StyledTableCell align="left" style={{ minWidth: 150 }}>
                 Sınıf Adı
@@ -117,9 +121,12 @@ const ClassDataTable = () => {
             ) : (
               classList.map((row, index) => (
                 <StyledTableRow key={index}>
-                  <StyledTableCell scope="row">{row.id}</StyledTableCell>
+                  <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell scope="row">
                     {row.school_name}
+                  </StyledTableCell>
+                  <StyledTableCell scope="row">
+                    {row.branch_id}
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {row.class_name}
@@ -167,7 +174,20 @@ const ClassDataTable = () => {
                         </CMIconButton>
                       </Box>
                       <Box>
-                        <SelectCheckbox color="success" />
+                        <SelectCheckbox
+                          color="success"
+                          checked={selected.includes(row.id)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelected(uniq([...selected, row.id]));
+                            } else {
+                              const updatedObjects = selected.filter(
+                                (obj) => obj !== row.id
+                              );
+                              setSelected(updatedObjects);
+                            }
+                          }}
+                        />
                       </Box>
                       <Box onClick={() => handleDelete(row.id)}>
                         <CMIconButton color="error">

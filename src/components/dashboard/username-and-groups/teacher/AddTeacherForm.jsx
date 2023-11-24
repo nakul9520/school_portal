@@ -5,6 +5,9 @@ import {
   Box,
   Button,
   CircularProgress,
+  FormControl,
+  MenuItem,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -24,7 +27,8 @@ import {
   getSchoolList,
 } from "redux/store/slice/dashboard/userSlice";
 import { USER_TYPE } from "services/constant";
-import { omit } from "lodash";
+import { map, omit } from "lodash";
+import { gradeList } from "services/constant";
 
 const AddTeacherForm = () => {
   const theme = useTheme();
@@ -96,6 +100,7 @@ const AddTeacherForm = () => {
           initialValues={{
             school_id: userData.school_id ?? "",
             school_name: userData.school_name ?? "",
+            branch_id: userData.branch_id ?? "",
             class_id: userData.class_id ?? "",
             class_name: userData.class_name ?? "",
             email: userData.email ?? "",
@@ -164,7 +169,7 @@ const AddTeacherForm = () => {
                               {loading ? (
                                 <CircularProgress color="inherit" size={20} />
                               ) : null}
-                              {params.InputProps.endAdornment}
+                              {params.InputProps.endadornment}
                             </React.Fragment>
                           ),
                         }}
@@ -182,7 +187,28 @@ const AddTeacherForm = () => {
                     )}
                   />
                 </Box>
-
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
+                    Seviye
+                  </Typography>
+                  <FormControl fullWidth>
+                    <Select
+                      name="branch_id"
+                      value={values.branch_id}
+                      onChange={handleChange}
+                    >
+                      {map(gradeList, (item, index) => (
+                        <MenuItem key={index} value={item.id}>
+                          {item.title}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
                     variant="body2"
@@ -223,7 +249,7 @@ const AddTeacherForm = () => {
                               {loading ? (
                                 <CircularProgress color="inherit" size={20} />
                               ) : null}
-                              {params.InputProps.endAdornment}
+                              {params.InputProps.endadornment}
                             </React.Fragment>
                           ),
                         }}

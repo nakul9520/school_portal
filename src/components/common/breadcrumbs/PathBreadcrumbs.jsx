@@ -14,6 +14,9 @@ const breadcrumbNameMap = {
   "/dashboard/username-and-groups/add-school": "Okul",
   "/dashboard/username-and-groups/mass-school": "Okul",
 
+  "/dashboard/username-and-groups/school-admin": "Okul Yöneticisi",
+  "/dashboard/username-and-groups/add-school-admin": "Okul Yöneticisi",
+
   "/dashboard/username-and-groups/class": "Sınıf",
   "/dashboard/username-and-groups/add-class": "Sınıf",
   "/dashboard/username-and-groups/mass-class": "Sınıf",

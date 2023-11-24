@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import {
   Autocomplete,
   Box,
   Button,
-  Chip,
   CircularProgress,
   FormControl,
   Grid,
@@ -29,68 +28,59 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Iconify from "components/common/iconify/Iconify";
 import { get, isEmpty, map, size } from "lodash";
+import { getFilterList } from "redux/store/slice/dashboard/contentSlice";
 import { getBookReport } from "redux/store/slice/dashboard/reportSlice";
-import {
-  getClassesBySchool,
-  getSchoolList,
-} from "redux/store/slice/dashboard/userSlice";
+import { categoryName } from "services/constant";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import { getFilterList } from "redux/store/slice/dashboard/contentSlice";
 
 const BookReport = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const categoryName = [
-    { title: "Sınıf Düzeyi Ekle/Çıkar", categoryId: 1, key: "grade" },
-    { title: "PYP Temaları Ekle/Çıkar", categoryId: 2, key: "pypthemes" },
-    { title: "Genel Temalar Ekle/Çıkar", categoryId: 3, key: "generalthemes" },
-    { title: "Kazanımlar Ekle/Çıkar", categoryId: 4, key: "objectives" },
-    { title: "Seriler Ekle/Çıkar", categoryId: 5, key: "series" },
-  ];
+
   const [filterOptions, setFilterOptions] = useState({
     search: "",
     per_page: 10,
   });
 
-  const { filterList } = useSelector((state) => state.content);
+  const { filterList, loading } = useSelector((state) => state.content);
   const filterListData = filterList.data ?? [];
 
-  const { schoolListInfo, loading, classBySchoolList } = useSelector(
-    (state) => state.users
-  );
-  const schoolList = schoolListInfo.data ?? [];
+  // const { schoolListInfo, loading, classBySchoolList } = useSelector(
+  //   (state) => state.users
+  // );
+  // const schoolList = schoolListInfo.data ?? [];
 
   const { bookReportInfo, listLoading } = useSelector((state) => state.report);
   const bookReportList = bookReportInfo.data ?? [];
 
-  const [schoolData, setSchoolData] = useState({});
-  const [classData, setClassData] = useState({});
-  const [categoryId, setCategoryId] = useState("");
-  const [subfilterId, setSubfilterId] = useState("");
+  // const [schoolData, setSchoolData] = useState({});
+  // const [classData, setClassData] = useState({});
 
+  const [categoryId, setCategoryId] = useState("");
+  const [subCategoryData, setSubCategoryData] = useState({});
   const [page, setPage] = useState(1);
   const [perPageData, setperPageData] = useState(10);
 
-  useEffect(() => {
-    const payload = {
-      search: "",
-      per_page: "",
-      page: 0,
-    };
+  // useEffect(() => {
+  //   const payload = {
+  //     search: "",
+  //     per_page: "",
+  //     page: 0,
+  //   };
 
-    dispatch(getSchoolList(payload));
-  }, [dispatch]);
+  //   dispatch(getSchoolList(payload));
+  // }, [dispatch]);
 
   const getBookReportList = useCallback(
     async (data, pageNumber) => {
       const param = {
         payload: {
-          school_id: get(data, "school_id", ""),
-          class_id: get(data, "class_id", ""),
+          // school_id: get(data, "school_id", ""),
+          // class_id: get(data, "class_id", ""),
           filter_id: get(data, "filter_id", ""),
           search: get(data, "search", ""),
           per_page: get(data, "per_page", 10),
@@ -116,9 +106,9 @@ const BookReport = () => {
     });
     getBookReportList(
       {
-        school_id: schoolData.id,
-        class_id: classData.id,
-        filter_id: subfilterId,
+        // school_id: schoolData.id,
+        // class_id: classData.id,
+        filter_id: subCategoryData.id,
         ...filterOptions,
 
         per_page: e.target.value,
@@ -127,9 +117,26 @@ const BookReport = () => {
     );
   };
 
+  // const handleSchoolChange = (data) => {
+  //   dispatch(getClassesBySchool(data.id));
+  // };
+
+  // const handleClassChange = (data) => {
+  //   getBookReportList(
+  //     {
+  //       school_id: schoolData.id,
+  //       class_id: data.id,
+  //       filter_id: subCategoryData.id,
+  //       search: "",
+  //       per_page: 10,
+  //     },
+  //     1
+  //   );
+  // };
+
   const handleCategoryChange = (e) => {
     setCategoryId(e.target.value);
-    setSubfilterId("");
+    setSubCategoryData({});
     dispatch(
       getFilterList({
         category_id: e.target.value,
@@ -140,8 +147,8 @@ const BookReport = () => {
     if (e.target.value === "") {
       getBookReportList(
         {
-          school_id: schoolData.id,
-          class_id: classData.id,
+          // school_id: schoolData.id,
+          // class_id: classData.id,
           filter_id: "",
           search: "",
           per_page: 10,
@@ -151,49 +158,17 @@ const BookReport = () => {
     }
   };
 
-  const handleSchoolChange = (data) => {
-    dispatch(getClassesBySchool(data.id));
-  };
-
-  const handleClassChange = (data) => {
+  const handleClickCategory = (value) => {
     getBookReportList(
       {
-        school_id: schoolData.id,
-        class_id: data.id,
-        filter_id: subfilterId,
+        // school_id: schoolData.id,
+        // class_id: classData.id,
+        filter_id: value.id,
         search: "",
         per_page: 10,
       },
       1
     );
-  };
-
-  const handleClickCategory = (id) => {
-    if (subfilterId === id) {
-      setSubfilterId("");
-      getBookReportList(
-        {
-          school_id: schoolData.id,
-          class_id: classData.id,
-          filter_id: "",
-          search: "",
-          per_page: 10,
-        },
-        1
-      );
-    } else {
-      setSubfilterId(id);
-      getBookReportList(
-        {
-          school_id: schoolData.id,
-          class_id: classData.id,
-          filter_id: id,
-          search: "",
-          per_page: 10,
-        },
-        1
-      );
-    }
   };
   return (
     <>
@@ -264,9 +239,9 @@ const BookReport = () => {
                 setFilterOptions({ ...filterOptions, search: e.target.value });
                 getBookReportList(
                   {
-                    school_id: schoolData.id,
-                    class_id: classData.id,
-                    filter_id: subfilterId,
+                    // school_id: schoolData.id,
+                    // class_id: classData.id,
+                    filter_id: subCategoryData.id,
                     ...filterOptions,
                     search: e.target.value,
                   },
@@ -277,7 +252,7 @@ const BookReport = () => {
               className="header_search"
               size="small"
               InputProps={{
-                endAdornment: (
+                endadornment: (
                   <InputAdornment position="start">
                     <IconButton sx={{ color: "text.secondary" }}>
                       <Iconify icon="iconamoon:search-light" width={20} />
@@ -296,7 +271,7 @@ const BookReport = () => {
           className="gap-2"
           mt={2}
         >
-          <Box className="w-100">
+          {/* <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
               School
             </Typography>
@@ -334,7 +309,7 @@ const BookReport = () => {
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
-                        {params.InputProps.endAdornment}
+                        {params.InputProps.endadornment}
                       </React.Fragment>
                     ),
                   }}
@@ -349,6 +324,7 @@ const BookReport = () => {
             <Autocomplete
               getOptionLabel={(option) => option.class_name ?? option}
               options={classBySchoolList}
+              disabled={isEmpty(classBySchoolList) || isEmpty(schoolData)}
               value={classData.class_name ?? ""}
               isOptionEqualToValue={(option, value) => {
                 if (value === "" || option.class_name === value.class_name) {
@@ -377,14 +353,15 @@ const BookReport = () => {
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
-                        {params.InputProps.endAdornment}
+                        {params.InputProps.endadornment}
                       </React.Fragment>
                     ),
                   }}
                 />
               )}
             />
-          </Box>
+          </Box> */}
+
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
               Category
@@ -394,6 +371,7 @@ const BookReport = () => {
                 value={categoryId}
                 onChange={handleCategoryChange}
                 size="small"
+                // disabled={isEmpty(classBySchoolList) || isEmpty(classData)}
               >
                 <MenuItem value="">No Category</MenuItem>
                 {map(categoryName, (item, index) => (
@@ -404,24 +382,51 @@ const BookReport = () => {
               </Select>
             </FormControl>
           </Box>
-        </Stack>
-        <Box className="w-100 py-2 d-flex align-items-center gap-2">
-          {map(filterListData, (item, index) => (
-            <Chip
-              label={item.filter_name}
-              key={index}
-              icon={
-                subfilterId === item.id ? (
-                  <Iconify icon="ic:round-done-all" />
-                ) : null
-              }
-              onClick={() => {
-                handleClickCategory(item.id);
+          <Box className="w-100">
+            <Typography variant="body2" color="text.secondary">
+              Sub Category
+            </Typography>
+            <Autocomplete
+              getOptionLabel={(option) => option.filter_name ?? option}
+              options={filterListData}
+              disabled={categoryId === ""}
+              value={subCategoryData.filter_name ?? ""}
+              isOptionEqualToValue={(option, value) => {
+                if (value === "" || option.filter_name === value.filter_name) {
+                  return true;
+                }
               }}
-              variant={subfilterId === item.id ? "contained" : "outlined"}
+              onChange={(e, value) => {
+                setSubCategoryData(value);
+                handleClickCategory(value);
+              }}
+              autoHighlight
+              disableClearable
+              noOptionsText="No Data"
+              loading={loading}
+              className="w-100"
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  size="small"
+                  inputProps={{
+                    ...params.inputProps,
+                    autoComplete: "new-password",
+                    endadornment: (
+                      <React.Fragment>
+                        {loading ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
+                        {params.InputProps.endadornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )}
             />
-          ))}
-        </Box>
+          </Box>
+        </Stack>
         <TableContainer
           component={Paper}
           className="rounded-0 mt-3 scrollbar-none"

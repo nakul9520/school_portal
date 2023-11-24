@@ -5,7 +5,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-import { isEmpty } from "lodash";
+import { isEmpty, uniq } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -24,7 +24,9 @@ import {
   StyledTableRow,
 } from "styles/ComponentStyle";
 
-const TeacherDataTable = () => {
+const TeacherDataTable = (props) => {
+  const { selected, setSelected } = props;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -66,6 +68,7 @@ const TeacherDataTable = () => {
             <TableRow>
               <StyledTableCell align="left">Sıra</StyledTableCell>
               <StyledTableCell align="left">Okul Adı</StyledTableCell>
+              <StyledTableCell align="left">Seviye</StyledTableCell>
               <StyledTableCell align="left">Öğretmen Adı </StyledTableCell>
               <StyledTableCell align="left">E-mail</StyledTableCell>
               <StyledTableCell align="left">Şifre</StyledTableCell>
@@ -96,9 +99,12 @@ const TeacherDataTable = () => {
             ) : (
               usersList.map((row, index) => (
                 <StyledTableRow key={index}>
-                  <StyledTableCell scope="row">{row.id}</StyledTableCell>
+                  <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">
                     {row.school_name}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.branch_id}
                   </StyledTableCell>
                   <StyledTableCell align="left">{row.name}</StyledTableCell>
                   <StyledTableCell align="left">{row.email}</StyledTableCell>
@@ -135,7 +141,20 @@ const TeacherDataTable = () => {
                         </CMIconButton>
                       </Box>
                       <Box>
-                        <SelectCheckbox color="success" />
+                        <SelectCheckbox
+                          color="success"
+                          checked={selected.includes(row.id)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelected(uniq([...selected, row.id]));
+                            } else {
+                              const updatedObjects = selected.filter(
+                                (obj) => obj !== row.id
+                              );
+                              setSelected(updatedObjects);
+                            }
+                          }}
+                        />
                       </Box>
                       <Box onClick={() => handleDelete(row.id)}>
                         <CMIconButton color="error">

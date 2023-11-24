@@ -3,11 +3,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
-  Checkbox,
+  FormControl,
   Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   Pagination,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -73,18 +75,18 @@ const VideoContent = () => {
   };
 
   const handlePerPageData = (e) => {
-    if (e.target.checked) {
-      setFilterOptions({
+    setperPageData(e.target.value);
+    setFilterOptions({
+      ...filterOptions,
+      per_page: e.target.value,
+    });
+    getContentListData(
+      {
         ...filterOptions,
-        per_page: perPageData,
-      });
-    } else {
-      setFilterOptions({
-        ...filterOptions,
-        per_page: 10,
-      });
-    }
-    getContentListData(filterOptions, page);
+        per_page: e.target.value,
+      },
+      page
+    );
   };
   return (
     <>
@@ -106,7 +108,6 @@ const VideoContent = () => {
             </Typography>
           </Grid>
         </Grid>
-
         <Grid
           container
           justifyContent="space-between"
@@ -119,29 +120,21 @@ const VideoContent = () => {
               <Typography variant="caption" color="text.secondary">
                 Sayfada Göster
               </Typography>
-              <Box className="d-flex align-items-center border">
-                <TextField
-                  variant="outlined"
+
+              <FormControl>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
                   value={perPageData}
-                  onChange={(e) => setperPageData(e.target.value)}
+                  onChange={handlePerPageData}
                   size="small"
-                  placeholder="10"
-                  sx={{
-                    width: "50px",
-                    ".MuiInputBase-root": {
-                      backgroundColor: "transparent",
-                      ".MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                      },
-                    },
-                  }}
-                />
-                <Box
-                  sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
                 >
-                  <Checkbox onChange={handlePerPageData} />
-                </Box>
-              </Box>
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={50}>50</MenuItem>
+                  <MenuItem value={100}>100</MenuItem>
+                </Select>
+              </FormControl>
             </Stack>
           </Grid>
           <Grid item sm={6} xs={12} className="text-right">
@@ -150,16 +143,19 @@ const VideoContent = () => {
               value={filterOptions.search}
               onChange={(e) => {
                 setFilterOptions({ ...filterOptions, search: e.target.value });
-                getContentListData({
-                  ...filterOptions,
-                  search: e.target.value,
-                });
+                getContentListData(
+                  {
+                    ...filterOptions,
+                    search: e.target.value,
+                  },
+                  1
+                );
               }}
               placeholder="Arama…"
               className="header_search"
               size="small"
               InputProps={{
-                endAdornment: (
+                endadornment: (
                   <InputAdornment position="start">
                     <IconButton sx={{ color: "text.secondary" }}>
                       <Iconify icon="iconamoon:search-light" width={20} />

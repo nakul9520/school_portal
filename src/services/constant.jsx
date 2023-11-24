@@ -7,6 +7,7 @@ export const USER_TYPE = {
   student: "2",
   teacher: "3",
   subAdmin: "4",
+  schoolAdmin: "5",
 };
 
 export const FILE_TYPE = {
@@ -27,3 +28,20 @@ export const GUIDELINE_TYPE = {
   privacy: 2,
   faq: 3,
 };
+
+export const categoryName = [
+  { title: "Sınıf Düzeyi Ekle/Çıkar", categoryId: 1, key: "grade" },
+  { title: "PYP Temaları Ekle/Çıkar", categoryId: 2, key: "pypthemes" },
+  { title: "Genel Temalar Ekle/Çıkar", categoryId: 3, key: "generalthemes" },
+  { title: "Kazanımlar Ekle/Çıkar", categoryId: 4, key: "objectives" },
+  { title: "Seriler Ekle/Çıkar", categoryId: 5, key: "series" },
+];
+
+export const gradeList = [
+  { title: "001", id: 1 },
+  { title: "002", id: 2 },
+  { title: "YIL1", id: 3 },
+  { title: "YIL2", id: 4 },
+  { title: "YIL3", id: 5 },
+  { title: "YIL4", id: 6 },
+];

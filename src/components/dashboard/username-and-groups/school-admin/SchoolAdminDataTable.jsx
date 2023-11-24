@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Box,
   LinearProgress,
@@ -10,40 +12,45 @@ import {
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
+import { isEmpty, map, uniq } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { isEmpty, uniq } from "lodash";
 
+import CMIconButton from "components/common/CMIconButton";
+import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
 import Iconify from "components/common/iconify/Iconify";
-import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
-import { deleteSchool } from "redux/store/slice/dashboard/userSlice";
+import {
+  deleteUsers,
+  getUsersList,
+} from "redux/store/slice/dashboard/userSlice";
+import { USER_TYPE } from "services/constant";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import CMIconButton from "components/common/CMIconButton";
-import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
 
-const SchoolDataTable = (props) => {
+const SchoolAdminDataTable = (props) => {
   const { selected, setSelected } = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { schoolListInfo, loading } = useSelector((state) => state.users);
-  const schoolList = schoolListInfo.data ?? [];
+  const { userListInfo, loading } = useSelector((state) => state.users);
+  const usersList = userListInfo.data ?? [];
+
   const handleDelete = (id) => {
-    dispatch(deleteSchool({ id: [id] }))
+    dispatch(deleteUsers({ id: [id] }))
       .unwrap()
       .then((result) => {
         if (result.success) {
           toast.success(result.message);
           dispatch(
-            getSchoolList({
+            getUsersList({
               payload: {
                 search: "",
                 per_page: 10,
+                user_type: USER_TYPE.schoolAdmin,
               },
               page: 1,
             })
@@ -69,6 +76,8 @@ const SchoolDataTable = (props) => {
                 Sıra
               </StyledTableCell>
               <StyledTableCell align="left">Okul Adı</StyledTableCell>
+              <StyledTableCell align="left">Yöneticisi Adı</StyledTableCell>
+              <StyledTableCell align="left">E-mail</StyledTableCell>
               <StyledTableCell align="left">Aktivasyon Tarihi</StyledTableCell>
               <StyledTableCell align="left">
                 Lisans Sonlanma Tarihi
@@ -83,7 +92,7 @@ const SchoolDataTable = (props) => {
                   <LinearProgress />
                 </StyledTableCell>
               </StyledTableRow>
-            ) : isEmpty(schoolList) ? (
+            ) : isEmpty(usersList) ? (
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={9}>
                   <Typography variant="subtitle1" color="text.primary">
@@ -92,12 +101,19 @@ const SchoolDataTable = (props) => {
                 </StyledTableCell>
               </StyledTableRow>
             ) : (
-              schoolList.map((row, index) => (
+              usersList.map((row, index) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.school_name}
+                    {map(row.schoolDetails, (item, subIndex) => (
+                      <Typography variant="body2" key={subIndex}>
+                        {item.school_name}
+                      </Typography>
+                    ))}
                   </StyledTableCell>
+                  <StyledTableCell align="left">{row.name}</StyledTableCell>
+                  <StyledTableCell align="left">{row.email}</StyledTableCell>
+
                   <StyledTableCell align="left">
                     {row.activation_date}
                   </StyledTableCell>
@@ -115,7 +131,7 @@ const SchoolDataTable = (props) => {
                       <Box
                         onClick={() =>
                           navigate(
-                            "/dashboard/username-and-groups/add-school",
+                            "/dashboard/username-and-groups/add-school-admin",
                             { state: row }
                           )
                         }
@@ -160,4 +176,4 @@ const SchoolDataTable = (props) => {
   );
 };
 
-export default SchoolDataTable;
+export default SchoolAdminDataTable;
