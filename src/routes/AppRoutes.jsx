@@ -75,6 +75,8 @@ import VoiceTask from "components/dashboard/contents/book/task/voice-task/VoiceT
 import MCQTask from "components/dashboard/contents/book/task/mcq-task/MCQTask";
 import DragDropTask from "components/dashboard/contents/book/task/drag-drop/DragDropTask";
 import MatchingTask from "components/dashboard/contents/book/task/matching-task/MatchingTask";
+import SchoolAdmin from "components/dashboard/username-and-groups/school-admin/SchoolAdmin";
+import AddSchoolAdminForm from "components/dashboard/username-and-groups/school-admin/AddSchoolAdminForm";
 
 // private
 // const DashboardLayout = Loadable(
@@ -110,6 +112,16 @@ const AppRoutes = () => {
               <Route
                 path="/dashboard/username-and-groups/add-school"
                 element={<AddSchoolForm />}
+              />
+              {/* school Admin */}
+              <Route
+                path="/dashboard/username-and-groups/school-admin"
+                index
+                element={<SchoolAdmin />}
+              />
+              <Route
+                path="/dashboard/username-and-groups/add-school-admin"
+                element={<AddSchoolAdminForm />}
               />
 
               {/* Class */}

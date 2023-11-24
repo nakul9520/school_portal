@@ -5,13 +5,16 @@ import {
   Box,
   Button,
   CircularProgress,
+  FormControl,
+  MenuItem,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 import { Formik } from "formik";
-import { get, omit } from "lodash";
+import { get, map, omit } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -19,6 +22,7 @@ import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
 
 import { addEditClass } from "redux/store/slice/dashboard/userSlice";
 import { addEditClassValidation } from "services/validations";
+import { gradeList } from "services/constant";
 
 const AddClassForm = () => {
   const theme = useTheme();
@@ -82,6 +86,7 @@ const AddClassForm = () => {
           initialValues={{
             school_id: get(classData, "school_id", ""),
             school_name: get(classData, "school_name", ""),
+            branch_id: get(classData, "branch_id", ""),
             class_name: get(classData, "class_name", ""),
             class_code: get(classData, "class_code", ""),
             teacher_name1: get(classData, "teacher_name1", ""),
@@ -90,7 +95,7 @@ const AddClassForm = () => {
             teacher_name2: get(classData, "teacher_name2", ""),
             teacher_email2: get(classData, "teacher_email2", ""),
             teacher_password2: get(classData, "teacher_password2", ""),
-            no_of_student: get(classData, "no_of_student", ""),
+            // no_of_student: get(classData, "no_of_student", ""),
           }}
           validationSchema={addEditClassValidation}
           onSubmit={(value, action) => {
@@ -150,7 +155,7 @@ const AddClassForm = () => {
                               {loading ? (
                                 <CircularProgress color="inherit" size={20} />
                               ) : null}
-                              {params.InputProps.endAdornment}
+                              {params.InputProps.endadornment}
                             </React.Fragment>
                           ),
                         }}
@@ -167,6 +172,28 @@ const AddClassForm = () => {
                       />
                     )}
                   />
+                </Box>
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
+                    Seviye
+                  </Typography>
+                  <FormControl fullWidth>
+                    <Select
+                      name="branch_id"
+                      value={values.branch_id}
+                      onChange={handleChange}
+                    >
+                      {map(gradeList, (item, index) => (
+                        <MenuItem key={index} value={item.id}>
+                          {item.title}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Box>
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
@@ -374,7 +401,7 @@ const AddClassForm = () => {
                     }
                   />
                 </Box>
-                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                {/* <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
                     variant="body2"
                     color="secondary.disabled"
@@ -399,7 +426,7 @@ const AddClassForm = () => {
                         : null
                     }
                   />
-                </Box>
+                </Box> */}
               </Box>
               <Box className="text-right mt-3">
                 <Button

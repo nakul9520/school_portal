@@ -352,7 +352,7 @@ const TicketDetails = () => {
                       //     </IconButton>
                       //   </InputAdornment>
                       // }
-                      endAdornment={
+                      endadornment={
                         <InputAdornment position="end">
                           <IconButton
                             color="primary"

@@ -11,7 +11,11 @@ const Api = {
   GET_SCHOOL_DETAIL: "getSchool",
   DELETE_SCHOOL: "schoolDelete",
   GET_SCHOOL_CSV_FILE: "schoolCsv",
+  GET_SPECIFIC_SCHOOL_CSV_FILE: "downloadSelectSchoolCsv",
   IMPORT_SCHOOL_FILE: "schoolImport",
+
+  // School Admin
+  ADD_EDIT_SCHOOL_ADMIN: "addEditSchool",
 
   // class
   ADD_EDIT_CLASS: "addEditClass",
@@ -20,8 +24,9 @@ const Api = {
   DELETE_CLASS: "classDelete",
   GET_CLASS_CSV_FILE: "classCsv",
   IMPORT_CLASS_FILE: "classImport",
+  GET_SPECIFIC_CLASS_CSV_FILE: "downloadSelectClassCsv",
 
-  //Techers & students
+  //Techers , students & School Admin
   ADD_EDIT_USERS: "addEditUser",
   GET_USERS_LIST: "userList",
   GET_USERS_DETAIL: "getUser",
@@ -31,6 +36,8 @@ const Api = {
   GET_STUDENT_CSV_FILE: "studentCsv",
   IMPORT_TEACHER_FILE: "teacherImport",
   IMPORT_STUDENT_FILE: "studentImport",
+  GET_SPECIFIC_TEACHER_CSV_FILE: "downloadSelectTeacherCsv",
+  GET_SPECIFIC_STUDENT_CSV_FILE: "downloadSelectStudentCsv",
 
   // Leaving
   GET_BOOK_LIST_FOR_ASSIGN: "getContentBookList",

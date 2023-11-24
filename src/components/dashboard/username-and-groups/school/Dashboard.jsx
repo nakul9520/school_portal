@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Box,
@@ -16,19 +16,26 @@ import {
 } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
-import { debounce, get, size } from "lodash";
+import { debounce, get, isEmpty, size } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Iconify from "components/common/iconify/Iconify";
 import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
 import SchoolDataTable from "./SchoolDataTable";
+import { toast } from "react-toastify";
+import { getSpecificSchoolCSVFile } from "redux/store/slice/dashboard/userSlice";
+import { deleteSchool } from "redux/store/slice/dashboard/userSlice";
+import { importSchoolFile } from "redux/store/slice/dashboard/userSlice";
+import { getSchoolCSVFile } from "redux/store/slice/dashboard/userSlice";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useTheme();
+  const mediaInputRef = useRef(null);
 
+  const [selected, setSelected] = useState([]);
   const { schoolListInfo } = useSelector((state) => state.users);
 
   const [filterOptions, setFilterOptions] = useState({
@@ -86,6 +93,104 @@ const Dashboard = () => {
       page
     );
   };
+
+  const handleDownloadCSV = () => {
+    if (isEmpty(selected)) {
+      dispatch(getSchoolCSVFile())
+        .unwrap()
+        .then((result) => {
+          if (result) {
+            const blob = new Blob([result], {
+              type: "data:text/csv;charset=utf-8,",
+            });
+            const blobURL = window.URL.createObjectURL(blob);
+            const anchor = document.createElement("a");
+            anchor.download = `mass-school-list.csv`;
+            anchor.href = blobURL;
+            anchor.dataset.downloadurl = [
+              "text/csv",
+              anchor.download,
+              anchor.href,
+            ].join(":");
+            anchor.click();
+            anchor.remove();
+            toast.success("File downloaded successfully");
+          } else {
+            toast.error("Try again later");
+          }
+        })
+        .catch((err) => {
+          toast.error(err.message);
+          console.log("Error: ", err);
+        });
+    } else {
+      dispatch(getSpecificSchoolCSVFile({ id: selected }))
+        .unwrap()
+        .then((result) => {
+          if (result) {
+            const blob = new Blob([result], {
+              type: "data:text/csv;charset=utf-8,",
+            });
+            const blobURL = window.URL.createObjectURL(blob);
+            const anchor = document.createElement("a");
+            anchor.download = `school-list.csv`;
+            anchor.href = blobURL;
+            anchor.dataset.downloadurl = [
+              "text/csv",
+              anchor.download,
+              anchor.href,
+            ].join(":");
+            anchor.click();
+            anchor.remove();
+            setSelected([]);
+            toast.success("File downloaded successfully");
+          } else {
+            toast.error("Try again later");
+          }
+        })
+        .catch((err) => {
+          toast.error(err.message);
+          console.log("Error: ", err);
+        });
+    }
+  };
+
+  const handleDelete = () => {
+    dispatch(deleteSchool({ id: selected }))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          toast.success(result.message);
+          setSelected([]);
+          dispatch(
+            getSchoolList({
+              payload: {
+                search: "",
+                per_page: 10,
+              },
+              page: 1,
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
+  };
+
+  // import school file
+  const onImageChange = (event) => {
+    const file = event.target.files[0];
+    console.log("file: ", file);
+    dispatch(importSchoolFile({ file })).then((result) => {
+      if (result.success) {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    });
+  };
   return (
     <>
       <Box
@@ -112,9 +217,39 @@ const Dashboard = () => {
               alignItems="center"
               className="gap-2"
             >
-              <Button variant="contained" color="success">
-                Excel
+              {!isEmpty(selected) ? (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </Button>
+              ) : null}
+              <Button
+                variant="contained"
+                color="info"
+                startIcon={<Iconify icon="ph:arrow-up" />}
+                onClick={() => mediaInputRef.current.click()}
+              >
+                Toplu Formu Yükle
               </Button>
+              <Button
+                variant="contained"
+                color="success"
+                startIcon={<Iconify icon="ph:arrow-down" />}
+                onClick={handleDownloadCSV}
+              >
+                Toplu Formu İndir
+              </Button>
+              <input
+                ref={mediaInputRef}
+                hidden
+                accept=".csv"
+                onChange={(e) => onImageChange(e)}
+                name="image"
+                type="file"
+              />
             </Stack>
           </Grid>
         </Grid>
@@ -154,16 +289,19 @@ const Dashboard = () => {
               value={filterOptions.search}
               onChange={(e) => {
                 setFilterOptions({ ...filterOptions, search: e.target.value });
-                getSchoolListData({
-                  ...filterOptions,
-                  search: e.target.value,
-                });
+                getSchoolListData(
+                  {
+                    ...filterOptions,
+                    search: e.target.value,
+                  },
+                  1
+                );
               }}
               placeholder="Arama…"
               className="header_search"
               size="small"
               InputProps={{
-                endAdornment: (
+                endadornment: (
                   <InputAdornment position="start">
                     <IconButton sx={{ color: "text.secondary" }}>
                       <Iconify icon="iconamoon:search-light" width={20} />
@@ -175,7 +313,7 @@ const Dashboard = () => {
           </Grid>
         </Grid>
 
-        <SchoolDataTable />
+        <SchoolDataTable selected={selected} setSelected={setSelected} />
 
         <Stack
           direction={{ sm: "row", xs: "column" }}
@@ -193,7 +331,7 @@ const Dashboard = () => {
           >
             Okul Ekle
           </Button>
-
+{/* 
           <Button
             variant="contained"
             onClick={() =>
@@ -201,7 +339,7 @@ const Dashboard = () => {
             }
           >
             Toplu Okul Ekle
-          </Button>
+          </Button> */}
         </Stack>
         <Stack
           direction={{ md: "row", xs: "column" }}

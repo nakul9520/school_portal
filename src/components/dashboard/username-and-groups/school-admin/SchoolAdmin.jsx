@@ -14,23 +14,26 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 
+import { useTheme } from "@mui/material/styles";
 import { debounce, get, isEmpty } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Iconify from "components/common/iconify/Iconify";
-import { getUsersList } from "redux/store/slice/dashboard/userSlice";
-import { USER_TYPE } from "services/constant";
-import TeacherDataTable from "./TeacherDataTable";
 import { toast } from "react-toastify";
-import { getSpecificTeacherCSVFile } from "redux/store/slice/dashboard/userSlice";
-import { deleteUsers } from "redux/store/slice/dashboard/userSlice";
-import { getTeacherCSVFile } from "redux/store/slice/dashboard/userSlice";
-import { importTeacherFile } from "redux/store/slice/dashboard/userSlice";
+import {
+  deleteSchool,
+  getSchoolCSVFile,
+  getSchoolList,
+  getSpecificSchoolCSVFile,
+  getUsersList,
+  importSchoolFile,
+} from "redux/store/slice/dashboard/userSlice";
+import { USER_TYPE } from "services/constant";
+import SchoolDataTable from "./SchoolAdminDataTable";
 
-const Teacher = () => {
+const SchoolAdmin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -40,7 +43,6 @@ const Teacher = () => {
   const { userListInfo } = useSelector((state) => state.users);
 
   const [filterOptions, setFilterOptions] = useState({
-    user_type: USER_TYPE.teacher,
     search: "",
     per_page: 10,
   });
@@ -54,7 +56,7 @@ const Teacher = () => {
         payload: {
           search: get(data, "search", ""),
           per_page: get(data, "per_page", 10),
-          user_type: USER_TYPE.teacher,
+          user_type: USER_TYPE.schoolAdmin,
         },
         page: pageNumber,
       };
@@ -73,7 +75,6 @@ const Teacher = () => {
     const payload = {
       search: "",
       per_page: 10,
-      user_type: USER_TYPE.teacher,
     };
     debounceFn(payload, 1);
   }, [debounceFn, dispatch]);
@@ -100,7 +101,7 @@ const Teacher = () => {
 
   const handleDownloadCSV = () => {
     if (isEmpty(selected)) {
-      dispatch(getTeacherCSVFile())
+      dispatch(getSchoolCSVFile())
         .unwrap()
         .then((result) => {
           if (result) {
@@ -109,7 +110,7 @@ const Teacher = () => {
             });
             const blobURL = window.URL.createObjectURL(blob);
             const anchor = document.createElement("a");
-            anchor.download = `mass-teacher-list.csv`;
+            anchor.download = `mass-school-list.csv`;
             anchor.href = blobURL;
             anchor.dataset.downloadurl = [
               "text/csv",
@@ -128,7 +129,7 @@ const Teacher = () => {
           console.log("Error: ", err);
         });
     } else {
-      dispatch(getSpecificTeacherCSVFile({ id: selected }))
+      dispatch(getSpecificSchoolCSVFile({ id: selected }))
         .unwrap()
         .then((result) => {
           if (result) {
@@ -137,7 +138,7 @@ const Teacher = () => {
             });
             const blobURL = window.URL.createObjectURL(blob);
             const anchor = document.createElement("a");
-            anchor.download = `teacher-list.csv`;
+            anchor.download = `school-list.csv`;
             anchor.href = blobURL;
             anchor.dataset.downloadurl = [
               "text/csv",
@@ -159,32 +160,18 @@ const Teacher = () => {
     }
   };
 
-  // import school file
-  const onImageChange = (event) => {
-    const file = event.target.files[0];
-    console.log("file: ", file);
-    dispatch(importTeacherFile({ file })).then((result) => {
-      if (result.success) {
-        toast.success(result.message);
-      } else {
-        toast.error(result.message);
-      }
-    });
-  };
-
   const handleDelete = () => {
-    dispatch(deleteUsers({ id: selected }))
+    dispatch(deleteSchool({ id: selected }))
       .unwrap()
       .then((result) => {
         if (result.success) {
           toast.success(result.message);
           setSelected([]);
           dispatch(
-            getUsersList({
+            getSchoolList({
               payload: {
                 search: "",
                 per_page: 10,
-                user_type: USER_TYPE.teacher,
               },
               page: 1,
             })
@@ -197,6 +184,18 @@ const Teacher = () => {
       });
   };
 
+  // import school file
+  const onImageChange = (event) => {
+    const file = event.target.files[0];
+    console.log("file: ", file);
+    dispatch(importSchoolFile({ file })).then((result) => {
+      if (result.success) {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    });
+  };
   return (
     <>
       <Box
@@ -213,7 +212,7 @@ const Teacher = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              Öğretmen
+              Okul Yöneticisi
             </Typography>
           </Grid>
           <Grid item sm={6} xs={12}>
@@ -272,6 +271,7 @@ const Teacher = () => {
               <Typography variant="caption" color="text.secondary">
                 Sayfada Göster
               </Typography>
+
               <FormControl>
                 <Select
                   labelId="demo-simple-select-label"
@@ -318,7 +318,7 @@ const Teacher = () => {
           </Grid>
         </Grid>
 
-        <TeacherDataTable selected={selected} setSelected={setSelected} />
+        <SchoolDataTable selected={selected} setSelected={setSelected} />
 
         <Stack
           direction={{ sm: "row", xs: "column" }}
@@ -330,25 +330,22 @@ const Teacher = () => {
           <Button
             variant="contained"
             color="secondary"
-            className="rounded-0"
             onClick={() =>
-              navigate("/dashboard/username-and-groups/add-teacher")
+              navigate("/dashboard/username-and-groups/add-school-admin")
             }
           >
-            Öğretmen Ekle
+            Okul Ekle
           </Button>
-
-          {/* <Button
+          {/* 
+          <Button
             variant="contained"
-            className="rounded-0"
             onClick={() =>
-              navigate("/dashboard/username-and-groups/mass-teacher")
+              navigate("/dashboard/username-and-groups/mass-school")
             }
           >
-            Toplu Öğretmen Ekle
+            Toplu Okul Ekle
           </Button> */}
         </Stack>
-
         <Stack
           direction={{ md: "row", xs: "column" }}
           justifyContent="space-between"
@@ -372,4 +369,4 @@ const Teacher = () => {
   );
 };
 
-export default Teacher;
+export default SchoolAdmin;

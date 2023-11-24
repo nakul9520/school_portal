@@ -5,7 +5,6 @@ import {
   CircularProgress,
   FormControl,
   FormControlLabel,
-  FormGroup,
   Grid,
   IconButton,
   InputAdornment,
@@ -22,16 +21,15 @@ import {
   Typography,
 } from "@mui/material";
 
-import MenuPopover from "components/common/MenuPopover";
-
 import { useTheme } from "@mui/material/styles";
 import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import Iconify from "components/common/iconify/Iconify";
 import { Formik } from "formik";
 import { get, isEmpty, map, size, uniq } from "lodash";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { getFilterList } from "redux/store/slice/dashboard/contentSlice";
 import {
   getBookListForAssign,
   postAssignBook,
@@ -40,6 +38,7 @@ import {
   getClassesBySchool,
   getSchoolList,
 } from "redux/store/slice/dashboard/userSlice";
+import { categoryName } from "services/constant";
 import {
   StyledTable,
   StyledTableCell,
@@ -47,15 +46,8 @@ import {
 } from "styles/ComponentStyle";
 const LevelingUp = () => {
   const theme = useTheme();
-  const anchorRef = useRef(null);
   const dispatch = useDispatch();
-  const categoryName = [
-    { title: "Sınıf Düzeyi Ekle/Çıkar", categoryId: 1, key: "grade" },
-    { title: "PYP Temaları Ekle/Çıkar", categoryId: 2, key: "pypthemes" },
-    { title: "Genel Temalar Ekle/Çıkar", categoryId: 3, key: "generalthemes" },
-    { title: "Kazanımlar Ekle/Çıkar", categoryId: 4, key: "objectives" },
-    { title: "Seriler Ekle/Çıkar", categoryId: 5, key: "series" },
-  ];
+
   const [filterOptions, setFilterOptions] = useState({
     search: "",
     per_page: 10,
@@ -76,22 +68,17 @@ const LevelingUp = () => {
     }
     return acc;
   }, []);
+
   const [schoolData, setSchoolData] = useState({});
   const [classData, setClassData] = useState({});
   const [categoryId, setCategoryId] = useState("");
-
+  const [subCategoryData, setSubCategoryData] = useState({});
   const [page, setPage] = useState(1);
   const [perPageData, setperPageData] = useState(10);
-  const [open, setOpen] = useState(false);
   const [isSelectAll, setIsSelectAll] = useState(false);
 
-  // const handleOpen = () => {
-  //   setOpen(true);
-  // };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const { filterList } = useSelector((state) => state.content);
+  const filterListData = filterList.data ?? [];
 
   const handleAllSelect = (e, setFieldValue) => {
     setIsSelectAll(e.target.checked);
@@ -121,6 +108,7 @@ const LevelingUp = () => {
         payload: {
           school_id: get(data, "school_id", ""),
           class_id: get(data, "class_id", ""),
+          category_id: get(data, "category_id", ""),
           search: get(data, "search", ""),
           per_page: get(data, "per_page", 10),
         },
@@ -175,11 +163,34 @@ const LevelingUp = () => {
 
   const handleCategoryChange = (e) => {
     setCategoryId(e.target.value);
+    setSubCategoryData({});
+    dispatch(
+      getFilterList({
+        category_id: e.target.value,
+        search: "",
+        per_page: 10,
+      })
+    );
+    if (e.target.value === "") {
+      getAssignBookListData(
+        {
+          school_id: schoolData.id,
+          class_id: classData.id,
+          category_id: "",
+          search: "",
+          per_page: 10,
+        },
+        1
+      );
+    }
+  };
+
+  const handleClickCategory = (value) => {
     getAssignBookListData(
       {
         school_id: schoolData.id,
         class_id: classData.id,
-        category_id: e.target.value,
+        category_id: value.id,
         search: "",
         per_page: 10,
       },
@@ -266,18 +277,21 @@ const LevelingUp = () => {
                   ...filterOptions,
                   search: e.target.value,
                 });
-                getAssignBookListData({
-                  school_id: schoolData.id,
-                  class_id: classData.id,
-                  ...filterOptions,
-                  search: e.target.value,
-                });
+                getAssignBookListData(
+                  {
+                    school_id: schoolData.id,
+                    class_id: classData.id,
+                    ...filterOptions,
+                    search: e.target.value,
+                  },
+                  1
+                );
               }}
               placeholder="Arama…"
               className="header_search"
               size="small"
               InputProps={{
-                endAdornment: (
+                endadornment: (
                   <InputAdornment position="start">
                     <IconButton sx={{ color: "text.secondary" }}>
                       <Iconify icon="iconamoon:search-light" width={20} />
@@ -333,7 +347,7 @@ const LevelingUp = () => {
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
-                        {params.InputProps.endAdornment}
+                        {params.InputProps.endadornment}
                       </React.Fragment>
                     ),
                   }}
@@ -348,6 +362,7 @@ const LevelingUp = () => {
             <Autocomplete
               getOptionLabel={(option) => option.class_name ?? option}
               options={classBySchoolList}
+              disabled={isEmpty(classBySchoolList) || isEmpty(schoolData)}
               value={classData.class_name ?? ""}
               isOptionEqualToValue={(option, value) => {
                 if (value === "" || option.class_name === value.class_name) {
@@ -376,7 +391,7 @@ const LevelingUp = () => {
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
-                        {params.InputProps.endAdornment}
+                        {params.InputProps.endadornment}
                       </React.Fragment>
                     ),
                   }}
@@ -393,6 +408,7 @@ const LevelingUp = () => {
                 value={categoryId}
                 onChange={handleCategoryChange}
                 size="small"
+                disabled={isEmpty(classBySchoolList) || isEmpty(classData)}
               >
                 <MenuItem value="">No Category</MenuItem>
                 {map(categoryName, (item, index) => (
@@ -402,6 +418,50 @@ const LevelingUp = () => {
                 ))}
               </Select>
             </FormControl>
+          </Box>
+          <Box className="w-100">
+            <Typography variant="body2" color="text.secondary">
+              Sub Category
+            </Typography>
+            <Autocomplete
+              getOptionLabel={(option) => option.filter_name ?? option}
+              options={filterListData}
+              disabled={categoryId === ""}
+              value={subCategoryData.filter_name ?? ""}
+              isOptionEqualToValue={(option, value) => {
+                if (value === "" || option.filter_name === value.filter_name) {
+                  return true;
+                }
+              }}
+              onChange={(e, value) => {
+                setSubCategoryData(value);
+                handleClickCategory(value);
+              }}
+              autoHighlight
+              disableClearable
+              noOptionsText="No Data"
+              loading={loading}
+              className="w-100"
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  size="small"
+                  inputProps={{
+                    ...params.inputProps,
+                    autoComplete: "new-password",
+                    endadornment: (
+                      <React.Fragment>
+                        {loading ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
+                        {params.InputProps.endadornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )}
+            />
           </Box>
         </Stack>
 
@@ -424,35 +484,7 @@ const LevelingUp = () => {
                   <StyledTable stickyHeader>
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell align="left">
-                          Kitaplar
-                          {/* <IconButton ref={anchorRef} onClick={handleOpen}>
-                    <Iconify icon="ep:arrow-down" color="text.secondary" />
-                  </IconButton> */}
-                          <IconButton>
-                            <Iconify
-                              icon="ep:arrow-down"
-                              color="text.secondary"
-                            />
-                          </IconButton>
-                          <MenuPopover
-                            open={open}
-                            onClose={handleClose}
-                            anchorEl={anchorRef.current}
-                            sx={{ width: 130 }}
-                          >
-                            <FormGroup>
-                              <FormControlLabel
-                                control={<CMCheckBox />}
-                                label="Tümünü Seç"
-                              />
-                              <FormControlLabel
-                                control={<CMCheckBox />}
-                                label="School 1"
-                              />
-                            </FormGroup>
-                          </MenuPopover>
-                        </StyledTableCell>
+                        <StyledTableCell align="left">Kitaplar</StyledTableCell>
                         <StyledTableCell align="left">
                           <Box className="d-flex align-items-center justify-content-between">
                             Seç

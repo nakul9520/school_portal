@@ -91,15 +91,28 @@ const MassTeacher = () => {
           >
             <Button
               variant="contained"
+              color="info"
+              startIcon={<Iconify icon="ph:arrow-up" />}
+              onClick={() => mediaInputRef.current.click()}
+            >
+              Toplu Formu Yükle
+            </Button>
+            <Button
+              variant="contained"
               color="success"
+              startIcon={<Iconify icon="ph:arrow-down" />}
               onClick={handleDownloadCSV}
             >
-              Excel
+              Toplu Formu İndir
             </Button>
-
-            <Button variant="contained" color="error">
-              PDF
-            </Button>
+            <input
+              ref={mediaInputRef}
+              hidden
+              accept=".csv"
+              onChange={(e) => onImageChange(e)}
+              name="image"
+              type="file"
+            />
           </Stack>
         </Stack>
 
@@ -146,7 +159,7 @@ const MassTeacher = () => {
             className="header_search"
             size="small"
             InputProps={{
-              endAdornment: (
+              endadornment: (
                 <InputAdornment position="start">
                   <IconButton sx={{ color: "text.secondary" }}>
                     <Iconify icon="iconamoon:search-light" width={20} />
@@ -159,36 +172,6 @@ const MassTeacher = () => {
 
         <MassTeacherTable />
 
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          spacing={1}
-          mt={3}
-          className="table_bottom_tabs"
-        >
-          <Button
-            variant="contained"
-            color="info"
-            startIcon={<Iconify icon="ph:arrow-up" />}
-            onClick={() => mediaInputRef.current.click()}
-          >
-            Toplu Formu Yükle
-          </Button>
-
-          <Button variant="contained" color="primary">
-            Kaydet
-          </Button>
-
-          <input
-            ref={mediaInputRef}
-            hidden
-            accept=".csv"
-            onChange={(e) => onImageChange(e)}
-            name="image"
-            type="file"
-          />
-        </Stack>
         <Stack
           direction="row"
           justifyContent="space-between"

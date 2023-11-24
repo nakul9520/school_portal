@@ -1,11 +1,13 @@
 import {
   Box,
   Button,
-  Checkbox,
+  FormControl,
   Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   Pagination,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -17,10 +19,12 @@ import { debounce, get, size } from "lodash";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getBookList } from "redux/store/slice/dashboard/contentSlice";
-import BookListTable from "./BookListTable";
-import { getBookDetail } from "redux/store/slice/dashboard/contentSlice";
 import { toast } from "react-toastify";
+import {
+  getBookDetail,
+  getBookList,
+} from "redux/store/slice/dashboard/contentSlice";
+import BookListTable from "./BookListTable";
 
 const BookDesign = () => {
   const navigate = useNavigate();
@@ -73,19 +77,18 @@ const BookDesign = () => {
   };
 
   const handlePerPageData = (e) => {
-    if (e.target.checked) {
-      setFilterOptions({
+    setperPageData(e.target.value);
+    setFilterOptions({
+      ...filterOptions,
+      per_page: e.target.value,
+    });
+    getBookListData(
+      {
         ...filterOptions,
-        per_page: perPageData,
-      });
-    } else {
-      setFilterOptions({
-        ...filterOptions,
-        per_page: 10,
-      });
-      setperPageData(10);
-    }
-    getBookListData(filterOptions, page);
+        per_page: e.target.value,
+      },
+      page
+    );
   };
 
   const handleBookEdit = () => {
@@ -137,7 +140,6 @@ const BookDesign = () => {
             </Button>
           </Grid>
         </Grid>
-
         <Grid
           container
           justifyContent="space-between"
@@ -150,29 +152,21 @@ const BookDesign = () => {
               <Typography variant="caption" color="text.secondary">
                 Sayfada Göster
               </Typography>
-              <Box className="d-flex align-items-center border">
-                <TextField
-                  variant="outlined"
+
+              <FormControl>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
                   value={perPageData}
-                  onChange={(e) => setperPageData(e.target.value)}
+                  onChange={handlePerPageData}
                   size="small"
-                  placeholder="10"
-                  sx={{
-                    width: "50px",
-                    ".MuiInputBase-root": {
-                      backgroundColor: "transparent",
-                      ".MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                      },
-                    },
-                  }}
-                />
-                <Box
-                  sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
                 >
-                  <Checkbox onChange={handlePerPageData} />
-                </Box>
-              </Box>
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={50}>50</MenuItem>
+                  <MenuItem value={100}>100</MenuItem>
+                </Select>
+              </FormControl>
             </Stack>
           </Grid>
           <Grid item sm={6} xs={12} className="text-right">
@@ -181,16 +175,19 @@ const BookDesign = () => {
               value={filterOptions.search}
               onChange={(e) => {
                 setFilterOptions({ ...filterOptions, search: e.target.value });
-                getBookListData({
-                  ...filterOptions,
-                  search: e.target.value,
-                });
+                getBookListData(
+                  {
+                    ...filterOptions,
+                    search: e.target.value,
+                  },
+                  1
+                );
               }}
               placeholder="Arama…"
               className="header_search"
               size="small"
               InputProps={{
-                endAdornment: (
+                endadornment: (
                   <InputAdornment position="start">
                     <IconButton sx={{ color: "text.secondary" }}>
                       <Iconify icon="iconamoon:search-light" width={20} />
@@ -201,7 +198,6 @@ const BookDesign = () => {
             />
           </Grid>
         </Grid>
-
         <BookListTable bookId={bookId} setBookId={setBookId} />
 
         <Stack
@@ -225,35 +221,20 @@ const BookDesign = () => {
         </Stack>
 
         <Stack
-          direction={{ sm: "row", xs: "column" }}
-          justifyContent={{ sm: "space-between", xs: "flex-start" }}
+          direction="row"
           alignItems="center"
-          mt={3}
-          className="gap-2"
+          justifyContent="end"
+          className="gap-2 mt-3"
         >
-          <Stack direction="row" alignItems="center" className="gap-2">
-            <Button variant="contained" color="primary">
-              Pdf
+          {bookId ? (
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleBookEdit}
+            >
+              Düzenlemek
             </Button>
-            <Button variant="contained" color="secondary">
-              Print
-            </Button>
-          </Stack>
-
-          <Stack direction="row" alignItems="center" className="gap-2">
-            {bookId ? (
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleBookEdit}
-              >
-                Düzenlemek
-              </Button>
-            ) : null}
-            <Button variant="contained" color="primary">
-              Kaydet
-            </Button>
-          </Stack>
+          ) : null}
         </Stack>
       </Box>
     </>
