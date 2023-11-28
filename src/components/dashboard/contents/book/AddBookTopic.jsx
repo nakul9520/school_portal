@@ -18,7 +18,7 @@ import TableRow from "@mui/material/TableRow";
 import { useTheme } from "@mui/material/styles";
 import Iconify from "components/common/iconify";
 import { FieldArray, Formik, getIn } from "formik";
-import { filter, get, isEmpty } from "lodash";
+import { get, isEmpty, omit } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -49,10 +49,8 @@ const AddBookTopic = () => {
   const [activeTaskBtn, setActiveTaskBtn] = useState(true);
   const { state } = useLocation();
   const bookData = state ?? {};
-  console.log("bookData", bookData);
   const { filterList, loading } = useSelector((state) => state.content);
   const filterListData = filterList.data ?? [];
-  const [subCategoryData, setSubCategoryData] = useState({});
 
   const handleCategoryChange = (data) => {
     setCategoryData(data);
@@ -63,14 +61,6 @@ const AddBookTopic = () => {
         per_page: 10,
       })
     );
-  };
-
-  const handleClickCategory = (value, setFieldValue) => {
-    const result = filter(
-      categoryName,
-      (item) => item.categoryId === categoryData.categoryId
-    );
-    setFieldValue(result[0].key, value.id);
   };
 
   useEffect(() => {
@@ -91,17 +81,15 @@ const AddBookTopic = () => {
   // }, []);
 
   const handleAddBookTitle = (values) => {
-    // if (
-    //   values.grade ||
-    //   values.generalthemes ||
-    //   values.objectives ||
-    //   values.pypthemes ||
-    //   values.series === 0
-    // ) {
-    //   toast.error("You need to select must one filter in all category");
-    // } else {
+    const data = omit(values, [
+      "grade_name",
+      "pypthemes_name",
+      "generalthemes_name",
+      "objectives_name",
+      "series_name",
+    ]);
     const payload = {
-      ...values,
+      ...data,
       id: bookData.id ?? "",
     };
     dispatch(addBookTitle(payload))
@@ -118,7 +106,6 @@ const AddBookTopic = () => {
       .catch((err) => {
         console.log("Error: ", err);
       });
-    // }
   };
 
   const handleAddBookFile = (values, fileType) => {
@@ -164,10 +151,15 @@ const AddBookTopic = () => {
               book_name: bookData.book_name ?? "",
               book_description: bookData.book_description ?? "",
               grade: bookData.grade ?? 0,
+              grade_name: bookData.grade_name ?? "",
               pypthemes: bookData.pypthemes ?? 0,
+              pypthemes_name: bookData.pypthemes_name ?? "",
               generalthemes: bookData.generalthemes ?? 0,
+              generalthemes_name: bookData.generalthemes_name ?? "",
               objectives: bookData.objectives ?? 0,
+              objectives_name: bookData.objectives_name ?? "",
               series: bookData.series ?? 0,
+              series_name: bookData.series_name ?? "",
             }}
             validationSchema={addFileTitleValidation}
             onSubmit={(value) => {
@@ -276,56 +268,306 @@ const AddBookTopic = () => {
                     </Stack>
 
                     <Box className="w-100 pt-2">
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        className="mb-2"
+                      >
                         Sub Category
                       </Typography>
-                      <Autocomplete
-                        getOptionLabel={(option) =>
-                          option.filter_name ?? option
-                        }
-                        options={filterListData}
-                        disabled={categoryData.categoryId === ""}
-                        value={subCategoryData.filter_name ?? ""}
-                        isOptionEqualToValue={(option, value) => {
-                          if (
-                            value === "" ||
-                            option.filter_name === value.filter_name
-                          ) {
-                            return true;
+                      {categoryData.categoryId === 1 ? (
+                        <Autocomplete
+                          getOptionLabel={(option) =>
+                            option.filter_name ?? option
                           }
-                        }}
-                        onChange={(e, value) => {
-                          setSubCategoryData(value);
-                          handleClickCategory(value, setFieldValue);
-                        }}
-                        autoHighlight
-                        disableClearable
-                        noOptionsText="No Data"
-                        loading={loading}
-                        className="w-100"
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            fullWidth
-                            size="small"
-                            inputProps={{
-                              ...params.inputProps,
-                              autoComplete: "new-password",
-                              endadornment: (
-                                <React.Fragment>
-                                  {loading ? (
-                                    <CircularProgress
-                                      color="inherit"
-                                      size={20}
-                                    />
-                                  ) : null}
-                                  {params.InputProps.endadornment}
-                                </React.Fragment>
-                              ),
-                            }}
-                          />
-                        )}
-                      />
+                          options={filterListData}
+                          disabled={categoryData.categoryId === ""}
+                          name="grade_name"
+                          value={values.grade_name ?? ""}
+                          isOptionEqualToValue={(option, value) => {
+                            if (value === "" || option.filter_name === value) {
+                              return true;
+                            }
+                          }}
+                          onChange={(e, value) => {
+                            setFieldValue("grade", value.id);
+                            setFieldValue("grade_name", value.filter_name);
+                          }}
+                          autoHighlight
+                          disableClearable
+                          noOptionsText="No Data"
+                          loading={loading}
+                          className="w-100"
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              fullWidth
+                              name="grade_name"
+                              size="small"
+                              inputProps={{
+                                ...params.inputProps,
+                                autoComplete: "new-password",
+                                endadornment: (
+                                  <React.Fragment>
+                                    {loading ? (
+                                      <CircularProgress
+                                        color="inherit"
+                                        size={20}
+                                      />
+                                    ) : null}
+                                    {params.InputProps.endadornment}
+                                  </React.Fragment>
+                                ),
+                              }}
+                              error={
+                                errors.grade_name && touched.grade_name
+                                  ? true
+                                  : false
+                              }
+                              helperText={
+                                errors.grade_name && touched.grade_name
+                                  ? errors.grade_name
+                                  : null
+                              }
+                            />
+                          )}
+                        />
+                      ) : categoryData.categoryId === 2 ? (
+                        <Autocomplete
+                          getOptionLabel={(option) =>
+                            option.filter_name ?? option
+                          }
+                          options={filterListData}
+                          disabled={categoryData.categoryId === ""}
+                          name="pypthemes_name"
+                          value={values.pypthemes_name ?? ""}
+                          isOptionEqualToValue={(option, value) => {
+                            if (value === "" || option.filter_name === value) {
+                              return true;
+                            }
+                          }}
+                          onChange={(e, value) => {
+                            setFieldValue("pypthemes", value.id);
+                            setFieldValue("pypthemes_name", value.filter_name);
+                          }}
+                          autoHighlight
+                          disableClearable
+                          noOptionsText="No Data"
+                          loading={loading}
+                          className="w-100"
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              fullWidth
+                              name="pypthemes_name"
+                              size="small"
+                              inputProps={{
+                                ...params.inputProps,
+                                autoComplete: "new-password",
+                                endadornment: (
+                                  <React.Fragment>
+                                    {loading ? (
+                                      <CircularProgress
+                                        color="inherit"
+                                        size={20}
+                                      />
+                                    ) : null}
+                                    {params.InputProps.endadornment}
+                                  </React.Fragment>
+                                ),
+                              }}
+                              error={
+                                errors.pypthemes_name && touched.pypthemes_name
+                                  ? true
+                                  : false
+                              }
+                              helperText={
+                                errors.pypthemes_name && touched.pypthemes_name
+                                  ? errors.pypthemes_name
+                                  : null
+                              }
+                            />
+                          )}
+                        />
+                      ) : categoryData.categoryId === 3 ? (
+                        <Autocomplete
+                          getOptionLabel={(option) =>
+                            option.filter_name ?? option
+                          }
+                          options={filterListData}
+                          disabled={categoryData.categoryId === ""}
+                          name="generalthemes_name"
+                          value={values.generalthemes_name ?? ""}
+                          isOptionEqualToValue={(option, value) => {
+                            if (value === "" || option.filter_name === value) {
+                              return true;
+                            }
+                          }}
+                          onChange={(e, value) => {
+                            setFieldValue("generalthemes", value.id);
+                            setFieldValue(
+                              "generalthemes_name",
+                              value.filter_name
+                            );
+                          }}
+                          autoHighlight
+                          disableClearable
+                          noOptionsText="No Data"
+                          loading={loading}
+                          className="w-100"
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              fullWidth
+                              name="generalthemes_name"
+                              size="small"
+                              inputProps={{
+                                ...params.inputProps,
+                                autoComplete: "new-password",
+                                endadornment: (
+                                  <React.Fragment>
+                                    {loading ? (
+                                      <CircularProgress
+                                        color="inherit"
+                                        size={20}
+                                      />
+                                    ) : null}
+                                    {params.InputProps.endadornment}
+                                  </React.Fragment>
+                                ),
+                              }}
+                              error={
+                                errors.generalthemes_name &&
+                                touched.generalthemes_name
+                                  ? true
+                                  : false
+                              }
+                              helperText={
+                                errors.generalthemes_name &&
+                                touched.generalthemes_name
+                                  ? errors.generalthemes_name
+                                  : null
+                              }
+                            />
+                          )}
+                        />
+                      ) : categoryData.categoryId === 4 ? (
+                        <Autocomplete
+                          getOptionLabel={(option) =>
+                            option.filter_name ?? option
+                          }
+                          options={filterListData}
+                          disabled={categoryData.categoryId === ""}
+                          name="objectives_name"
+                          value={values.objectives_name ?? ""}
+                          isOptionEqualToValue={(option, value) => {
+                            if (value === "" || option.filter_name === value) {
+                              return true;
+                            }
+                          }}
+                          onChange={(e, value) => {
+                            setFieldValue("objectives", value.id);
+                            setFieldValue("objectives_name", value.filter_name);
+                          }}
+                          autoHighlight
+                          disableClearable
+                          noOptionsText="No Data"
+                          loading={loading}
+                          className="w-100"
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              fullWidth
+                              name="objectives_name"
+                              size="small"
+                              inputProps={{
+                                ...params.inputProps,
+                                autoComplete: "new-password",
+                                endadornment: (
+                                  <React.Fragment>
+                                    {loading ? (
+                                      <CircularProgress
+                                        color="inherit"
+                                        size={20}
+                                      />
+                                    ) : null}
+                                    {params.InputProps.endadornment}
+                                  </React.Fragment>
+                                ),
+                              }}
+                              error={
+                                errors.objectives_name &&
+                                touched.objectives_name
+                                  ? true
+                                  : false
+                              }
+                              helperText={
+                                errors.objectives_name &&
+                                touched.objectives_name
+                                  ? errors.objectives_name
+                                  : null
+                              }
+                            />
+                          )}
+                        />
+                      ) : categoryData.categoryId === 5 ? (
+                        <Autocomplete
+                          getOptionLabel={(option) =>
+                            option.filter_name ?? option
+                          }
+                          options={filterListData}
+                          disabled={categoryData.categoryId === ""}
+                          name="series_name"
+                          value={values.series_name ?? ""}
+                          isOptionEqualToValue={(option, value) => {
+                            if (value === "" || option.filter_name === value) {
+                              return true;
+                            }
+                          }}
+                          onChange={(e, value) => {
+                            setFieldValue("series", value.id);
+                            setFieldValue("series_name", value.filter_name);
+                          }}
+                          autoHighlight
+                          disableClearable
+                          noOptionsText="No Data"
+                          loading={loading}
+                          className="w-100"
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              fullWidth
+                              name="series_name"
+                              size="small"
+                              inputProps={{
+                                ...params.inputProps,
+                                autoComplete: "new-password",
+                                endadornment: (
+                                  <React.Fragment>
+                                    {loading ? (
+                                      <CircularProgress
+                                        color="inherit"
+                                        size={20}
+                                      />
+                                    ) : null}
+                                    {params.InputProps.endadornment}
+                                  </React.Fragment>
+                                ),
+                              }}
+                              error={
+                                errors.series_name && touched.series_name
+                                  ? true
+                                  : false
+                              }
+                              helperText={
+                                errors.series_name && touched.series_name
+                                  ? errors.series_name
+                                  : null
+                              }
+                            />
+                          )}
+                        />
+                      ) : null}
                     </Box>
                   </Box>
                   <Box className="mt-3">

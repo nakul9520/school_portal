@@ -114,7 +114,7 @@ const MatchingTaskTable = () => {
             ) : (
               matchingTaskList.map((row, index) => (
                 <StyledTableRow key={index}>
-                  <StyledTableCell scope="row">{row.id}</StyledTableCell>
+                  <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">{row.question}</StyledTableCell>
                   <StyledTableCell align="left">
                     {map(row.left_column, (item, optionIndex) => (

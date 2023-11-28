@@ -10,15 +10,16 @@ import { useTheme } from "@mui/material/styles";
 import { MobileDatePicker } from "@mui/x-date-pickers";
 
 import { Formik } from "formik";
+import { map } from "lodash";
 import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
-import { addEditSchoolAdmin } from "redux/store/slice/dashboard/userSlice";
-
-import { addEditSchoolValidation } from "services/validations";
+import {
+  addEditSchoolAdmin,
+  getSchoolList,
+} from "redux/store/slice/dashboard/userSlice";
 
 const AddSchoolAdminForm = () => {
   const theme = useTheme();
@@ -42,9 +43,17 @@ const AddSchoolAdminForm = () => {
   }, [dispatch]);
 
   const handleAddEdit = (values, action) => {
+    const schoolIds = map(values.school_id, (item) => {
+      if (item.school_id !== undefined) {
+        return item.school_id;
+      } else {
+        return item.id;
+      }
+    });
     const data = {
       ...values,
       id: schoolAdminData.id ? schoolAdminData.id : "",
+      school_id: schoolIds,
       activation_date: moment(values.activation_date).format("YYYY-MM-DD"),
       expired_at: moment(values.expired_at).format("YYYY-MM-DD"),
     };
@@ -78,8 +87,7 @@ const AddSchoolAdminForm = () => {
 
         <Formik
           initialValues={{
-            school_id: schoolAdminData.school_id ?? [],
-            school_name: schoolAdminData.school_name ?? [],
+            school_id: schoolAdminData.schoolDetails ?? [],
             name: schoolAdminData.name ?? "",
             email: schoolAdminData.email ?? "",
             password: schoolAdminData.password ?? "",
@@ -87,7 +95,6 @@ const AddSchoolAdminForm = () => {
               moment(schoolAdminData.activation_date) ?? moment(),
             expired_at: moment(schoolAdminData.expired_at) ?? moment(),
           }}
-          validationSchema={addEditSchoolValidation}
           onSubmit={(value, action) => {
             handleAddEdit(value, action);
           }}
@@ -102,6 +109,7 @@ const AddSchoolAdminForm = () => {
             touched,
           }) => (
             <form onSubmit={handleSubmit} className="h-100">
+              {console.log("props values", values)}
               <Box className="custom_form border">
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
@@ -115,15 +123,14 @@ const AddSchoolAdminForm = () => {
                     getOptionLabel={(option) => option.school_name ?? option}
                     options={schoolList}
                     name="school_name"
-                    value={values.school_name}
+                    value={values.school_id}
                     isOptionEqualToValue={(option, value) => {
-                      if (value === "" || option.school_name === value) {
+                      if (value === "" || option.school_name === value.school_name) {
                         return true;
                       }
                     }}
                     onChange={(e, value) => {
-                      setFieldValue("school_id", value.id);
-                      setFieldValue("school_name", value.school_name);
+                      setFieldValue("school_id", value);
                     }}
                     multiple
                     autoHighlight
@@ -144,7 +151,7 @@ const AddSchoolAdminForm = () => {
                               {loading ? (
                                 <CircularProgress color="inherit" size={20} />
                               ) : null}
-                              {params.InputProps.endadornment}
+                              {params.InputProps.endAdornment}
                             </React.Fragment>
                           ),
                         }}

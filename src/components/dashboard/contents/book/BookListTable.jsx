@@ -62,7 +62,7 @@ const BookListTable = (props) => {
             ) : (
               bookList.map((row, index) => (
                 <StyledTableRow key={index}>
-                  <StyledTableCell align="left">{row.id}</StyledTableCell>
+                  <StyledTableCell align="left">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">
                     {row.book_name}
                   </StyledTableCell>

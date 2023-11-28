@@ -65,7 +65,7 @@ const breadcrumbNameMap = {
   "/dashboard/system-settings/sub-admin": "sub admin",
   "/dashboard/system-settings/add-sub-admin": "sub admin",
 
-  "/dashboard/dramatization": "Oyunlaştırma",
+  "/dashboard/badges": "Oyunlaştırma",
 };
 
 const LinkRouter = (props) => (

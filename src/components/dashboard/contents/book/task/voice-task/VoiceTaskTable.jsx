@@ -110,7 +110,7 @@ const VoiceTaskTable = () => {
             ) : (
               voiceTaskList.map((row, index) => (
                 <StyledTableRow key={index}>
-                  <StyledTableCell scope="row">{row.id}</StyledTableCell>
+                  <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">{row.question}</StyledTableCell>
                   <StyledTableCell align="left">
                     <audio controls>
