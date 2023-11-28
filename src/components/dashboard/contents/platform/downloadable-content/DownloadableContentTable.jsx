@@ -95,7 +95,7 @@ const DownloadableContentTable = () => {
             ) : (
               contentList.map((row, index) => (
                 <StyledTableRow key={index}>
-                  <StyledTableCell scope="row">{row.id}</StyledTableCell>
+                  <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">{row.title}</StyledTableCell>
                   <StyledTableCell align="left">
                     <Box sx={{ width: 80, height: 80 }}>
