@@ -21,13 +21,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Iconify from "components/common/iconify/Iconify";
-import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
-import SchoolDataTable from "./SchoolDataTable";
+import BackdropLoader from "components/common/loader/BackdropLoader";
 import { toast } from "react-toastify";
-import { getSpecificSchoolCSVFile } from "redux/store/slice/dashboard/userSlice";
-import { deleteSchool } from "redux/store/slice/dashboard/userSlice";
-import { importSchoolFile } from "redux/store/slice/dashboard/userSlice";
-import { getSchoolCSVFile } from "redux/store/slice/dashboard/userSlice";
+import {
+  deleteSchool,
+  getSchoolCSVFile,
+  getSchoolList,
+  getSpecificSchoolCSVFile,
+  importSchoolFile,
+} from "redux/store/slice/dashboard/userSlice";
+import SchoolDataTable from "./SchoolDataTable";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -36,7 +39,7 @@ const Dashboard = () => {
   const mediaInputRef = useRef(null);
 
   const [selected, setSelected] = useState([]);
-  const { schoolListInfo } = useSelector((state) => state.users);
+  const { uploadLoading, schoolListInfo } = useSelector((state) => state.users);
 
   const [filterOptions, setFilterOptions] = useState({
     search: "",
@@ -182,17 +185,28 @@ const Dashboard = () => {
   // import school file
   const onImageChange = (event) => {
     const file = event.target.files[0];
-    console.log("file: ", file);
-    dispatch(importSchoolFile({ file })).then((result) => {
-      if (result.success) {
-        toast.success(result.message);
-      } else {
-        toast.error(result.message);
-      }
-    });
+    dispatch(importSchoolFile({ file }))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          mediaInputRef.current.value = "";
+          toast.success(result.message);
+          getSchoolListData({
+            payload: {
+              search: "",
+              per_page: 10,
+            },
+            page: 1,
+          });
+        } else {
+          mediaInputRef.current.value = "";
+          toast.error("Please check your formate, something went wrong");
+        }
+      });
   };
   return (
     <>
+      <BackdropLoader open={uploadLoading} />
       <Box
         sx={{
           p: 2,
@@ -207,7 +221,7 @@ const Dashboard = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              okul
+              Okul
             </Typography>
           </Grid>
           <Grid item sm={6} xs={12}>
@@ -217,23 +231,25 @@ const Dashboard = () => {
               alignItems="center"
               className="gap-2"
             >
-              {!isEmpty(selected) ? (
+              {size(selected) > 1 ? (
                 <Button
                   variant="contained"
                   color="secondary"
                   onClick={handleDelete}
                 >
-                  Delete
+                  Silmek
                 </Button>
               ) : null}
+
               <Button
                 variant="contained"
-                color="info"
                 startIcon={<Iconify icon="ph:arrow-up" />}
                 onClick={() => mediaInputRef.current.click()}
+                color="info"
               >
                 Toplu Formu Yükle
               </Button>
+
               <Button
                 variant="contained"
                 color="success"
@@ -331,7 +347,7 @@ const Dashboard = () => {
           >
             Okul Ekle
           </Button>
-{/* 
+          {/* 
           <Button
             variant="contained"
             onClick={() =>

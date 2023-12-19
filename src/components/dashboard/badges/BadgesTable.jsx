@@ -67,14 +67,12 @@ const BadgesTable = () => {
               <StyledTableCell className="" color="text.primary">
                 Sıra
               </StyledTableCell>
-              <StyledTableCell align="left">Badges</StyledTableCell>
               <StyledTableCell align="left">
-                The completion criteria for these badges
+                Rozetler / Profil resimleri
               </StyledTableCell>
-              <StyledTableCell align="left">profiller</StyledTableCell>
-              <StyledTableCell align="left">
-                profile photo avatars
-              </StyledTableCell>
+              <StyledTableCell align="left">Tamamlama Kriteri</StyledTableCell>
+
+              <StyledTableCell align="left">Rozet görseli</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -89,7 +87,7 @@ const BadgesTable = () => {
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={9}>
                   <Typography variant="subtitle1" color="text.primary">
-                    No Data Available
+                    Mevcut Veri Yok
                   </Typography>
                 </StyledTableCell>
               </StyledTableRow>
@@ -101,7 +99,6 @@ const BadgesTable = () => {
                   <StyledTableCell align="left">
                     {row.description}
                   </StyledTableCell>
-                  <StyledTableCell align="left">{row.profile}</StyledTableCell>
                   <StyledTableCell align="left">
                     <Box sx={{ width: 80, height: 80 }}>
                       <Box

@@ -14,6 +14,7 @@ const initialState = {
 
   classBySchoolList: [],
   loading: false,
+  uploadLoading: false,
 };
 
 // School
@@ -154,6 +155,63 @@ export const addEditSchoolAdmin = createAsyncThunk(
         method: "POST",
         url: Api.ADD_EDIT_SCHOOL_ADMIN,
         data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const getSchoolAdminCSVFile = createAsyncThunk(
+  "users/getSchoolAdminCSVFile",
+  async () => {
+    try {
+      const response = await AxiosDefault({
+        method: "GET",
+        url: Api.GET_SCHOOL_ADMIN_CSV_FILE,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const getSpecificSchoolAdminCSVFile = createAsyncThunk(
+  "users/getSpecificSchoolAdminCSVFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.GET_SPECIFIC_SCHOOL_ADMIN_CSV_FILE,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const importSchoolAdminFile = createAsyncThunk(
+  "users/importSchoolAdminFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.IMPORT_SCHOOL_ADMIN_FILE,
+        data: data,
+        contentType: "multipart/form-data",
       });
       return response.data;
     } catch (err) {
@@ -540,6 +598,15 @@ const userSlice = createSlice({
       .addCase(deleteSchool.rejected, (state) => {
         state.loading = false;
       })
+      .addCase(importSchoolFile.pending, (state) => {
+        state.uploadLoading = true;
+      })
+      .addCase(importSchoolFile.fulfilled, (state) => {
+        state.uploadLoading = false;
+      })
+      .addCase(importSchoolFile.rejected, (state) => {
+        state.uploadLoading = false;
+      })
       .addCase(getSchoolCSVFile.pending, (state) => {
         state.loading = true;
       })
@@ -557,6 +624,15 @@ const userSlice = createSlice({
       })
       .addCase(addEditSchoolAdmin.rejected, (state) => {
         state.loading = false;
+      })
+      .addCase(importSchoolAdminFile.pending, (state) => {
+        state.uploadLoading = true;
+      })
+      .addCase(importSchoolAdminFile.fulfilled, (state) => {
+        state.uploadLoading = false;
+      })
+      .addCase(importSchoolAdminFile.rejected, (state) => {
+        state.uploadLoading = false;
       })
       .addCase(addEditClass.pending, (state) => {
         state.loading = true;
@@ -595,6 +671,15 @@ const userSlice = createSlice({
       })
       .addCase(deleteClass.rejected, (state) => {
         state.loading = false;
+      })
+      .addCase(importClassFile.pending, (state) => {
+        state.uploadLoading = true;
+      })
+      .addCase(importClassFile.fulfilled, (state) => {
+        state.uploadLoading = false;
+      })
+      .addCase(importClassFile.rejected, (state) => {
+        state.uploadLoading = false;
       })
       .addCase(getClassCSVFile.pending, (state) => {
         state.loading = true;
@@ -651,6 +736,24 @@ const userSlice = createSlice({
       })
       .addCase(getClassesBySchool.rejected, (state) => {
         state.loading = false;
+      })
+      .addCase(importStudentFile.pending, (state) => {
+        state.uploadLoading = true;
+      })
+      .addCase(importStudentFile.fulfilled, (state) => {
+        state.uploadLoading = false;
+      })
+      .addCase(importStudentFile.rejected, (state) => {
+        state.uploadLoading = false;
+      })
+      .addCase(importTeacherFile.pending, (state) => {
+        state.uploadLoading = true;
+      })
+      .addCase(importTeacherFile.fulfilled, (state) => {
+        state.uploadLoading = false;
+      })
+      .addCase(importTeacherFile.rejected, (state) => {
+        state.uploadLoading = false;
       })
       .addCase(getTeacherCSVFile.pending, (state) => {
         state.loading = true;

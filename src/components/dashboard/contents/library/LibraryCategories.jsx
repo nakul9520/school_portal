@@ -17,6 +17,7 @@ import { debounce, get, isEmpty } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { getFilterList } from "redux/store/slice/dashboard/contentSlice";
 import AddEditCategoryFilter from "./AddEditCategoryFilter";
+import BackButton from "components/common/BackButton";
 
 const LibraryCategories = () => {
   const theme = useTheme();
@@ -70,6 +71,7 @@ const LibraryCategories = () => {
   };
   return (
     <>
+      <BackButton />
       <Box
         sx={{
           p: 2,
@@ -104,14 +106,14 @@ const LibraryCategories = () => {
             <TableHead>
               <TableRow>
                 <StyledTableCell align="left">
-                  List of selected category items
+                  Alt-Kategori ekle
                 </StyledTableCell>
-                <StyledTableCell align="left">Edit</StyledTableCell>
+                <StyledTableCell align="left">Düzenlemek</StyledTableCell>
                 <StyledTableCell
                   align="left"
                   className="d-flex align-items-center justify-content-between"
                 >
-                  Remove
+                  Kaldır
                   <Button
                     variant="contained"
                     startIcon={<Iconify icon="bi:plus" />}
@@ -137,7 +139,7 @@ const LibraryCategories = () => {
                 <StyledTableRow>
                   <StyledTableCell align="center" colSpan={9}>
                     <Typography variant="subtitle1" color="text.primary">
-                      No Data Available
+                      Mevcut Veri Yok
                     </Typography>
                   </StyledTableCell>
                 </StyledTableRow>

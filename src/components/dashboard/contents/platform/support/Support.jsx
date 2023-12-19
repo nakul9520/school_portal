@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getSupportTicketList } from "redux/store/slice/dashboard/contentSlice";
 import SupportDataTable from "./SupportDataTable";
+import BackButton from "components/common/BackButton";
 
 const Support = () => {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ const Support = () => {
 
   return (
     <>
+      <BackButton />
       <Box
         sx={{
           p: 2,

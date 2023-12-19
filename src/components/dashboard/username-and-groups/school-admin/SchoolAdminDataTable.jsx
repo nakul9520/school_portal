@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-import { isEmpty, map, uniq } from "lodash";
+import { isEmpty, map, size, uniq } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import CMIconButton from "components/common/CMIconButton";
 import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
 import Iconify from "components/common/iconify/Iconify";
+
 import {
   deleteUsers,
   getUsersList,
@@ -96,7 +97,7 @@ const SchoolAdminDataTable = (props) => {
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={9}>
                   <Typography variant="subtitle1" color="text.primary">
-                    No Data Available
+                    Mevcut Veri Yok
                   </Typography>
                 </StyledTableCell>
               </StyledTableRow>
@@ -128,15 +129,17 @@ const SchoolAdminDataTable = (props) => {
                       direction="row"
                       className="align-items-center  gap-2"
                     >
-                      <Box
-                        onClick={() =>
-                          navigate(
-                            "/dashboard/username-and-groups/add-school-admin",
-                            { state: row }
-                          )
-                        }
-                      >
-                        <CMIconButton color="warning">
+                      <Box>
+                        <CMIconButton
+                          onClick={() =>
+                            navigate(
+                              "/dashboard/username-and-groups/add-school-admin",
+                              { state: row }
+                            )
+                          }
+                          color="warning"
+                          disabled={size(selected) > 1}
+                        >
                           <Iconify icon="el:edit" />
                         </CMIconButton>
                       </Box>
@@ -159,6 +162,7 @@ const SchoolAdminDataTable = (props) => {
                       <Box>
                         <CMIconButton
                           color="error"
+                          disabled={size(selected) > 1}
                           onClick={() => handleDelete(row.id)}
                         >
                           <Iconify icon="uiw:delete" />

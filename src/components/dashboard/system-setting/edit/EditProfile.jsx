@@ -20,6 +20,7 @@ import Iconify from "components/common/iconify";
 import { updateProfile } from "redux/store/slice/auth/authSlice";
 import { getProfileInfo } from "redux/store/slice/auth/authSlice";
 import { getSession } from "services/utiles";
+import BackButton from "components/common/BackButton";
 
 const EditProfile = () => {
   const theme = useTheme();
@@ -63,6 +64,7 @@ const EditProfile = () => {
   };
   return (
     <>
+      <BackButton />
       {loading ? (
         <LinearProgress />
       ) : (

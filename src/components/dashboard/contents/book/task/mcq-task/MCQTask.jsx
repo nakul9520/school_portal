@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import VoiceTaskTable from "./MCQTaskTable";
 import { getMCQTaskList } from "redux/store/slice/dashboard/contentSlice";
+import BackButton from "components/common/BackButton";
 
 const MCQTask = () => {
   const theme = useTheme();
@@ -47,6 +48,7 @@ const MCQTask = () => {
 
   return (
     <>
+      <BackButton />
       <Box
         sx={{
           p: 2,

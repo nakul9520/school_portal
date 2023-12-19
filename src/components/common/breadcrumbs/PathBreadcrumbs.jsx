@@ -54,6 +54,10 @@ const breadcrumbNameMap = {
     "İndirilebilir İçerik",
   "/dashboard/contents/platform-design/video-content": "Video İçerik",
   "/dashboard/contents/platform-design/add-video-content": "Video İçerik",
+  "/dashboard/contents/platform-design/faq": "FAQ İçerik",
+  "/dashboard/contents/platform-design/add-faq": "FAQ İçerik",
+  "/dashboard/contents/platform-design/help": "yardım",
+  "/dashboard/contents/platform-design/legal-documents": "politika",
 
   "/dashboard/contents/library-categories": "Kitaplık Kategorileri",
   "/dashboard/contents/book-design": "Kitap Tasarımı",
@@ -66,6 +70,7 @@ const breadcrumbNameMap = {
   "/dashboard/system-settings/add-sub-admin": "sub admin",
 
   "/dashboard/badges": "Oyunlaştırma",
+  "/dashboard/add-badges": "Oyunlaştırma",
 };
 
 const LinkRouter = (props) => (

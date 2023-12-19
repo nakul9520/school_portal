@@ -15,7 +15,11 @@ const Api = {
   IMPORT_SCHOOL_FILE: "schoolImport",
 
   // School Admin
-  ADD_EDIT_SCHOOL_ADMIN: "addEditSchool",
+  ADD_EDIT_SCHOOL_ADMIN: "addEditSchoolAdmin",
+  GET_SCHOOL_ADMIN_CSV_FILE: "schoolAdminCsv",
+  GET_SPECIFIC_SCHOOL_ADMIN_CSV_FILE: "downloadSelectSchoolAdminCsv",
+  IMPORT_SCHOOL_ADMIN_FILE: "schoolAdminImport",
+
 
   // class
   ADD_EDIT_CLASS: "addEditClass",

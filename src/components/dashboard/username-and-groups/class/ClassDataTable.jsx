@@ -19,7 +19,7 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import { isEmpty, uniq } from "lodash";
+import { isEmpty, size, uniq } from "lodash";
 import CMIconButton from "components/common/CMIconButton";
 import SelectCheckbox from "components/common/checkbox/SelectCheckbox";
 
@@ -114,7 +114,7 @@ const ClassDataTable = (props) => {
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={12}>
                   <Typography variant="subtitle1" color="text.primary">
-                    No Data Available
+                    Mevcut Veri Yok
                   </Typography>
                 </StyledTableCell>
               </StyledTableRow>
@@ -125,9 +125,7 @@ const ClassDataTable = (props) => {
                   <StyledTableCell scope="row">
                     {row.school_name}
                   </StyledTableCell>
-                  <StyledTableCell scope="row">
-                    {row.branch_id}
-                  </StyledTableCell>
+                  <StyledTableCell scope="row">{row.branch_id}</StyledTableCell>
                   <StyledTableCell align="left">
                     {row.class_name}
                   </StyledTableCell>
@@ -153,7 +151,17 @@ const ClassDataTable = (props) => {
                   <StyledTableCell align="left">
                     {row.no_of_student}
                   </StyledTableCell>
-                  <StyledTableCell align="left">{row.status}</StyledTableCell>
+                  <StyledTableCell align="left">
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color:
+                          row.status === "1" ? "success.main" : "error.main",
+                      }}
+                    >
+                      {row.status === "1" ? "Active" : "Deactive"}
+                    </Typography>
+                  </StyledTableCell>
                   <StyledTableCell
                     align="left"
                     className="d-flex align-items-center"
@@ -162,14 +170,19 @@ const ClassDataTable = (props) => {
                       direction="row"
                       className="align-items-center  gap-2"
                     >
-                      <Box
-                        onClick={() =>
-                          navigate("/dashboard/username-and-groups/add-class", {
-                            state: row,
-                          })
-                        }
-                      >
-                        <CMIconButton color="warning">
+                      <Box>
+                        <CMIconButton
+                          onClick={() =>
+                            navigate(
+                              "/dashboard/username-and-groups/add-class",
+                              {
+                                state: row,
+                              }
+                            )
+                          }
+                          color="warning"
+                          disabled={size(selected) > 1}
+                        >
                           <Iconify icon="el:edit" />
                         </CMIconButton>
                       </Box>
@@ -190,7 +203,10 @@ const ClassDataTable = (props) => {
                         />
                       </Box>
                       <Box onClick={() => handleDelete(row.id)}>
-                        <CMIconButton color="error">
+                        <CMIconButton
+                          color="error"
+                          disabled={size(selected) > 1}
+                        >
                           <Iconify icon="uiw:delete" />
                         </CMIconButton>
                       </Box>

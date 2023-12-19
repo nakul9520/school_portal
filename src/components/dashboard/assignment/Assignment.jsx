@@ -321,7 +321,7 @@ const Assignment = () => {
         >
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
-              School
+              Okul
             </Typography>
             <Autocomplete
               getOptionLabel={(option) => {
@@ -341,7 +341,7 @@ const Assignment = () => {
               }}
               autoHighlight
               disableClearable
-              noOptionsText="No Data"
+              noOptionsText="Veri yok"
               loading={loading}
               className="w-100"
               renderInput={(params) => (
@@ -367,7 +367,7 @@ const Assignment = () => {
           </Box>
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
-              Class
+              Sınıf
             </Typography>
             <Autocomplete
               getOptionLabel={(option) => option.class_name ?? option}
@@ -385,7 +385,7 @@ const Assignment = () => {
               }}
               autoHighlight
               disableClearable
-              noOptionsText="No Data"
+              noOptionsText="Veri yok"
               loading={loading}
               className="w-100"
               renderInput={(params) => (
@@ -411,7 +411,7 @@ const Assignment = () => {
           </Box>
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
-              Category
+              Kategori
             </Typography>
             <FormControl fullWidth>
               <Select
@@ -431,7 +431,7 @@ const Assignment = () => {
           </Box>
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
-              Sub Category
+              Alt-Kategori
             </Typography>
             <Autocomplete
               getOptionLabel={(option) => option.filter_name ?? option}
@@ -449,7 +449,7 @@ const Assignment = () => {
               }}
               autoHighlight
               disableClearable
-              noOptionsText="No Data"
+              noOptionsText="Veri yok"
               loading={loading}
               className="w-100"
               renderInput={(params) => (
@@ -487,7 +487,6 @@ const Assignment = () => {
           >
             {({ values, handleSubmit, setFieldValue }) => (
               <form onSubmit={handleSubmit} className="h-100">
-                {console.log("values", values)}
                 <FieldArray
                   name="data"
                   render={(arrayHelpers) => (
@@ -594,7 +593,7 @@ const Assignment = () => {
                                     variant="subtitle1"
                                     color="text.primary"
                                   >
-                                    No Data Available
+                                    Mevcut Veri Yok
                                   </Typography>
                                 </StyledTableCell>
                               </StyledTableRow>
@@ -731,11 +730,12 @@ const Assignment = () => {
                           )}
                         </Stack>
                       ) : null}
-                      <Box className="table_bottom_tabs text-right mt-3">
+                      <Box className=" text-right mt-3">
                         <Button
                           variant="contained"
                           color="primary"
                           type="submit"
+                          disabled={isEmpty(values.data)}
                         >
                           Kaydet
                         </Button>

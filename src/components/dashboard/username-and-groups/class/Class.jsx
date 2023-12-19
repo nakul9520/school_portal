@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
-import { debounce, get, isEmpty } from "lodash";
+import { debounce, get, isEmpty, size } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -30,6 +30,7 @@ import ClassDataTable from "./ClassDataTable";
 import { deleteClass } from "redux/store/slice/dashboard/userSlice";
 import { importClassFile } from "redux/store/slice/dashboard/userSlice";
 import { getClassCSVFile } from "redux/store/slice/dashboard/userSlice";
+import BackdropLoader from "components/common/loader/BackdropLoader";
 
 const Class = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Class = () => {
   const mediaInputRef = useRef(null);
 
   const [selected, setSelected] = useState([]);
-  const { classListInfo } = useSelector((state) => state.users);
+  const { uploadLoading, classListInfo } = useSelector((state) => state.users);
 
   const [filterOptions, setFilterOptions] = useState({
     search: "",
@@ -161,13 +162,26 @@ const Class = () => {
   const onImageChange = (event) => {
     const file = event.target.files[0];
     console.log("file: ", file);
-    dispatch(importClassFile({ file })).then((result) => {
-      if (result.success) {
-        toast.success(result.message);
-      } else {
-        toast.error(result.message);
-      }
-    });
+    dispatch(importClassFile({ file }))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          mediaInputRef.current.value = "";
+          toast.success(result.message);
+          dispatch(
+            getClassList({
+              payload: {
+                search: "",
+                per_page: 10,
+              },
+              page: 1,
+            })
+          );
+        } else {
+          mediaInputRef.current.value = "";
+          toast.error("Please check your formate, something went wrong");
+        }
+      });
   };
 
   const handleDelete = () => {
@@ -195,6 +209,7 @@ const Class = () => {
   };
   return (
     <>
+      <BackdropLoader open={uploadLoading} />
       <Box
         sx={{
           p: 2,
@@ -219,13 +234,13 @@ const Class = () => {
               alignItems="center"
               className="gap-2"
             >
-              {!isEmpty(selected) ? (
+              {size(selected) > 1 ? (
                 <Button
                   variant="contained"
                   color="secondary"
                   onClick={handleDelete}
                 >
-                  Delete
+                  Silmek
                 </Button>
               ) : null}
               <Button

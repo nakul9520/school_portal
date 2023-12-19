@@ -7,6 +7,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import BackButton from "components/common/BackButton";
 import RichTextEditor from "components/common/editor/RichTextEditor";
 import { Formik } from "formik";
 import React, { useEffect } from "react";
@@ -56,6 +57,7 @@ const AddEditLegalDocuments = () => {
 
   return (
     <>
+      <BackButton />
       {loading ? (
         <LinearProgress />
       ) : (

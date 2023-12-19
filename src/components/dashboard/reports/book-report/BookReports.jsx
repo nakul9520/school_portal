@@ -293,7 +293,7 @@ const BookReport = () => {
               }}
               autoHighlight
               disableClearable
-              noOptionsText="No Data"
+              noOptionsText="Veri yok"
               loading={loading}
               className="w-100"
               renderInput={(params) => (
@@ -337,7 +337,7 @@ const BookReport = () => {
               }}
               autoHighlight
               disableClearable
-              noOptionsText="No Data"
+              noOptionsText="Veri yok"
               loading={loading}
               className="w-100"
               renderInput={(params) => (
@@ -402,7 +402,7 @@ const BookReport = () => {
               }}
               autoHighlight
               disableClearable
-              noOptionsText="No Data"
+              noOptionsText="Veri yok"
               loading={loading}
               className="w-100"
               renderInput={(params) => (
@@ -459,7 +459,7 @@ const BookReport = () => {
                 <StyledTableRow>
                   <StyledTableCell align="center" colSpan={11}>
                     <Typography variant="subtitle1" color="text.primary">
-                      No Data Available
+                      Mevcut Veri Yok
                     </Typography>
                   </StyledTableCell>
                 </StyledTableRow>
@@ -490,7 +490,7 @@ const BookReport = () => {
                   },
                 }}
               >
-                <StyledTableCell align="left">Total</StyledTableCell>
+                <StyledTableCell align="left">Toplam</StyledTableCell>
                 <StyledTableCell align="left"></StyledTableCell>
 
                 <StyledTableCell align="left">

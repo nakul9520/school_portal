@@ -16,6 +16,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 import { useTheme } from "@mui/material/styles";
+import BackButton from "components/common/BackButton";
 import Iconify from "components/common/iconify";
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty, omit } from "lodash";
@@ -144,6 +145,7 @@ const AddBookTopic = () => {
 
   return (
     <>
+      <BackButton />
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Formik
@@ -295,7 +297,7 @@ const AddBookTopic = () => {
                           }}
                           autoHighlight
                           disableClearable
-                          noOptionsText="No Data"
+                          noOptionsText="Veri yok"
                           loading={loading}
                           className="w-100"
                           renderInput={(params) => (
@@ -352,7 +354,7 @@ const AddBookTopic = () => {
                           }}
                           autoHighlight
                           disableClearable
-                          noOptionsText="No Data"
+                          noOptionsText="Veri yok"
                           loading={loading}
                           className="w-100"
                           renderInput={(params) => (
@@ -412,7 +414,7 @@ const AddBookTopic = () => {
                           }}
                           autoHighlight
                           disableClearable
-                          noOptionsText="No Data"
+                          noOptionsText="Veri yok"
                           loading={loading}
                           className="w-100"
                           renderInput={(params) => (
@@ -471,7 +473,7 @@ const AddBookTopic = () => {
                           }}
                           autoHighlight
                           disableClearable
-                          noOptionsText="No Data"
+                          noOptionsText="Veri yok"
                           loading={loading}
                           className="w-100"
                           renderInput={(params) => (
@@ -530,7 +532,7 @@ const AddBookTopic = () => {
                           }}
                           autoHighlight
                           disableClearable
-                          noOptionsText="No Data"
+                          noOptionsText="Veri yok"
                           loading={loading}
                           className="w-100"
                           renderInput={(params) => (

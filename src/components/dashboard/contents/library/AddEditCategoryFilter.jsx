@@ -10,7 +10,10 @@ import CMDialog from "components/common/dialog/CMDialog";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { filterAddEdit, getFilterList } from "redux/store/slice/dashboard/contentSlice";
+import {
+  filterAddEdit,
+  getFilterList,
+} from "redux/store/slice/dashboard/contentSlice";
 
 const AddEditCategoryFilter = (props) => {
   const { open, onClose, categoryId, filterId, filterData } = props;
@@ -81,7 +84,7 @@ const AddEditCategoryFilter = (props) => {
                         color="text.primary"
                         className="mb-3"
                       >
-                        Kitap Konusu Ekle
+                        Alt-Kategori ekel
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>
@@ -92,7 +95,7 @@ const AddEditCategoryFilter = (props) => {
                         onBlur={props.handleBlur}
                         fullWidth
                         size="small"
-                        placeholder="Kitap konusu"
+                        placeholder="Alt-Kategori"
                         error={
                           props.errors.filter_name && props.touched.filter_name
                             ? true

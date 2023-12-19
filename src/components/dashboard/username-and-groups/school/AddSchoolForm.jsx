@@ -1,6 +1,7 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { MobileDatePicker } from "@mui/x-date-pickers";
+import BackButton from "components/common/BackButton";
 
 import { Formik } from "formik";
 import moment from "moment";
@@ -43,6 +44,7 @@ const AddSchoolForm = () => {
   };
   return (
     <>
+      <BackButton />
       <Box
         component="section"
         sx={{
@@ -112,6 +114,7 @@ const AddSchoolForm = () => {
                     name="activation_date"
                     className="w-100"
                     value={values.activation_date}
+                    disablePast
                     onChange={(newValue) =>
                       setFieldValue("activation_date", newValue)
                     }

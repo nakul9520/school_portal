@@ -6,7 +6,7 @@ const PlatFormDesign = () => {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={10} sm={4} md={3} lg={2}>
+        {/* <Grid item xs={10} sm={4} md={3} lg={2}>
           <Box
             className="common_multi_box"
             sx={{ backgroundColor: "mint.main" }}
@@ -16,7 +16,7 @@ const PlatFormDesign = () => {
           >
             Creating Pages
           </Box>
-        </Grid>
+        </Grid> */}
         <Grid item xs={10} sm={4} md={3} lg={2}>
           <Box
             className="common_multi_box"

@@ -216,7 +216,7 @@ const GetBookReportTable = () => {
                   },
                 }}
               >
-                <StyledTableCell align="left">Total</StyledTableCell>
+                <StyledTableCell align="left">Toplam</StyledTableCell>
                 <StyledTableCell align="left"></StyledTableCell>
                 <StyledTableCell align="left"></StyledTableCell>
                 <StyledTableCell align="left"></StyledTableCell>

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getVoiceTaskList } from "redux/store/slice/dashboard/contentSlice";
 import VoiceTaskTable from "./VoiceTaskTable";
+import BackButton from "components/common/BackButton";
 
 const VoiceTask = () => {
   const theme = useTheme();
@@ -47,6 +48,7 @@ const VoiceTask = () => {
 
   return (
     <>
+      <BackButton />
       <Box
         sx={{
           p: 2,
@@ -61,7 +63,7 @@ const VoiceTask = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              Voice Task
+              Video Görevi
             </Typography>
           </Grid>
         </Grid>

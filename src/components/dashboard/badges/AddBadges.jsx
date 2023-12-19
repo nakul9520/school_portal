@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import BackButton from "components/common/BackButton";
 import ShowOuterFileUploader from "components/common/file-uploader/ShowOuterFileUploader";
 import Iconify from "components/common/iconify";
 
@@ -57,6 +58,7 @@ const AddBadge = () => {
   };
   return (
     <>
+      <BackButton />
       <Box
         component="section"
         sx={{
@@ -65,7 +67,7 @@ const AddBadge = () => {
         }}
       >
         <Typography variant="body1" color="secondary.disabled" className="mb-4">
-          Sosyal İçerik
+          Rozetler / Profil resimleri
         </Typography>
 
         <Formik
@@ -88,7 +90,7 @@ const AddBadge = () => {
                     color="secondary.disabled"
                     className="ms-4 w-25"
                   >
-                    Başlık
+                    İsim
                   </Typography>
                   <TextField
                     name="title"
@@ -112,7 +114,7 @@ const AddBadge = () => {
                     color="secondary.disabled"
                     className="ms-4 w-25"
                   >
-                    Avatar Ekle
+                    Görsel
                   </Typography>
                   <Box
                     sx={{
@@ -127,7 +129,7 @@ const AddBadge = () => {
                         className="w-100 h-100 d-flex align-items-center"
                       >
                         <Typography variant="body2" className="px-3">
-                          click to add Avatar
+                          Görsel Ekle
                         </Typography>
                       </Box>
                     ) : (
