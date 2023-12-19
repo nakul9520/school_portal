@@ -13,6 +13,7 @@ import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import { styled } from "@mui/material/styles";
 
 import { useTheme } from "@mui/material/styles";
+import BackButton from "components/common/BackButton";
 import Iconify from "components/common/iconify";
 import { isEmpty, map } from "lodash";
 import { useEffect, useState } from "react";
@@ -92,6 +93,7 @@ const FAQList = () => {
   };
   return (
     <>
+      <BackButton />
       <Box
         sx={{
           p: 2,
@@ -127,7 +129,7 @@ const FAQList = () => {
             <LinearProgress />
           ) : isEmpty(guideLinesData) ? (
             <Typography variant="subtitle1" color="text.primary">
-              No Data Available
+              Mevcut Veri Yok
             </Typography>
           ) : (
             map(guideLinesData, (item, index) => (

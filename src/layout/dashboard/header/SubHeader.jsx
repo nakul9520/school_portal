@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 
 // components
 import PathBreadcrumbs from "components/common/breadcrumbs/PathBreadcrumbs";
-import navConfig from "../nav/config";
+import headingConfig from "../nav/headingConfig";
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ export default function SubHeader({ onOpenNav }) {
     return null; // No matching item found
   };
 
-  const headingContent = findNavItem(navConfig, location.pathname);
+  const headingContent = findNavItem(headingConfig, location.pathname);
   return (
     <StyledToolbar>
       <Box sx={{ flexGrow: 1 }}>

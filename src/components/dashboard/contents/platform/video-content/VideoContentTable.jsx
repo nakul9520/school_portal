@@ -73,6 +73,7 @@ const VideoContentTable = () => {
                 Sıra
               </StyledTableCell>
               <StyledTableCell align="left">Başlık</StyledTableCell>
+              <StyledTableCell align="left">Visibility</StyledTableCell>
               <StyledTableCell align="left">Resim</StyledTableCell>
               <StyledTableCell align="left">Tanım</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
@@ -89,7 +90,7 @@ const VideoContentTable = () => {
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={9}>
                   <Typography variant="subtitle1" color="text.primary">
-                    No Data Available
+                    Mevcut Veri Yok
                   </Typography>
                 </StyledTableCell>
               </StyledTableRow>
@@ -98,6 +99,9 @@ const VideoContentTable = () => {
                 <StyledTableRow key={index}>
                   <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">{row.title}</StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.visibility}
+                  </StyledTableCell>
                   <StyledTableCell align="left">
                     <Box sx={{ width: 80, height: 80 }}>
                       <VedioThumbnail

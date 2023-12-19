@@ -107,7 +107,7 @@ const MatchingTaskTable = () => {
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={9}>
                   <Typography variant="subtitle1" color="text.primary">
-                    No Data Available
+                    Mevcut Veri Yok
                   </Typography>
                 </StyledTableCell>
               </StyledTableRow>

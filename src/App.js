@@ -16,12 +16,14 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "yet-another-react-lightbox/styles.css";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "react-toastify/dist/ReactToastify.css";
+import MomentUtils from "@date-io/moment";
+import "moment/locale/tr"; // Turkish locale
 
 function App() {
   return (
     <>
       <ScrollToTop />
-      <LocalizationProvider dateAdapter={AdapterMoment}>
+      <LocalizationProvider dateAdapter={AdapterMoment} locale="tr" utils={MomentUtils}>
         <AppRoutes />
       </LocalizationProvider>
       <ToastContainer

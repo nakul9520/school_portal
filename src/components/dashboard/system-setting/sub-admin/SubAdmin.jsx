@@ -24,6 +24,7 @@ import Iconify from "components/common/iconify/Iconify";
 import { getUsersList } from "redux/store/slice/dashboard/userSlice";
 import { USER_TYPE } from "services/constant";
 import SchoolDataTable from "./SubAdminTable";
+import BackButton from "components/common/BackButton";
 
 const SubAdmin = () => {
   const navigate = useNavigate();
@@ -92,6 +93,7 @@ const SubAdmin = () => {
   };
   return (
     <>
+      <BackButton />
       <Box
         sx={{
           p: 2,
@@ -106,7 +108,7 @@ const SubAdmin = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              Sub Admin
+              Alt Yönetici
             </Typography>
           </Grid>
         </Grid>

@@ -24,6 +24,7 @@ import Iconify from "components/common/iconify/Iconify";
 import { getAllContentList } from "redux/store/slice/dashboard/contentSlice";
 import { CONTENT_TYPE } from "services/constant";
 import SocialContentTable from "./SocialContentTable";
+import BackButton from "components/common/BackButton";
 
 const SocialContent = () => {
   const navigate = useNavigate();
@@ -90,6 +91,7 @@ const SocialContent = () => {
   };
   return (
     <>
+      <BackButton />
       <Box
         sx={{
           p: 2,

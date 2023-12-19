@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 
-import { isEmpty, uniq } from "lodash";
+import { isEmpty, size, uniq } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -108,7 +108,7 @@ const StudentDataTable = (props) => {
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={10}>
                   <Typography variant="subtitle1" color="text.primary">
-                    No Data Available
+                    Mevcut Veri Yok
                   </Typography>
                 </StyledTableCell>
               </StyledTableRow>
@@ -127,14 +127,24 @@ const StudentDataTable = (props) => {
                   </StyledTableCell>
                   <StyledTableCell align="left">{row.name}</StyledTableCell>
                   <StyledTableCell align="left">{row.email}</StyledTableCell>
-                  <StyledTableCell align="left">{row.password}</StyledTableCell>
+                  <StyledTableCell align="left">{row.code}</StyledTableCell>
                   <StyledTableCell align="left">
                     {row.activation_date}
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {row.expired_at}
                   </StyledTableCell>
-                  <StyledTableCell align="left">{row.Status}</StyledTableCell>
+                  <StyledTableCell align="left">
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color:
+                          row.status === "1" ? "success.main" : "error.main",
+                      }}
+                    >
+                      {row.status === "1" ? "Active" : "Deactive"}
+                    </Typography>
+                  </StyledTableCell>
 
                   <StyledTableCell
                     align="left"
@@ -144,15 +154,17 @@ const StudentDataTable = (props) => {
                       direction="row"
                       className="align-items-center  gap-2"
                     >
-                      <Box
-                        onClick={() =>
-                          navigate(
-                            "/dashboard/username-and-groups/add-student",
-                            { state: row }
-                          )
-                        }
-                      >
-                        <CMIconButton color="warning">
+                      <Box>
+                        <CMIconButton
+                          color="warning"
+                          onClick={() =>
+                            navigate(
+                              "/dashboard/username-and-groups/add-student",
+                              { state: row }
+                            )
+                          }
+                          disabled={size(selected) > 1}
+                        >
                           <Iconify icon="el:edit" />
                         </CMIconButton>
                       </Box>
@@ -173,7 +185,10 @@ const StudentDataTable = (props) => {
                         />
                       </Box>
                       <Box onClick={() => handleDelete(row.id)}>
-                        <CMIconButton color="error">
+                        <CMIconButton
+                          color="error"
+                          disabled={size(selected) > 1}
+                        >
                           <Iconify icon="uiw:delete" />
                         </CMIconButton>
                       </Box>

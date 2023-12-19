@@ -1,23 +1,30 @@
 import {
   Box,
   Button,
+  FormControl,
   IconButton,
+  MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import BackButton from "components/common/BackButton";
 import ShowOuterFileUploader from "components/common/file-uploader/ShowOuterFileUploader";
 import Iconify from "components/common/iconify";
+import ImageThumbnail from "components/common/thumbnail/ImageThumbnail";
+import VedioThumbnail from "components/common/thumbnail/VedioThumbnail";
 
 import { Formik } from "formik";
-import { map } from "lodash";
+import { isEmpty, truncate } from "lodash";
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { addEditContentFile } from "redux/store/slice/dashboard/contentSlice";
 import { CONTENT_TYPE } from "services/constant";
+import { imageObj } from "services/images";
 
 const AddDownloadableContent = () => {
   const theme = useTheme();
@@ -59,6 +66,7 @@ const AddDownloadableContent = () => {
   };
   return (
     <>
+      <BackButton />
       <Box
         component="section"
         sx={{
@@ -73,6 +81,7 @@ const AddDownloadableContent = () => {
         <Formik
           initialValues={{
             title: contentData.title ?? "",
+            visibility: contentData.visibility ?? "",
             description: contentData.description ?? "",
             file: contentData.file ?? "",
           }}
@@ -113,73 +122,231 @@ const AddDownloadableContent = () => {
                     color="secondary.disabled"
                     className="ms-4 w-25"
                   >
+                    Yayınlanacağı yer
+                  </Typography>
+                  <FormControl fullWidth>
+                    <Select
+                      name="visibility"
+                      value={props.values.visibility}
+                      onChange={props.handleChange}
+                    >
+                      <MenuItem value={1}>Kaymaklar</MenuItem>
+                      <MenuItem value={2}>Academic</MenuItem>
+                      <MenuItem value={3}>Benim Dünyam</MenuItem>
+                      <MenuItem value={4}>Blog</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
                     Dosya Ekle
                   </Typography>
                   <Box
                     sx={{
-                      background: theme.palette.background.tableBgBody,
                       height: 70,
                     }}
                     className="cursor-pointer w-100"
                   >
+                    {console.log("ijmafe", imageList)}
                     {imageList.length <= 0 ? (
                       <Box
                         onClick={() => mediaInputRef.current.click()}
                         className="w-100 h-100 d-flex align-items-center"
                       >
                         <Typography variant="body2" className="px-3">
-                          click to add Image
+                          click to add File
                         </Typography>
                       </Box>
                     ) : (
-                      <Stack direction="row" className="gap-2 flex-wrap p-2">
-                        {map(imageList, (item, index) => (
-                          <Box
-                            key={index}
-                            className="rounded position-relative cursor-pointer overflow-hidden"
-                            sx={{
-                              "&::after": {
-                                content: '""',
-                                position: "absolute",
-                                backgroundColor: "rgba(0,0,0,0.3)",
-                                top: 0,
-                                left: 0,
-                                width: "100%",
-                                height: "100%",
-                              },
-                            }}
-                          >
-                            <Box
-                              component="img"
-                              src={item.url}
-                              alt={`${item.type}_${index}`}
-                              className="img-cover rounded position-relative"
-                              sx={{
-                                width: 60,
-                                height: 60,
-                              }}
-                            />
-                            <IconButton
-                              size="small"
-                              sx={{
-                                background: "rgba(255,255,255,.3)",
-                                color: "primary.contrastText",
-                                position: "absolute",
-                                top: "8%",
-                                right: "5%",
-                                transform: "translate(-8%, -5%)",
-                                zIndex: "2",
-                                "&:hover": {
-                                  background: "rgba(255,255,255,.3)",
-                                  color: "primary.contrastText",
-                                },
-                              }}
-                              onClick={() => handleRemoveFile(props, index)}
-                            >
-                              <Iconify icon="iconoir:cancel" width={18} />
-                            </IconButton>
-                          </Box>
-                        ))}
+                      <Stack direction="row" className="gap-3 flex-wrap p-2">
+                        {!isEmpty(imageList)
+                          ? imageList.map((item, index) =>
+                              item.type === "image" ? (
+                                <Box
+                                  key={index}
+                                  className="rounded position-relative cursor-pointer overflow-hidden"
+                                  sx={{
+                                    "&::after": {
+                                      content: '""',
+                                      position: "absolute",
+                                      backgroundColor: "rgba(0,0,0,0.3)",
+                                      top: 0,
+                                      left: 0,
+                                      width: "100%",
+                                      height: "100%",
+                                    },
+                                  }}
+                                >
+                                  <ImageThumbnail
+                                    imagePath={item.url}
+                                    size={60}
+                                  />
+                                  <IconButton
+                                    size="small"
+                                    sx={{
+                                      width: 20,
+                                      height: 20,
+                                      padding: 0,
+                                      background: "rgba(255,255,255,.3)",
+                                      color: "primary.contrastText",
+                                      position: "absolute",
+                                      top: "8%",
+                                      right: "5%",
+                                      transform: "translate(-8%, -5%)",
+                                      zIndex: "2",
+                                      "&:hover": {
+                                        background: "rgba(255,255,255,.3)",
+                                        color: "primary.contrastText",
+                                      },
+                                    }}
+                                    onClick={() =>
+                                      handleRemoveFile(props, index)
+                                    }
+                                  >
+                                    <Iconify icon="iconoir:cancel" width={15} />
+                                  </IconButton>
+                                </Box>
+                              ) : item.type === "video" ? (
+                                <Box
+                                  key={index}
+                                  className="rounded position-relative cursor-pointer overflow-hidden"
+                                  sx={{
+                                    "&::after": {
+                                      content: '""',
+                                      position: "absolute",
+                                      backgroundColor: "rgba(0,0,0,0.3)",
+                                      top: 0,
+                                      left: 0,
+                                      width: "100%",
+                                      height: "100%",
+                                    },
+                                  }}
+                                >
+                                  <VedioThumbnail
+                                    key={index}
+                                    videoPath={item.url}
+                                    size={60}
+                                  />
+                                  <IconButton
+                                    size="small"
+                                    sx={{
+                                      width: 20,
+                                      height: 20,
+                                      padding: 0,
+                                      background: "rgba(255,255,255,.3)",
+                                      color: "primary.contrastText",
+                                      position: "absolute",
+                                      top: "8%",
+                                      right: "5%",
+                                      transform: "translate(-8%, -5%)",
+                                      zIndex: "2",
+                                      "&:hover": {
+                                        background: "rgba(255,255,255,.3)",
+                                        color: "primary.contrastText",
+                                      },
+                                    }}
+                                    onClick={() =>
+                                      handleRemoveFile(props, index)
+                                    }
+                                  >
+                                    <Iconify icon="iconoir:cancel" width={15} />
+                                  </IconButton>
+                                </Box>
+                              ) : item.type === "audio" ? (
+                                <Box
+                                  sx={{
+                                    width: 60,
+                                    height: 60,
+                                    p: 0.5,
+                                    boxShadow: theme.shadows[3],
+                                  }}
+                                  className="rounded position-relative d-flex flex-column gap-1 align-items-center justify-content-center cursor-pointer"
+                                >
+                                  <Box
+                                    component="img"
+                                    src={imageObj.audioIcon}
+                                    sx={{ width: 25 }}
+                                    key={index}
+                                  />
+                                  <Typography variant="caption">
+                                    {truncate(item.name, { length: 8 })}
+                                  </Typography>
+                                  <IconButton
+                                    sx={{
+                                      width: 20,
+                                      height: 20,
+                                      padding: 0,
+                                      background: theme.palette.grey[300],
+                                      color: "text.primary",
+                                      position: "absolute",
+                                      top: "8%",
+                                      right: "5%",
+                                      transform: "translate(-8%, -5%)",
+                                      zIndex: "2",
+                                      boxShadow: theme.shadows[2],
+                                      "&:hover": {
+                                        background: theme.palette.grey[300],
+                                        color: "text.primary",
+                                      },
+                                    }}
+                                    onClick={() =>
+                                      handleRemoveFile(props, index)
+                                    }
+                                  >
+                                    <Iconify icon="iconoir:cancel" width={15} />
+                                  </IconButton>
+                                </Box>
+                              ) : (
+                                <Box
+                                  sx={{
+                                    width: 60,
+                                    height: 60,
+                                    p: 0.5,
+                                    boxShadow: theme.shadows[3],
+                                  }}
+                                  className="rounded position-relative d-flex flex-column gap-1 align-items-center justify-content-center cursor-pointer"
+                                >
+                                  <Box
+                                    component="img"
+                                    src={imageObj.documentIcon}
+                                    sx={{ width: 25 }}
+                                    key={index}
+                                  />
+                                  <Typography variant="caption">
+                                    {truncate(item.name, { length: 8 })}
+                                  </Typography>
+                                  <IconButton
+                                    sx={{
+                                      width: 20,
+                                      height: 20,
+                                      padding: 0,
+                                      background: theme.palette.grey[300],
+                                      color: "text.primary",
+                                      position: "absolute",
+                                      top: "8%",
+                                      right: "5%",
+                                      transform: "translate(-8%, -5%)",
+                                      zIndex: "2",
+                                      boxShadow: theme.shadows[2],
+                                      "&:hover": {
+                                        background: theme.palette.grey[300],
+                                        color: "text.primary",
+                                      },
+                                    }}
+                                    onClick={() =>
+                                      handleRemoveFile(props, index)
+                                    }
+                                  >
+                                    <Iconify icon="iconoir:cancel" width={15} />
+                                  </IconButton>
+                                </Box>
+                              )
+                            )
+                          : null}
                       </Stack>
                     )}
                   </Box>
@@ -227,7 +394,7 @@ const AddDownloadableContent = () => {
                 name="file"
                 formikProp={props}
                 maxFileUpload={3}
-                acceptType="image/*"
+                acceptType="*"
                 fileRef={mediaInputRef}
                 imageList={imageList}
                 setImageList={setImageList}

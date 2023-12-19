@@ -6,6 +6,7 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  FormHelperText,
   MenuItem,
   Select,
   TextField,
@@ -23,6 +24,7 @@ import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
 import { addEditClass } from "redux/store/slice/dashboard/userSlice";
 import { addEditClassValidation } from "services/validations";
 import { gradeList } from "services/constant";
+import BackButton from "components/common/BackButton";
 
 const AddClassForm = () => {
   const theme = useTheme();
@@ -71,6 +73,7 @@ const AddClassForm = () => {
 
   return (
     <>
+      <BackButton />
       <Box
         component="section"
         sx={{
@@ -95,7 +98,6 @@ const AddClassForm = () => {
             teacher_name2: get(classData, "teacher_name2", ""),
             teacher_email2: get(classData, "teacher_email2", ""),
             teacher_password2: get(classData, "teacher_password2", ""),
-            // no_of_student: get(classData, "no_of_student", ""),
           }}
           validationSchema={addEditClassValidation}
           onSubmit={(value, action) => {
@@ -112,6 +114,8 @@ const AddClassForm = () => {
             touched,
           }) => (
             <form onSubmit={handleSubmit} className="h-100">
+              {console.log("errors", errors)}
+              {console.log("props values", values)}
               <Box className="custom_form border">
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
@@ -139,7 +143,7 @@ const AddClassForm = () => {
                     }}
                     autoHighlight
                     disableClearable
-                    noOptionsText="No Data"
+                    noOptionsText="Veri yok"
                     loading={loading}
                     className="w-100"
                     renderInput={(params) => (
@@ -193,6 +197,9 @@ const AddClassForm = () => {
                         </MenuItem>
                       ))}
                     </Select>
+                    {errors.branch_id && touched.branch_id && (
+                      <FormHelperText error>{errors.branch_id}</FormHelperText>
+                    )}
                   </FormControl>
                 </Box>
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
@@ -215,30 +222,6 @@ const AddClassForm = () => {
                     helperText={
                       errors.class_name && touched.class_name
                         ? errors.class_name
-                        : null
-                    }
-                  />
-                </Box>
-                <Box className="custom_form_row d-flex align-items-center border-bottom">
-                  <Typography
-                    variant="body2"
-                    color="secondary.disabled"
-                    className="ms-4 w-25"
-                  >
-                    Sınıf Şifre
-                  </Typography>
-                  <TextField
-                    name="class_code"
-                    value={values.class_code}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    fullWidth
-                    error={
-                      errors.class_code && touched.class_code ? true : false
-                    }
-                    helperText={
-                      errors.class_code && touched.class_code
-                        ? errors.class_code
                         : null
                     }
                   />

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getMatchingTaskList } from "redux/store/slice/dashboard/contentSlice";
 import MatchingTaskTable from "./MatchingTaskTable";
+import BackButton from "components/common/BackButton";
 
 const MatchingTask = () => {
   const theme = useTheme();
@@ -47,6 +48,7 @@ const MatchingTask = () => {
 
   return (
     <>
+      <BackButton />
       <Box
         sx={{
           p: 2,
@@ -61,7 +63,7 @@ const MatchingTask = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              Matching Task
+              Eşleştirme Görevi
             </Typography>
           </Grid>
         </Grid>

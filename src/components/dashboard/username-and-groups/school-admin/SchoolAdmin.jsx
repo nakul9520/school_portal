@@ -16,22 +16,22 @@ import {
 } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
-import { debounce, get, isEmpty } from "lodash";
+import { debounce, get, isEmpty, size } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import Iconify from "components/common/iconify/Iconify";
-import { toast } from "react-toastify";
 import {
-  deleteSchool,
-  getSchoolCSVFile,
-  getSchoolList,
-  getSpecificSchoolCSVFile,
+  deleteUsers,
+  getSchoolAdminCSVFile,
+  getSpecificSchoolAdminCSVFile,
   getUsersList,
-  importSchoolFile,
+  importSchoolAdminFile,
 } from "redux/store/slice/dashboard/userSlice";
 import { USER_TYPE } from "services/constant";
-import SchoolDataTable from "./SchoolAdminDataTable";
+import SchoolAdminDataTable from "./SchoolAdminDataTable";
+import BackdropLoader from "components/common/loader/BackdropLoader";
 
 const SchoolAdmin = () => {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const SchoolAdmin = () => {
   const mediaInputRef = useRef(null);
 
   const [selected, setSelected] = useState([]);
-  const { userListInfo } = useSelector((state) => state.users);
+  const { uploadLoading, userListInfo } = useSelector((state) => state.users);
 
   const [filterOptions, setFilterOptions] = useState({
     search: "",
@@ -101,7 +101,7 @@ const SchoolAdmin = () => {
 
   const handleDownloadCSV = () => {
     if (isEmpty(selected)) {
-      dispatch(getSchoolCSVFile())
+      dispatch(getSchoolAdminCSVFile())
         .unwrap()
         .then((result) => {
           if (result) {
@@ -129,7 +129,7 @@ const SchoolAdmin = () => {
           console.log("Error: ", err);
         });
     } else {
-      dispatch(getSpecificSchoolCSVFile({ id: selected }))
+      dispatch(getSpecificSchoolAdminCSVFile({ id: selected }))
         .unwrap()
         .then((result) => {
           if (result) {
@@ -161,17 +161,18 @@ const SchoolAdmin = () => {
   };
 
   const handleDelete = () => {
-    dispatch(deleteSchool({ id: selected }))
+    dispatch(deleteUsers({ id: selected }))
       .unwrap()
       .then((result) => {
         if (result.success) {
           toast.success(result.message);
           setSelected([]);
           dispatch(
-            getSchoolList({
+            getUsersList({
               payload: {
                 search: "",
                 per_page: 10,
+                user_type: USER_TYPE.schoolAdmin,
               },
               page: 1,
             })
@@ -187,17 +188,31 @@ const SchoolAdmin = () => {
   // import school file
   const onImageChange = (event) => {
     const file = event.target.files[0];
-    console.log("file: ", file);
-    dispatch(importSchoolFile({ file })).then((result) => {
-      if (result.success) {
-        toast.success(result.message);
-      } else {
-        toast.error(result.message);
-      }
-    });
+    dispatch(importSchoolAdminFile({ file }))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          mediaInputRef.current.value = "";
+          dispatch(
+            getUsersList({
+              payload: {
+                search: "",
+                per_page: 10,
+                user_type: USER_TYPE.schoolAdmin,
+              },
+              page: 1,
+            })
+          );
+          toast.success(result.message);
+        } else {
+          mediaInputRef.current.value = "";
+          toast.error("Please check your formate, something went wrong");
+        }
+      });
   };
   return (
     <>
+      <BackdropLoader open={uploadLoading} />
       <Box
         sx={{
           p: 2,
@@ -222,13 +237,13 @@ const SchoolAdmin = () => {
               alignItems="center"
               className="gap-2"
             >
-              {!isEmpty(selected) ? (
+              {size(selected) > 1 ? (
                 <Button
                   variant="contained"
                   color="secondary"
                   onClick={handleDelete}
                 >
-                  Delete
+                  Silmek
                 </Button>
               ) : null}
               <Button
@@ -318,7 +333,7 @@ const SchoolAdmin = () => {
           </Grid>
         </Grid>
 
-        <SchoolDataTable selected={selected} setSelected={setSelected} />
+        <SchoolAdminDataTable selected={selected} setSelected={setSelected} />
 
         <Stack
           direction={{ sm: "row", xs: "column" }}
@@ -334,7 +349,7 @@ const SchoolAdmin = () => {
               navigate("/dashboard/username-and-groups/add-school-admin")
             }
           >
-            Okul Ekle
+            Okul Yöneticisi Ekle
           </Button>
           {/* 
           <Button

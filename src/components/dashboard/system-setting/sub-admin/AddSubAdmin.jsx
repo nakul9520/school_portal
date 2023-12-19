@@ -1,5 +1,6 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import BackButton from "components/common/BackButton";
 
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
@@ -40,6 +41,7 @@ const AddSubAdmin = () => {
   };
   return (
     <>
+      <BackButton />
       <Box
         component="section"
         sx={{

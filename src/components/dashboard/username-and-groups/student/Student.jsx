@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-import { debounce, get, isEmpty } from "lodash";
+import { debounce, get, isEmpty, size } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -29,6 +29,7 @@ import { toast } from "react-toastify";
 import { getSpecificStudentCSVFile } from "redux/store/slice/dashboard/userSlice";
 import { getStudentCSVFile } from "redux/store/slice/dashboard/userSlice";
 import { importStudentFile } from "redux/store/slice/dashboard/userSlice";
+import BackdropLoader from "components/common/loader/BackdropLoader";
 
 const Student = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Student = () => {
   const mediaInputRef = useRef(null);
 
   const [selected, setSelected] = useState([]);
-  const { userListInfo } = useSelector((state) => state.users);
+  const { uploadLoading, userListInfo } = useSelector((state) => state.users);
 
   const [filterOptions, setFilterOptions] = useState({
     search: "",
@@ -161,14 +162,27 @@ const Student = () => {
   // import class file
   const onImageChange = (event) => {
     const file = event.target.files[0];
-    console.log("file: ", file);
-    dispatch(importStudentFile({ file })).then((result) => {
-      if (result.success) {
-        toast.success(result.message);
-      } else {
-        toast.error(result.message);
-      }
-    });
+    dispatch(importStudentFile({ file }))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          mediaInputRef.current.value = "";
+          dispatch(
+            getUsersList({
+              payload: {
+                search: "",
+                per_page: 10,
+                user_type: USER_TYPE.student,
+              },
+              page: 1,
+            })
+          );
+          toast.success(result.message);
+        } else {
+          mediaInputRef.current.value = "";
+          toast.error("Please check your formate, something went wrong");
+        }
+      });
   };
 
   const handleDelete = (id) => {
@@ -198,6 +212,7 @@ const Student = () => {
 
   return (
     <>
+      <BackdropLoader open={uploadLoading} />
       <Box
         sx={{
           p: 2,
@@ -222,13 +237,13 @@ const Student = () => {
               alignItems="center"
               className="gap-2"
             >
-              {!isEmpty(selected) ? (
+              {size(selected) > 1 ? (
                 <Button
                   variant="contained"
                   color="secondary"
                   onClick={handleDelete}
                 >
-                  Delete
+                  Silmek
                 </Button>
               ) : null}
               <Button

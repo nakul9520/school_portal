@@ -102,7 +102,7 @@ const Badges = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              Badge
+              Rozetler ve Profil resimleri
             </Typography>
           </Grid>
         </Grid>
@@ -173,7 +173,7 @@ const Badges = () => {
             color="secondary"
             onClick={() => navigate("/dashboard/add-badges")}
           >
-            Add Badge
+            Ekle
           </Button>
         </Box>
 

@@ -311,7 +311,7 @@ const LevelingUp = () => {
         >
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
-              School
+              Okul
             </Typography>
             <Autocomplete
               getOptionLabel={(option) => {
@@ -331,7 +331,7 @@ const LevelingUp = () => {
               }}
               autoHighlight
               disableClearable
-              noOptionsText="No Data"
+              noOptionsText="Veri yok"
               loading={loading}
               className="w-100"
               renderInput={(params) => (
@@ -357,7 +357,7 @@ const LevelingUp = () => {
           </Box>
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
-              Class
+              Sınıf
             </Typography>
             <Autocomplete
               getOptionLabel={(option) => option.class_name ?? option}
@@ -375,7 +375,7 @@ const LevelingUp = () => {
               }}
               autoHighlight
               disableClearable
-              noOptionsText="No Data"
+              noOptionsText="Veri yok"
               loading={loading}
               className="w-100"
               renderInput={(params) => (
@@ -401,7 +401,7 @@ const LevelingUp = () => {
           </Box>
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
-              Category
+              Kategori
             </Typography>
             <FormControl fullWidth>
               <Select
@@ -421,7 +421,7 @@ const LevelingUp = () => {
           </Box>
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
-              Sub Category
+              Alt-Kategori
             </Typography>
             <Autocomplete
               getOptionLabel={(option) => option.filter_name ?? option}
@@ -439,7 +439,7 @@ const LevelingUp = () => {
               }}
               autoHighlight
               disableClearable
-              noOptionsText="No Data"
+              noOptionsText="Veri yok"
               loading={loading}
               className="w-100"
               renderInput={(params) => (
@@ -455,7 +455,7 @@ const LevelingUp = () => {
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
-                        {params.InputProps.endadornment}
+                        {params.InputProps.endAdornment}
                       </React.Fragment>
                     ),
                   }}
@@ -512,7 +512,7 @@ const LevelingUp = () => {
                               variant="subtitle1"
                               color="text.primary"
                             >
-                              No Data Available
+                              Mevcut Veri Yok
                             </Typography>
                           </StyledTableCell>
                         </StyledTableRow>
@@ -574,8 +574,13 @@ const LevelingUp = () => {
                     )}
                   </Stack>
                 ) : null}
-                <Box className="table_bottom_tabs text-right mt-3">
-                  <Button variant="contained" color="primary" type="submit">
+                <Box className="text-right mt-3">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={isEmpty(bookList)}
+                  >
                     Kaydet
                   </Button>
                 </Box>

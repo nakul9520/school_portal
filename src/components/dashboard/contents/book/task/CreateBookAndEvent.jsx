@@ -4,6 +4,7 @@ import { Box, Grid } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 import AddPuzzel from "./model/AddPuzzel";
+import BackButton from "components/common/BackButton";
 
 const CreateBookAndEvent = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const CreateBookAndEvent = () => {
 
   return (
     <>
+      <BackButton />
       <Grid container className="gap-3">
         <Grid item xs={10} sm={4} md={1} lg={2}>
           <Box

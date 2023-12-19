@@ -29,6 +29,7 @@ import {
 import { USER_TYPE } from "services/constant";
 import { map, omit } from "lodash";
 import { gradeList } from "services/constant";
+import BackButton from "components/common/BackButton";
 
 const AddTeacherForm = () => {
   const theme = useTheme();
@@ -86,6 +87,7 @@ const AddTeacherForm = () => {
 
   return (
     <>
+      <BackButton />
       <Box
         component="section"
         sx={{
@@ -153,7 +155,7 @@ const AddTeacherForm = () => {
                     }}
                     autoHighlight
                     disableClearable
-                    noOptionsText="No Data"
+                    noOptionsText="Veri yok"
                     loading={loading}
                     className="w-100"
                     renderInput={(params) => (
@@ -233,7 +235,7 @@ const AddTeacherForm = () => {
                     }}
                     autoHighlight
                     disableClearable
-                    noOptionsText="No Data"
+                    noOptionsText="Veri yok"
                     loading={loading}
                     className="w-100"
                     renderInput={(params) => (

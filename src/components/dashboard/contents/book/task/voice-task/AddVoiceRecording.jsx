@@ -8,17 +8,19 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import CMDialog from "components/common/dialog/CMDialog";
 import ShowOuterFileUploader from "components/common/file-uploader/ShowOuterFileUploader";
 import Iconify from "components/common/iconify";
 import { Formik } from "formik";
 import { map, truncate } from "lodash";
-import React, { useRef, useState } from "react";
-import { useTheme } from "@mui/material/styles";
-import { toast } from "react-toastify";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addEditVoiceTask } from "redux/store/slice/dashboard/contentSlice";
-import { getVoiceTaskList } from "redux/store/slice/dashboard/contentSlice";
+import { toast } from "react-toastify";
+import {
+  addEditVoiceTask,
+  getVoiceTaskList,
+} from "redux/store/slice/dashboard/contentSlice";
 
 const AddVoiceRecording = (props) => {
   const { data, open, onClose } = props;

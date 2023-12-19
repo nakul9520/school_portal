@@ -232,7 +232,7 @@ const SchoolReports = () => {
         >
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
-              School
+              Okul
             </Typography>
             <Autocomplete
               getOptionLabel={(option) => {
@@ -252,7 +252,7 @@ const SchoolReports = () => {
               }}
               autoHighlight
               disableClearable
-              noOptionsText="No Data"
+              noOptionsText="Veri yok"
               loading={loading}
               className="w-100"
               renderInput={(params) => (
@@ -297,7 +297,7 @@ const SchoolReports = () => {
           </Box>
           <Box className="w-100">
             <Typography variant="body2" color="text.secondary">
-              Class
+              Sınıf
             </Typography>
             <Autocomplete
               getOptionLabel={(option) => option.class_name ?? option}
@@ -314,7 +314,7 @@ const SchoolReports = () => {
               }}
               autoHighlight
               disableClearable
-              noOptionsText="No Data"
+              noOptionsText="Veri yok"
               loading={loading}
               className="w-100"
               renderInput={(params) => (
@@ -375,7 +375,7 @@ const SchoolReports = () => {
                 <StyledTableRow>
                   <StyledTableCell align="center" colSpan={6}>
                     <Typography variant="subtitle1" color="text.primary">
-                      No Data Available
+                      Mevcut Veri Yok
                     </Typography>
                   </StyledTableCell>
                 </StyledTableRow>
@@ -407,7 +407,7 @@ const SchoolReports = () => {
                   },
                 }}
               >
-                <StyledTableCell align="left">Total</StyledTableCell>
+                <StyledTableCell align="left">Toplam</StyledTableCell>
                 <StyledTableCell align="left"></StyledTableCell>
                 <StyledTableCell align="left">
                   {schoolReportInfo.total_books_read}

@@ -13,7 +13,7 @@ import Paper from "@mui/material/Paper";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { isEmpty, uniq } from "lodash";
+import { isEmpty, size, uniq } from "lodash";
 
 import Iconify from "components/common/iconify/Iconify";
 import { getSchoolList } from "redux/store/slice/dashboard/userSlice";
@@ -87,7 +87,7 @@ const SchoolDataTable = (props) => {
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={9}>
                   <Typography variant="subtitle1" color="text.primary">
-                    No Data Available
+                    Mevcut Veri Yok
                   </Typography>
                 </StyledTableCell>
               </StyledTableRow>
@@ -112,15 +112,17 @@ const SchoolDataTable = (props) => {
                       direction="row"
                       className="align-items-center  gap-2"
                     >
-                      <Box
-                        onClick={() =>
-                          navigate(
-                            "/dashboard/username-and-groups/add-school",
-                            { state: row }
-                          )
-                        }
-                      >
-                        <CMIconButton color="warning">
+                      <Box>
+                        <CMIconButton
+                          color="warning"
+                          disabled={size(selected) > 1}
+                          onClick={() =>
+                            navigate(
+                              "/dashboard/username-and-groups/add-school",
+                              { state: row }
+                            )
+                          }
+                        >
                           <Iconify icon="el:edit" />
                         </CMIconButton>
                       </Box>
@@ -143,6 +145,7 @@ const SchoolDataTable = (props) => {
                       <Box>
                         <CMIconButton
                           color="error"
+                          disabled={size(selected) > 1}
                           onClick={() => handleDelete(row.id)}
                         >
                           <Iconify icon="uiw:delete" />

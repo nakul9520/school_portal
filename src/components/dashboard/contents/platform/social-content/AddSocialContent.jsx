@@ -1,12 +1,16 @@
 import {
   Box,
   Button,
+  FormControl,
   IconButton,
+  MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import BackButton from "components/common/BackButton";
 import RichTextEditor from "components/common/editor/RichTextEditor";
 import ShowOuterFileUploader from "components/common/file-uploader/ShowOuterFileUploader";
 import Iconify from "components/common/iconify";
@@ -60,6 +64,7 @@ const AddSocialContent = () => {
   };
   return (
     <>
+      <BackButton />
       <Box
         component="section"
         sx={{
@@ -74,6 +79,7 @@ const AddSocialContent = () => {
         <Formik
           initialValues={{
             title: contentData.title ?? "",
+            visibility: contentData.visibility ?? "",
             description: contentData.description ?? "",
             file: contentData.file ?? "",
           }}
@@ -108,6 +114,28 @@ const AddSocialContent = () => {
                     }
                   />
                 </Box>
+
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
+                    Yayınlanacağı yer
+                  </Typography>
+                  <FormControl fullWidth>
+                    <Select
+                      name="visibility"
+                      value={props.values.visibility}
+                      onChange={props.handleChange}
+                    >
+                      <MenuItem value={1}>Kaymaklar</MenuItem>
+                      <MenuItem value={2}>Academic</MenuItem>
+                      <MenuItem value={3}>Benim Dünyam</MenuItem>
+                      <MenuItem value={4}>Blog</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
                     variant="body2"
@@ -118,7 +146,6 @@ const AddSocialContent = () => {
                   </Typography>
                   <Box
                     sx={{
-                      background: theme.palette.background.tableBgBody,
                       height: 70,
                     }}
                     className="cursor-pointer w-100"

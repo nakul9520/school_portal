@@ -5,8 +5,6 @@ import { styled } from "@mui/material/styles";
 import { Outlet } from "react-router-dom";
 import Header from "./header";
 import Nav from "./nav";
-import BackButton from "components/common/BackButton";
-
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 109;
@@ -44,7 +42,6 @@ export default function DashboardLayout({ children }) {
       <Nav openNav={open} onCloseNav={() => setOpen(false)} />
 
       <Main>
-        <BackButton />
         <Outlet />
       </Main>
     </StyledRoot>

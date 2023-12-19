@@ -33,6 +33,7 @@ import {
   postAddChatForAdmin,
 } from "redux/store/slice/dashboard/contentSlice";
 import { imageObj } from "services/images";
+import BackButton from "components/common/BackButton";
 
 const MessageInfo = ({ data, messageOwner }) => {
   return (
@@ -172,6 +173,7 @@ const TicketDetails = () => {
   };
   return (
     <>
+      <BackButton />
       <Card
         className="rounded-0 cursor-pointer"
         sx={{ boxShadow: (theme) => theme.shadows[1] }}

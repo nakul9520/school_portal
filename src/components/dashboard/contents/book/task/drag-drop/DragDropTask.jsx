@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getDragDropTaskList } from "redux/store/slice/dashboard/contentSlice";
 import DragDropTaskTable from "./DragDropTaskTable";
+import BackButton from "components/common/BackButton";
 
 const DragDropTask = () => {
   const theme = useTheme();
@@ -47,6 +48,7 @@ const DragDropTask = () => {
 
   return (
     <>
+      <BackButton />
       <Box
         sx={{
           p: 2,

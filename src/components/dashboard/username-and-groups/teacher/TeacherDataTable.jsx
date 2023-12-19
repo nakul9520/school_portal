@@ -5,7 +5,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-import { isEmpty, uniq } from "lodash";
+import { isEmpty, size, uniq } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -66,33 +66,53 @@ const TeacherDataTable = (props) => {
         <StyledTable stickyHeader>
           <TableHead>
             <TableRow>
-              <StyledTableCell align="left">Sıra</StyledTableCell>
-              <StyledTableCell align="left">Okul Adı</StyledTableCell>
-              <StyledTableCell align="left">Seviye</StyledTableCell>
-              <StyledTableCell align="left">Öğretmen Adı </StyledTableCell>
-              <StyledTableCell align="left">E-mail</StyledTableCell>
-              <StyledTableCell align="left">Şifre</StyledTableCell>
-              <StyledTableCell align="left">Sınıfları</StyledTableCell>
-              <StyledTableCell align="left">Aktivasyon Tarihi</StyledTableCell>
-              <StyledTableCell align="left">
+              <StyledTableCell align="left" style={{ minWidth: 50 }}>
+                Sıra
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 180 }}>
+                Okul Adı
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 100 }}>
+                Seviye
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 220 }}>
+                Öğretmen Adı{" "}
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                E-mail
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Şifre
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Sınıfları
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Aktivasyon Tarihi
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 180 }}>
                 Lisans Sonlanma Tarihi
               </StyledTableCell>
-              <StyledTableCell align="left">Durumu</StyledTableCell>
-              <StyledTableCell align="left">İşlemler</StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Durumu
+              </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                İşlemler
+              </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
               <StyledTableRow>
-                <StyledTableCell align="left" colSpan={10}>
+                <StyledTableCell align="left" colSpan={11}>
                   <LinearProgress />
                 </StyledTableCell>
               </StyledTableRow>
             ) : isEmpty(usersList) ? (
               <StyledTableRow>
-                <StyledTableCell align="center" colSpan={10}>
+                <StyledTableCell align="center" colSpan={11}>
                   <Typography variant="subtitle1" color="text.primary">
-                    No Data Available
+                    Mevcut Veri Yok
                   </Typography>
                 </StyledTableCell>
               </StyledTableRow>
@@ -108,7 +128,7 @@ const TeacherDataTable = (props) => {
                   </StyledTableCell>
                   <StyledTableCell align="left">{row.name}</StyledTableCell>
                   <StyledTableCell align="left">{row.email}</StyledTableCell>
-                  <StyledTableCell align="left">{row.password}</StyledTableCell>
+                  <StyledTableCell align="left">{row.code}</StyledTableCell>
                   <StyledTableCell align="left">
                     {row.class_name}
                   </StyledTableCell>
@@ -118,7 +138,17 @@ const TeacherDataTable = (props) => {
                   <StyledTableCell align="left">
                     {row.expired_at}
                   </StyledTableCell>
-                  <StyledTableCell align="left">{row.Status}</StyledTableCell>
+                  <StyledTableCell align="left">
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color:
+                          row.status === "1" ? "success.main" : "error.main",
+                      }}
+                    >
+                      {row.status === "1" ? "Active" : "Deactive"}
+                    </Typography>
+                  </StyledTableCell>
 
                   <StyledTableCell
                     align="left"
@@ -128,15 +158,17 @@ const TeacherDataTable = (props) => {
                       direction="row"
                       className="align-items-center  gap-2"
                     >
-                      <Box
-                        onClick={() =>
-                          navigate(
-                            "/dashboard/username-and-groups/add-teacher",
-                            { state: row }
-                          )
-                        }
-                      >
-                        <CMIconButton color="warning">
+                      <Box>
+                        <CMIconButton
+                          onClick={() =>
+                            navigate(
+                              "/dashboard/username-and-groups/add-teacher",
+                              { state: row }
+                            )
+                          }
+                          color="warning"
+                          disabled={size(selected) > 1}
+                        >
                           <Iconify icon="el:edit" />
                         </CMIconButton>
                       </Box>
@@ -157,7 +189,10 @@ const TeacherDataTable = (props) => {
                         />
                       </Box>
                       <Box onClick={() => handleDelete(row.id)}>
-                        <CMIconButton color="error">
+                        <CMIconButton
+                          color="error"
+                          disabled={size(selected) > 1}
+                        >
                           <Iconify icon="uiw:delete" />
                         </CMIconButton>
                       </Box>

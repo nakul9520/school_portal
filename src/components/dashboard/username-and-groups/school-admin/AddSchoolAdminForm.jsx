@@ -1,3 +1,5 @@
+import React, { useEffect } from "react";
+
 import {
   Autocomplete,
   Box,
@@ -12,14 +14,16 @@ import { MobileDatePicker } from "@mui/x-date-pickers";
 import { Formik } from "formik";
 import { map } from "lodash";
 import moment from "moment";
-import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import {
   addEditSchoolAdmin,
   getSchoolList,
 } from "redux/store/slice/dashboard/userSlice";
+import BackButton from "components/common/BackButton";
+import { addEditSchoolAdminValidation } from "services/validations";
 
 const AddSchoolAdminForm = () => {
   const theme = useTheme();
@@ -34,11 +38,12 @@ const AddSchoolAdminForm = () => {
 
   useEffect(() => {
     const payload = {
-      search: "",
-      per_page: "",
+      payload: {
+        search: "",
+        per_page: "",
+      },
       page: 0,
     };
-
     dispatch(getSchoolList(payload));
   }, [dispatch]);
 
@@ -72,8 +77,10 @@ const AddSchoolAdminForm = () => {
         console.log("Error: ", err);
       });
   };
+
   return (
     <>
+      <BackButton />
       <Box
         component="section"
         sx={{
@@ -95,6 +102,7 @@ const AddSchoolAdminForm = () => {
               moment(schoolAdminData.activation_date) ?? moment(),
             expired_at: moment(schoolAdminData.expired_at) ?? moment(),
           }}
+          validationSchema={addEditSchoolAdminValidation}
           onSubmit={(value, action) => {
             handleAddEdit(value, action);
           }}
@@ -109,7 +117,6 @@ const AddSchoolAdminForm = () => {
             touched,
           }) => (
             <form onSubmit={handleSubmit} className="h-100">
-              {console.log("props values", values)}
               <Box className="custom_form border">
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
@@ -125,7 +132,10 @@ const AddSchoolAdminForm = () => {
                     name="school_name"
                     value={values.school_id}
                     isOptionEqualToValue={(option, value) => {
-                      if (value === "" || option.school_name === value.school_name) {
+                      if (
+                        value === "" ||
+                        option.school_name === value.school_name
+                      ) {
                         return true;
                       }
                     }}
@@ -135,7 +145,7 @@ const AddSchoolAdminForm = () => {
                     multiple
                     autoHighlight
                     disableClearable
-                    noOptionsText="No Data"
+                    noOptionsText="Veri yok"
                     loading={loading}
                     className="w-100"
                     renderInput={(params) => (
