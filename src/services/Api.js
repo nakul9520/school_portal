@@ -20,7 +20,6 @@ const Api = {
   GET_SPECIFIC_SCHOOL_ADMIN_CSV_FILE: "downloadSelectSchoolAdminCsv",
   IMPORT_SCHOOL_ADMIN_FILE: "schoolAdminImport",
 
-
   // class
   ADD_EDIT_CLASS: "addEditClass",
   GET_CLASS_LIST: "classlist",
@@ -54,6 +53,7 @@ const Api = {
   // Reports
   GET_BOOK_REPORTS: "GetBookReports",
   GET_SCHOOL_REPORTS: "GetSchoolReports",
+  GET_SPECIFIC_BOOK_REPORT_CSV_FILE: "getSelectedReportsDownload",
 
   // Book
   ADD_BOOK_TITLE: "addEditBook",

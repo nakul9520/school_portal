@@ -45,7 +45,6 @@ const AddStudentForm = () => {
   const schoolList = schoolListInfo.data ?? [];
 
   const handleAddEdit = (values, action) => {
-    console.log("edit");
     const data = {
       ...values,
       user_type: USER_TYPE.student,
@@ -109,7 +108,7 @@ const AddStudentForm = () => {
             class_name: userData.class_name ?? "",
             email: userData.email ?? "",
             name: userData.name ?? "",
-            password: userData.password ?? "",
+            password: userData.code ?? "",
             code: userData.code ?? "",
             activation_date: moment(userData.activation_date) ?? moment(),
             expired_at: moment(userData.expired_at) ?? moment(),

@@ -69,6 +69,7 @@ const SchoolDataTable = (props) => {
                 Sıra
               </StyledTableCell>
               <StyledTableCell align="left">Okul Adı</StyledTableCell>
+              <StyledTableCell align="left">Okul Code</StyledTableCell>
               <StyledTableCell align="left">Aktivasyon Tarihi</StyledTableCell>
               <StyledTableCell align="left">
                 Lisans Sonlanma Tarihi
@@ -97,6 +98,9 @@ const SchoolDataTable = (props) => {
                   <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">
                     {row.school_name}
+                  </StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.id}
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {row.activation_date}

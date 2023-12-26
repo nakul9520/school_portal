@@ -6,6 +6,7 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  FormControlLabel,
   Grid,
   IconButton,
   InputAdornment,
@@ -24,21 +25,24 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useTheme } from "@mui/material/styles";
 
-import { get, isEmpty, map, size } from "lodash";
+import { get, isEmpty, map, size, uniq } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 
+import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import Iconify from "components/common/iconify/Iconify";
 import { getSchoolReport } from "redux/store/slice/dashboard/reportSlice";
 import {
   getClassesBySchool,
   getSchoolList,
 } from "redux/store/slice/dashboard/userSlice";
+import { gradeList } from "services/constant";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import { gradeList } from "services/constant";
+import { getSpecificSchoolReportCSVFile } from "redux/store/slice/dashboard/reportSlice";
+import { toast } from "react-toastify";
 
 const SchoolReports = () => {
   const theme = useTheme();
@@ -57,6 +61,10 @@ const SchoolReports = () => {
     (state) => state.report
   );
   const schoolReportList = schoolReportInfo.data ?? [];
+
+  const [isSelectAll, setIsSelectAll] = useState(false);
+  const [selectedSchool, setSelectedSchool] = useState([]);
+
   const [branchId, setBranchId] = useState("");
   const [schoolData, setSchoolData] = useState({});
   const [classData, setClassData] = useState({});
@@ -130,6 +138,50 @@ const SchoolReports = () => {
     );
   };
 
+  const handleAllSelect = (e) => {
+    setIsSelectAll(e.target.checked);
+    if (e.target.checked) {
+      const updatedObjects = schoolReportList.map(function (obj) {
+        return obj.user_id;
+      });
+      setSelectedSchool(uniq(updatedObjects));
+    } else {
+      setSelectedSchool([]);
+    }
+  };
+
+  const handleDownloadCSV = () => {
+    dispatch(getSpecificSchoolReportCSVFile({ id: selectedSchool }))
+      .unwrap()
+      .then((result) => {
+        if (result) {
+          const blob = new Blob([result], {
+            type: "data:text/csv;charset=utf-8,",
+          });
+          const blobURL = window.URL.createObjectURL(blob);
+          const anchor = document.createElement("a");
+          anchor.download = `school-report-list.csv`;
+          anchor.href = blobURL;
+          anchor.dataset.downloadurl = [
+            "text/csv",
+            anchor.download,
+            anchor.href,
+          ].join(":");
+          anchor.click();
+          anchor.remove();
+          setIsSelectAll(false);
+          setSelectedSchool([]);
+          toast.success(result.message);
+        } else {
+          toast.error(result.message);
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
+  };
+
   return (
     <>
       <Box
@@ -156,8 +208,13 @@ const SchoolReports = () => {
               alignItems="center"
               className="gap-2"
             >
-              <Button variant="contained" color="success">
-                Excel
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleDownloadCSV}
+                disabled={isEmpty(selectedSchool)}
+              >
+                Toplu Formu İndir
               </Button>
             </Stack>
           </Grid>
@@ -362,18 +419,32 @@ const SchoolReports = () => {
                 <StyledTableCell align="left">
                   Tamamlanan Etkinlik Sayısı
                 </StyledTableCell>
+                <StyledTableCell align="left">
+                  <FormControlLabel
+                    labelPlacement="start"
+                    control={
+                      <CMCheckBox
+                        checked={isSelectAll && !isEmpty(selectedSchool)}
+                        onChange={(e) => {
+                          handleAllSelect(e);
+                        }}
+                      />
+                    }
+                    label="Tümünü Seç"
+                  />
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {listLoading ? (
                 <StyledTableRow>
-                  <StyledTableCell align="left" colSpan={6}>
+                  <StyledTableCell align="left" colSpan={7}>
                     <LinearProgress />
                   </StyledTableCell>
                 </StyledTableRow>
               ) : isEmpty(schoolReportList) ? (
                 <StyledTableRow>
-                  <StyledTableCell align="center" colSpan={6}>
+                  <StyledTableCell align="center" colSpan={7}>
                     <Typography variant="subtitle1" color="text.primary">
                       Mevcut Veri Yok
                     </Typography>
@@ -396,6 +467,23 @@ const SchoolReports = () => {
                     <StyledTableCell align="left">
                       {row.activity_completed}
                     </StyledTableCell>
+                    <StyledTableCell style={{ width: 150 }}>
+                      <CMCheckBox
+                        checked={selectedSchool.includes(row.user_id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedSchool((preState) =>
+                              uniq([...preState, row.user_id])
+                            );
+                          } else {
+                            const updatedObjects = selectedSchool.filter(
+                              (obj) => obj !== row.user_id
+                            );
+                            setSelectedSchool(updatedObjects);
+                          }
+                        }}
+                      />
+                    </StyledTableCell>
                   </StyledTableRow>
                 ))
               )}
@@ -413,21 +501,20 @@ const SchoolReports = () => {
                   {schoolReportInfo.total_books_read}
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {" "}
                   {schoolReportInfo.total_reading_duraton}
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {" "}
                   {schoolReportInfo.total_listening_duraton}
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {" "}
                   {schoolReportInfo.total_activity_completed}
                 </StyledTableCell>
+                <StyledTableCell align="left"></StyledTableCell>
               </StyledTableRow>
             </TableBody>
           </StyledTable>
         </TableContainer>
+
         {schoolReportInfo ? (
           <Stack
             direction={{ md: "row", xs: "column" }}

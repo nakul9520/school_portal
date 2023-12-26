@@ -25,7 +25,11 @@ export const addEditSchoolValidation = Yup.object().shape({
 
 export const addEditSchoolAdminValidation = Yup.object().shape({
   school_id: Yup.array()
-    .of(Yup.string().required("School Name is Required"))
+    .of(
+      Yup.object().shape({
+        id: Yup.number().required("School Name is Required"),
+      })
+    )
     .min(1, "At least one name is required"),
   name: Yup.string()
     .matches(onlyCharactersRegx, "Please enter a valid Name")

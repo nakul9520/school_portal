@@ -32,7 +32,7 @@ const AddSchoolAdminForm = () => {
 
   const { state } = useLocation();
   const schoolAdminData = state ?? {};
-
+  console.log("navigate", schoolAdminData);
   const { schoolListInfo, loading } = useSelector((state) => state.users);
   const schoolList = schoolListInfo.data ?? [];
 
@@ -117,6 +117,8 @@ const AddSchoolAdminForm = () => {
             touched,
           }) => (
             <form onSubmit={handleSubmit} className="h-100">
+              {console.log("value", values)}
+              {console.log("error", errors)}
               <Box className="custom_form border">
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
@@ -129,7 +131,7 @@ const AddSchoolAdminForm = () => {
                   <Autocomplete
                     getOptionLabel={(option) => option.school_name ?? option}
                     options={schoolList}
-                    name="school_name"
+                    name="school_id"
                     value={values.school_id}
                     isOptionEqualToValue={(option, value) => {
                       if (
@@ -152,7 +154,7 @@ const AddSchoolAdminForm = () => {
                       <TextField
                         fullWidth
                         {...params}
-                        name="school_name"
+                        name="school_id"
                         inputProps={{
                           ...params.inputProps,
                           autoComplete: "new-password",
@@ -166,13 +168,11 @@ const AddSchoolAdminForm = () => {
                           ),
                         }}
                         error={
-                          errors.school_name && touched.school_name
-                            ? true
-                            : false
+                          errors.school_id && touched.school_id ? true : false
                         }
                         helperText={
-                          errors.school_name && touched.school_name
-                            ? errors.school_name
+                          errors.school_id && touched.school_id
+                            ? errors.school_id
                             : null
                         }
                       />
