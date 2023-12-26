@@ -62,7 +62,6 @@ const AddEditCategoryFilter = (props) => {
       <CMDialog
         dialogOpen={open}
         dialogClose={onClose}
-        dialogTitle="Dummy Title"
         // closeIcon={true}
       >
         <Formik
@@ -84,7 +83,7 @@ const AddEditCategoryFilter = (props) => {
                         color="text.primary"
                         className="mb-3"
                       >
-                        Alt-Kategori ekel
+                        Alt-Kategori ekle
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>

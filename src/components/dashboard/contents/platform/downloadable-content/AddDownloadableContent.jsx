@@ -158,7 +158,8 @@ const AddDownloadableContent = () => {
                         className="w-100 h-100 d-flex align-items-center"
                       >
                         <Typography variant="body2" className="px-3">
-                          click to add File
+                          Dosya eklemek için tıklayın
+                          (png, jpg, jpeg, word, excel, pdf)
                         </Typography>
                       </Box>
                     ) : (

@@ -108,7 +108,7 @@ const LibraryCategories = () => {
                 <StyledTableCell align="left">
                   Alt-Kategori ekle
                 </StyledTableCell>
-                <StyledTableCell align="left">Düzenlemek</StyledTableCell>
+                <StyledTableCell align="left">Düzenle</StyledTableCell>
                 <StyledTableCell
                   align="left"
                   className="d-flex align-items-center justify-content-between"

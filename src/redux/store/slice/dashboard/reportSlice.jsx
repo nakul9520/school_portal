@@ -47,6 +47,25 @@ export const getSchoolReport = createAsyncThunk(
   }
 );
 
+export const getSpecificSchoolReportCSVFile = createAsyncThunk(
+  "report/getSpecificSchoolReportCSVFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.GET_SPECIFIC_BOOK_REPORT_CSV_FILE,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
 const reportSlice = createSlice({
   name: "report",
   initialState,

@@ -74,6 +74,9 @@ const ClassDataTable = (props) => {
               <StyledTableCell align="left" style={{ minWidth: 150 }}>
                 Sınıf Adı
               </StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Sınıf Code
+              </StyledTableCell>
               <StyledTableCell align="left" style={{ minWidth: 120 }}>
                 Öğretmen 1
               </StyledTableCell>
@@ -129,6 +132,7 @@ const ClassDataTable = (props) => {
                   <StyledTableCell align="left">
                     {row.class_name}
                   </StyledTableCell>
+                  <StyledTableCell align="left">{row.id}</StyledTableCell>
                   <StyledTableCell align="left">
                     {row.teacher_name1 ?? ""}
                   </StyledTableCell>

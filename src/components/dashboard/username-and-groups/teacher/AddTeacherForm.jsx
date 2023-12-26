@@ -107,7 +107,7 @@ const AddTeacherForm = () => {
             class_name: userData.class_name ?? "",
             email: userData.email ?? "",
             name: userData.name ?? "",
-            password: userData.password ?? "",
+            password: userData.code ?? "",
             code: userData.code ?? "",
             activation_date: moment(userData.activation_date) ?? moment(),
             expired_at: moment(userData.expired_at) ?? moment(),

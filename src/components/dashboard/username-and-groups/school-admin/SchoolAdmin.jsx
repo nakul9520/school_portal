@@ -349,7 +349,7 @@ const SchoolAdmin = () => {
               navigate("/dashboard/username-and-groups/add-school-admin")
             }
           >
-            Okul Yöneticisi Ekle
+            Yöneticisi ekle
           </Button>
           {/* 
           <Button

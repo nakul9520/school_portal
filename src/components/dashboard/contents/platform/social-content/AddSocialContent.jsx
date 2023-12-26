@@ -156,7 +156,7 @@ const AddSocialContent = () => {
                         className="w-100 h-100 d-flex align-items-center"
                       >
                         <Typography variant="body2" className="px-3">
-                          click to add Image
+                          Resim eklemek için tıklayın
                         </Typography>
                       </Box>
                     ) : (
