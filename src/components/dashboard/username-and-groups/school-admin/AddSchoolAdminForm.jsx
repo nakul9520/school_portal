@@ -97,7 +97,7 @@ const AddSchoolAdminForm = () => {
             school_id: schoolAdminData.schoolDetails ?? [],
             name: schoolAdminData.name ?? "",
             email: schoolAdminData.email ?? "",
-            password: schoolAdminData.password ?? "",
+            password: schoolAdminData.code ?? "",
             activation_date:
               moment(schoolAdminData.activation_date) ?? moment(),
             expired_at: moment(schoolAdminData.expired_at) ?? moment(),
@@ -117,8 +117,6 @@ const AddSchoolAdminForm = () => {
             touched,
           }) => (
             <form onSubmit={handleSubmit} className="h-100">
-              {console.log("value", values)}
-              {console.log("error", errors)}
               <Box className="custom_form border">
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography

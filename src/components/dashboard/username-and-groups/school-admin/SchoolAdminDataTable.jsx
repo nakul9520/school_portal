@@ -79,6 +79,9 @@ const SchoolAdminDataTable = (props) => {
               <StyledTableCell align="left">Okul Adı</StyledTableCell>
               <StyledTableCell align="left">Yöneticisi Adı</StyledTableCell>
               <StyledTableCell align="left">E-mail</StyledTableCell>
+              <StyledTableCell align="left" style={{ minWidth: 150 }}>
+                Şifre
+              </StyledTableCell>
               <StyledTableCell align="left">Aktivasyon Tarihi</StyledTableCell>
               <StyledTableCell align="left">
                 Lisans Sonlanma Tarihi
@@ -114,6 +117,7 @@ const SchoolAdminDataTable = (props) => {
                   </StyledTableCell>
                   <StyledTableCell align="left">{row.name}</StyledTableCell>
                   <StyledTableCell align="left">{row.email}</StyledTableCell>
+                  <StyledTableCell align="left">{row.code}</StyledTableCell>
 
                   <StyledTableCell align="left">
                     {row.activation_date}
