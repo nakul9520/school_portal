@@ -14,7 +14,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     padding: 10,
     backgroundColor: theme.palette.background.paper,
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.primary,
     fontSize: 14,
   },
   [`&.${tableCellClasses.body}`]: {

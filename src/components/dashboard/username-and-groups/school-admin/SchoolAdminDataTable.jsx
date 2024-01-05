@@ -110,8 +110,8 @@ const SchoolAdminDataTable = (props) => {
                   <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">
                     {map(row.schoolDetails, (item, subIndex) => (
-                      <Typography variant="body2" key={subIndex}>
-                        {item.school_name}
+                      <Typography variant="subtitle2" key={subIndex}>
+                        {item.school_name} ,
                       </Typography>
                     ))}
                   </StyledTableCell>

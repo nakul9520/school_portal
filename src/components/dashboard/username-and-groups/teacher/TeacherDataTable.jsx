@@ -124,7 +124,7 @@ const TeacherDataTable = (props) => {
                     {row.school_name}
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.branch_id}
+                    {row.branch_name}
                   </StyledTableCell>
                   <StyledTableCell align="left">{row.name}</StyledTableCell>
                   <StyledTableCell align="left">{row.email}</StyledTableCell>

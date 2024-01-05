@@ -255,6 +255,7 @@ const Dashboard = () => {
                 color="success"
                 startIcon={<Iconify icon="ph:arrow-down" />}
                 onClick={handleDownloadCSV}
+                disabled={isEmpty(schoolListInfo?.data ?? [])}
               >
                 Toplu Formu İndir
               </Button>

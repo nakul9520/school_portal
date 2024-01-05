@@ -50,7 +50,7 @@ const AddSubAdmin = () => {
         }}
       >
         <Typography variant="body1" color="secondary.disabled" className="mb-4">
-          Add Sub Admin
+          Alt Yönetici Ekle
         </Typography>
 
         <Formik
@@ -79,7 +79,7 @@ const AddSubAdmin = () => {
                     color="secondary.disabled"
                     className="ms-4 w-25"
                   >
-                    Name
+                    İsim
                   </Typography>
                   <TextField
                     name="name"
@@ -99,7 +99,7 @@ const AddSubAdmin = () => {
                     color="secondary.disabled"
                     className="ms-4 w-25"
                   >
-                    Email
+                    E-mail
                   </Typography>
                   <TextField
                     name="email"
@@ -112,14 +112,14 @@ const AddSubAdmin = () => {
                       errors.email && touched.email ? errors.email : null
                     }
                   />
-                </Box>{" "}
+                </Box>
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography
                     variant="body2"
                     color="secondary.disabled"
                     className="ms-4 w-25"
                   >
-                    Password
+                    Şifre
                   </Typography>
                   <TextField
                     name="password"

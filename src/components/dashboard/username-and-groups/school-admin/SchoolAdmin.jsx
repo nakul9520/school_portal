@@ -259,6 +259,7 @@ const SchoolAdmin = () => {
                 color="success"
                 startIcon={<Iconify icon="ph:arrow-down" />}
                 onClick={handleDownloadCSV}
+                disabled={isEmpty(userListInfo?.data ?? [])}
               >
                 Toplu Formu İndir
               </Button>

@@ -128,9 +128,15 @@ const FAQList = () => {
           {loading ? (
             <LinearProgress />
           ) : isEmpty(guideLinesData) ? (
-            <Typography variant="subtitle1" color="text.primary">
-              Mevcut Veri Yok
-            </Typography>
+            <Grid item xs={12}>
+              <Typography
+                variant="subtitle1"
+                color="text.primary"
+                className="text-center"
+              >
+                Mevcut Veri Yok
+              </Typography>
+            </Grid>
           ) : (
             map(guideLinesData, (item, index) => (
               <Grid item md={6} xs={12} key={index}>

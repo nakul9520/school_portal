@@ -6,7 +6,6 @@ import {
   Button,
   CircularProgress,
   FormControl,
-  FormControlLabel,
   Grid,
   IconButton,
   InputAdornment,
@@ -503,57 +502,42 @@ const Assignment = () => {
                                 Kitaplar
                               </StyledTableCell>
                               <StyledTableCell align="center">
-                                <FormControlLabel
-                                  labelPlacement="start"
-                                  control={
-                                    <CMCheckBox
-                                      onChange={(e) =>
-                                        handleAllSelect(
-                                          e,
-                                          values.data,
-                                          setFieldValue,
-                                          "reading_assignment"
-                                        )
-                                      }
-                                    />
+                                Okuma
+                                <CMCheckBox
+                                  onChange={(e) =>
+                                    handleAllSelect(
+                                      e,
+                                      values.data,
+                                      setFieldValue,
+                                      "reading_assignment"
+                                    )
                                   }
-                                  label="Okuma"
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center">
-                                <FormControlLabel
-                                  labelPlacement="start"
-                                  control={
-                                    <CMCheckBox
-                                      onChange={(e) =>
-                                        handleAllSelect(
-                                          e,
-                                          values.data,
-                                          setFieldValue,
-                                          "listening_assignment"
-                                        )
-                                      }
-                                    />
+                                Dinleme
+                                <CMCheckBox
+                                  onChange={(e) =>
+                                    handleAllSelect(
+                                      e,
+                                      values.data,
+                                      setFieldValue,
+                                      "listening_assignment"
+                                    )
                                   }
-                                  label="Dinleme"
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center">
-                                <FormControlLabel
-                                  labelPlacement="start"
-                                  control={
-                                    <CMCheckBox
-                                      onChange={(e) =>
-                                        handleAllSelect(
-                                          e,
-                                          values.data,
-                                          setFieldValue,
-                                          "activities_assignment"
-                                        )
-                                      }
-                                    />
+                                Etkinlik
+                                <CMCheckBox
+                                  onChange={(e) =>
+                                    handleAllSelect(
+                                      e,
+                                      values.data,
+                                      setFieldValue,
+                                      "activities_assignment"
+                                    )
                                   }
-                                  label="Etkinlik"
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center">
@@ -563,21 +547,16 @@ const Assignment = () => {
                                 Teslim Tarihi
                               </StyledTableCell>
                               <StyledTableCell align="center">
-                                <FormControlLabel
-                                  labelPlacement="start"
-                                  control={
-                                    <CMCheckBox
-                                      onChange={(e) =>
-                                        handleAllSelect(
-                                          e,
-                                          values.data,
-                                          setFieldValue,
-                                          "is_general"
-                                        )
-                                      }
-                                    />
+                                Kitaplıkta Görünümü
+                                <CMCheckBox
+                                  onChange={(e) =>
+                                    handleAllSelect(
+                                      e,
+                                      values.data,
+                                      setFieldValue,
+                                      "is_general"
+                                    )
                                   }
-                                  label="Kitaplıkta Görünümü"
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center">

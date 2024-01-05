@@ -5,6 +5,7 @@ import BackButton from "components/common/BackButton";
 
 import { Formik } from "formik";
 import moment from "moment";
+// import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -16,7 +17,8 @@ const AddSchoolForm = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  // const [minExpiredDate, setMinExpiredDate] = useState(moment(new Date()));
+  // console.log("minExpiredDate", minExpiredDate);
   const { state } = useLocation();
   const schoolData = state ?? {};
 
@@ -111,13 +113,15 @@ const AddSchoolForm = () => {
                     Aktivasyon Tarihi
                   </Typography>
                   <MobileDatePicker
-                    name="activation_date"
+                    // name="activation_date"
                     className="w-100"
                     value={values.activation_date}
                     disablePast
-                    onChange={(newValue) =>
-                      setFieldValue("activation_date", newValue)
-                    }
+                    onChange={(newValue) => {
+                      setFieldValue("activation_date", newValue);
+                      // setMinExpiredDate(newValue.add(1, "years"));
+                    }}
+                    format="YYYY-MM-DD"
                   />
                 </Box>
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
@@ -129,13 +133,15 @@ const AddSchoolForm = () => {
                     Lisans Sonlanma Tarihi
                   </Typography>
                   <MobileDatePicker
+                    // name="expired_at"
                     className="w-100"
-                    name="expired_at"
                     value={values.expired_at}
-                    label=" "
-                    onChange={(newValue) => {
-                      setFieldValue("expired_at", newValue);
+                    label=""
+                    onChange={(newExpireDate) => {
+                      setFieldValue("expired_at", newExpireDate);
                     }}
+                    format="YYYY-MM-DD"
+                   // minDate={values.activation_date.add(1, "years")}
                   />
                 </Box>
               </Box>

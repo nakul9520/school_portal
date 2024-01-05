@@ -91,7 +91,7 @@ const SocialContent = () => {
   };
   return (
     <>
-      <BackButton />
+    <BackButton />
       <Box
         sx={{
           p: 2,

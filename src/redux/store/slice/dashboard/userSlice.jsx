@@ -547,8 +547,9 @@ export const importStudentFile = createAsyncThunk(
       return response.data;
     } catch (err) {
       return {
-        status: err.response.data.status,
-        message: err.response.data.message,
+        status: err.response.status,
+        success: err.response.success,
+        message: err.response.message,
       };
     }
   }

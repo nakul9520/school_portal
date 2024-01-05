@@ -36,6 +36,8 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
+import { toast } from "react-toastify";
+import { getBookReportCSVFile } from "redux/store/slice/dashboard/reportSlice";
 
 const BookReport = () => {
   const theme = useTheme();
@@ -170,6 +172,36 @@ const BookReport = () => {
       1
     );
   };
+
+  const handleDownloadCSV = () => {
+    dispatch(getBookReportCSVFile())
+      .unwrap()
+      .then((result) => {
+        if (result) {
+          const blob = new Blob([result], {
+            type: "data:text/csv;charset=utf-8,",
+          });
+          const blobURL = window.URL.createObjectURL(blob);
+          const anchor = document.createElement("a");
+          anchor.download = `book-reports.csv`;
+          anchor.href = blobURL;
+          anchor.dataset.downloadurl = [
+            "text/csv",
+            anchor.download,
+            anchor.href,
+          ].join(":");
+          anchor.click();
+          anchor.remove();
+          toast.success("File downloaded successfully");
+        } else {
+          toast.error("Try again later");
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
+  };
   return (
     <>
       <Box
@@ -196,8 +228,13 @@ const BookReport = () => {
               alignItems="center"
               className="gap-2"
             >
-              <Button variant="contained" color="success">
-                Excel
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleDownloadCSV}
+                disabled={isEmpty(bookReportList)}
+              >
+                Toplu Formu İndir
               </Button>
             </Stack>
           </Grid>

@@ -549,6 +549,24 @@ export const filterAddEdit = createAsyncThunk(
   }
 );
 
+export const deleteFilter = createAsyncThunk(
+  "content/deleteFilter",
+  async (id) => {
+    try {
+      const response = await AxiosDefault({
+        method: "GET",
+        url: `${Api.DELETE_FILTER}/${id}`,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
 export const postAddChatForAdmin = createAsyncThunk(
   "content/postAddChatForAdmin",
   async (data) => {
@@ -575,6 +593,24 @@ const contentSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(filterAddEdit.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(filterAddEdit.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(filterAddEdit.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteFilter.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteFilter.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteFilter.rejected, (state) => {
+        state.loading = false;
+      })
       .addCase(addBookTitle.pending, (state) => {
         state.loading = true;
       })

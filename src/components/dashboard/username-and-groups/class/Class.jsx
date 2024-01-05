@@ -256,6 +256,7 @@ const Class = () => {
                 color="success"
                 startIcon={<Iconify icon="ph:arrow-down" />}
                 onClick={handleDownloadCSV}
+                disabled={isEmpty(classListInfo?.data ?? [])}
               >
                 Toplu Formu İndir
               </Button>

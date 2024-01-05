@@ -257,6 +257,7 @@ const AddSchoolAdminForm = () => {
                     onChange={(newValue) =>
                       setFieldValue("activation_date", newValue)
                     }
+                    format="YYYY-MM-DD"
                   />
                 </Box>
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
@@ -275,6 +276,7 @@ const AddSchoolAdminForm = () => {
                     onChange={(newValue) => {
                       setFieldValue("expired_at", newValue);
                     }}
+                    format="YYYY-MM-DD"
                   />
                 </Box>
               </Box>
