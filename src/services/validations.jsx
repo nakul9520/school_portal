@@ -29,8 +29,7 @@ export const addEditSchoolAdminValidation = Yup.object().shape({
       })
     )
     .min(1, "At least one name is required"),
-  name: Yup.string()
-  .required("Name cannot be empty"),
+  name: Yup.string().required("Name cannot be empty"),
   email: Yup.string()
     .email("Please enter valid email")
     .required("Email is Required"),

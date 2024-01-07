@@ -234,7 +234,7 @@ const BookReport = () => {
                 onClick={handleDownloadCSV}
                 disabled={isEmpty(bookReportList)}
               >
-                Toplu Formu İndir
+                Rapor İndir
               </Button>
             </Stack>
           </Grid>

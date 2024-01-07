@@ -151,15 +151,14 @@ const AddDownloadableContent = () => {
                     }}
                     className="cursor-pointer w-100"
                   >
-                    {console.log("ijmafe", imageList)}
                     {imageList.length <= 0 ? (
                       <Box
                         onClick={() => mediaInputRef.current.click()}
                         className="w-100 h-100 d-flex align-items-center"
                       >
                         <Typography variant="body2" className="px-3">
-                          Dosya eklemek için tıklayın
-                          (png, jpg, jpeg, word, excel, pdf)
+                          Dosya eklemek için tıklayın (png, jpg, jpeg, word,
+                          excel, pdf)
                         </Typography>
                       </Box>
                     ) : (
@@ -184,7 +183,7 @@ const AddDownloadableContent = () => {
                                 >
                                   <ImageThumbnail
                                     imagePath={item.url}
-                                    size={60}
+                                    size={50}
                                   />
                                   <IconButton
                                     size="small"
@@ -230,7 +229,7 @@ const AddDownloadableContent = () => {
                                   <VedioThumbnail
                                     key={index}
                                     videoPath={item.url}
-                                    size={60}
+                                    size={50}
                                   />
                                   <IconButton
                                     size="small"
@@ -304,8 +303,8 @@ const AddDownloadableContent = () => {
                               ) : (
                                 <Box
                                   sx={{
-                                    width: 60,
-                                    height: 60,
+                                    width: 50,
+                                    height: 50,
                                     p: 0.5,
                                     boxShadow: theme.shadows[3],
                                   }}

@@ -2,8 +2,11 @@ import {
   Box,
   Button,
   DialogContent,
+  FormControl,
   Grid,
   IconButton,
+  MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -78,6 +81,7 @@ const AddVoiceRecording = (props) => {
         <DialogContent>
           <Formik
             initialValues={{
+              question_type: data.question_type ?? 1,
               question: data.question ?? "",
               file: data.file ?? "",
             }}
@@ -88,6 +92,28 @@ const AddVoiceRecording = (props) => {
             {(props) => (
               <form onSubmit={props.handleSubmit}>
                 <Grid container className="gap-3">
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      className="my-2"
+                    >
+                      Type of Question
+                    </Typography>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="question_type"
+                        value={props.values.question_type}
+                        onChange={props.handleChange}
+                        size="small"
+                      >
+                        <MenuItem value={1}>Text</MenuItem>
+                        <MenuItem value={2}>File</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
                   <Grid item xs={12}>
                     <Typography
                       variant="subtitle2"
@@ -116,7 +142,7 @@ const AddVoiceRecording = (props) => {
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
+                  <Grid item xs={12} className="d-none">
                     <Box
                       className="border p-2 d-flex align-items-center justify-content-center"
                       sx={{ height: 100 }}

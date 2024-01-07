@@ -1,15 +1,32 @@
 import {
+  Box,
   Button,
   DialogContent,
+  FormControl,
   Grid,
+  IconButton,
+  MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import CMDialog from "components/common/dialog/CMDialog";
+import Iconify from "components/common/iconify";
 import { FieldArray, Formik, getIn } from "formik";
-import { concat, get, includes, isEmpty, size, without } from "lodash";
+import {
+  concat,
+  get,
+  includes,
+  isEmpty,
+  map,
+  size,
+  truncate,
+  without,
+} from "lodash";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import {
@@ -21,6 +38,18 @@ const AddMultipleChoiceQuestions = (props) => {
   const { data, open, onClose } = props;
   const dispatch = useDispatch();
   const book_id = localStorage.getItem("bookId");
+
+  const [fileList, setFileList] = useState([]);
+  const mediaInputRef = useRef(null);
+  const theme = useTheme();
+
+  const handleRemoveFile = (formikProp, index) => {
+    const updatedFiles = fileList.filter(
+      (file, fileIndex) => fileIndex !== index
+    );
+    setFileList(updatedFiles);
+    formikProp.setFieldValue("file", updatedFiles);
+  };
 
   const handleAddEdit = (values, action) => {
     if (size(values.answer) > 0) {
@@ -64,7 +93,9 @@ const AddMultipleChoiceQuestions = (props) => {
         <DialogContent>
           <Formik
             initialValues={{
+              question_type: data.question_type ?? 1,
               question: data.question ?? "",
+              option_type: data.option_type ?? 1,
               options: data.options ?? ["", "", "", ""],
               answer: data.answer ?? [],
             }}
@@ -75,7 +106,29 @@ const AddMultipleChoiceQuestions = (props) => {
             {(props) => (
               <form onSubmit={props.handleSubmit}>
                 <Grid container className="gap-2">
-                  <Grid item xs={12} className="mb-2">
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      className="my-2"
+                    >
+                      Type of Question
+                    </Typography>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="question_type"
+                        value={props.values.question_type}
+                        onChange={props.handleChange}
+                        size="small"
+                      >
+                        <MenuItem value={1}>Text</MenuItem>
+                        <MenuItem value={2}>File</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
                     <Typography
                       variant="subtitle2"
                       color="text.secondary"
@@ -101,6 +154,28 @@ const AddMultipleChoiceQuestions = (props) => {
                           : null
                       }
                     />
+                  </Grid>
+                  <Grid item xs={12} className="mb-2">
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      className="my-2"
+                    >
+                      Type of Options
+                    </Typography>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="option_type"
+                        value={props.values.option_type}
+                        onChange={props.handleChange}
+                        size="small"
+                      >
+                        <MenuItem value={1}>Text</MenuItem>
+                        <MenuItem value={2}>File</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Grid>
                   <Grid item xs={12}>
                     <FieldArray
@@ -153,29 +228,113 @@ const AddMultipleChoiceQuestions = (props) => {
                                       }
                                     }}
                                   />
-                                  <TextField
-                                    name={option}
-                                    value={optionContent}
-                                    onChange={(e) =>
-                                      props.setFieldValue(
-                                        option,
-                                        e.target.value
-                                      )
-                                    }
-                                    onBlur={props.handleBlur}
-                                    fullWidth
-                                    size="small"
-                                    error={
-                                      optionError && optionTouched
-                                        ? true
-                                        : false
-                                    }
-                                    helperText={
-                                      optionError && optionTouched
-                                        ? optionError
-                                        : null
-                                    }
-                                  />
+                                  {props.values.option_type === 1 ? (
+                                    <TextField
+                                      name={option}
+                                      value={optionContent}
+                                      onChange={(e) =>
+                                        props.setFieldValue(
+                                          option,
+                                          e.target.value
+                                        )
+                                      }
+                                      onBlur={props.handleBlur}
+                                      fullWidth
+                                      size="small"
+                                      error={
+                                        optionError && optionTouched
+                                          ? true
+                                          : false
+                                      }
+                                      helperText={
+                                        optionError && optionTouched
+                                          ? optionError
+                                          : null
+                                      }
+                                    />
+                                  ) : (
+                                    <>
+                                      <Box
+                                        className="border p-2 d-flex align-items-center justify-content-center"
+                                        sx={{ width: 100, height: 100 }}
+                                        onClick={() =>
+                                          mediaInputRef.current.click()
+                                        }
+                                      >
+                                        <Iconify
+                                          icon="ic:round-upload-file"
+                                          width={35}
+                                          color="text.secondary"
+                                        />
+                                      </Box>
+                                      <Stack
+                                        direction="row"
+                                        className="gap-2 flex-wrap p-2 mb-1"
+                                      >
+                                        {fileList.length > 0
+                                          ? map(fileList, (item, index) => (
+                                              <Box
+                                                key={index}
+                                                sx={{
+                                                  width: 100,
+                                                  height: 100,
+                                                  p: 1,
+                                                  boxShadow: theme.shadows[3],
+                                                }}
+                                                className="rounded position-relative d-flex flex-column gap-1 align-items-center justify-content-center cursor-pointer"
+                                              >
+                                                <Box>
+                                                  <Iconify
+                                                    icon="flat-color-icons:audio-file"
+                                                    width={30}
+                                                  />
+                                                </Box>
+                                                <Typography
+                                                  variant="caption"
+                                                  key={index}
+                                                >
+                                                  {truncate(item.name, {
+                                                    length: 10,
+                                                  })}
+                                                </Typography>
+
+                                                <IconButton
+                                                  size="small"
+                                                  sx={{
+                                                    background:
+                                                      theme.palette.grey[300],
+                                                    color: "text.primary",
+                                                    position: "absolute",
+                                                    top: "8%",
+                                                    right: "5%",
+                                                    transform:
+                                                      "translate(-8%, -5%)",
+                                                    zIndex: "2",
+                                                    boxShadow: theme.shadows[2],
+                                                    "&:hover": {
+                                                      background:
+                                                        theme.palette.grey[300],
+                                                      color: "text.primary",
+                                                    },
+                                                  }}
+                                                  onClick={() =>
+                                                    handleRemoveFile(
+                                                      props,
+                                                      index
+                                                    )
+                                                  }
+                                                >
+                                                  <Iconify
+                                                    icon="iconoir:cancel"
+                                                    width={18}
+                                                  />
+                                                </IconButton>
+                                              </Box>
+                                            ))
+                                          : null}
+                                      </Stack>
+                                    </>
+                                  )}
                                 </Stack>
                               );
                             })

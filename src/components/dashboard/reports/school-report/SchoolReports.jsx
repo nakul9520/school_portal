@@ -215,7 +215,7 @@ const SchoolReports = () => {
                 onClick={handleDownloadCSV}
                 disabled={isEmpty(selectedSchool)}
               >
-                Toplu Formu İndir
+                Rapor İndir
               </Button>
             </Stack>
           </Grid>
