@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-const onlyCharactersRegx = /^[aA-zZ\s]+$/;
+// const onlyCharactersRegx = /^[aA-zZ\s]+$/;
 // const onlyNumbersRegx = /^-?[0-9]*$/;
 // const fileFolderNameRegx = /^[a-zA-Z0-9-_]+$/;
 
@@ -16,9 +16,7 @@ export const loginValidation = Yup.object().shape({
 });
 
 export const addEditSchoolValidation = Yup.object().shape({
-  school_name: Yup.string()
-    .matches(onlyCharactersRegx, "Please enter a valid Name")
-    .required("School Name cannot be empty"),
+  school_name: Yup.string().required("School Name cannot be empty"),
   activation_date: Yup.string().required("Activation date is Required"),
   expired_at: Yup.string().required("expired date is Required"),
 });
@@ -31,9 +29,7 @@ export const addEditSchoolAdminValidation = Yup.object().shape({
       })
     )
     .min(1, "At least one name is required"),
-  name: Yup.string()
-    .matches(onlyCharactersRegx, "Please enter a valid Name")
-    .required("Name cannot be empty"),
+  name: Yup.string().required("Name cannot be empty"),
   email: Yup.string()
     .email("Please enter valid email")
     .required("Email is Required"),
@@ -50,24 +46,16 @@ export const addEditClassValidation = Yup.object().shape({
   school_name: Yup.string().required("school name cannot be empty"),
   branch_id: Yup.string().required("Branch is Required"),
   class_name: Yup.string().required("Class Name is Required"),
-  teacher_name1: Yup.string().required("Teacher Name is Required"),
-  teacher_email1: Yup.string()
-    .email("Enter Valid Email Address")
-    .required("Teacher Email is Required"),
+  teacher_email1: Yup.string().email("Enter Valid Email Address"),
   teacher_password1: Yup.string()
     .trim("Please don't enter a whitespace character")
     .strict(true)
-    .min(8, "Password should be at least 8 characters long")
-    .required("Password is Required"),
-  teacher_name2: Yup.string().required("Teacher Name is Required"),
-  teacher_email2: Yup.string()
-    .email("Enter Valid Email Address")
-    .required("Teacher Email is Required"),
+    .min(8, "Password should be at least 8 characters long"),
+  teacher_email2: Yup.string().email("Enter Valid Email Address"),
   teacher_password2: Yup.string()
     .trim("Please don't enter a whitespace character")
     .strict(true)
-    .min(8, "Password should be at least 8 characters long")
-    .required("Password is Required"),
+    .min(8, "Password should be at least 8 characters long"),
 });
 
 export const addEditTeacherValidation = Yup.object().shape({

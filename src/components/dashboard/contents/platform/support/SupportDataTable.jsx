@@ -85,9 +85,11 @@ const SupportDataTable = () => {
                   <StyledTableCell align="left">
                     <Typography
                       variant="subtitle2"
-                      color={row.status === 0 ? "warning.main" : "success.main"}
+                      color={
+                        row.status === "1" ? "success.main" : "warning.main"
+                      }
                     >
-                      {row.status === 0 ? "Pending" : "Completed"}{" "}
+                      {row.status === "1" ? "Completed" : "Pending"}
                     </Typography>
                   </StyledTableCell>
                   <StyledTableCell align="left">{row.time}</StyledTableCell>

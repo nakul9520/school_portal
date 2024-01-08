@@ -18,6 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getFilterList } from "redux/store/slice/dashboard/contentSlice";
 import AddEditCategoryFilter from "./AddEditCategoryFilter";
 import BackButton from "components/common/BackButton";
+import { deleteFilter } from "redux/store/slice/dashboard/contentSlice";
+import { toast } from "react-toastify";
 
 const LibraryCategories = () => {
   const theme = useTheme();
@@ -68,6 +70,23 @@ const LibraryCategories = () => {
   };
   const handleAddEditCategory = () => {
     setOpen(false);
+  };
+
+  const handleDelete = (id) => {
+    dispatch(deleteFilter(id))
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          toast.success(result.message);
+          getFilterListData({
+            category_id: 1,
+          });
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log("Error: ", err);
+      });
   };
   return (
     <>
@@ -160,7 +179,11 @@ const LibraryCategories = () => {
                     >
                       Edit
                     </StyledTableCell>
-                    <StyledTableCell align="left" className="cursor-pointer">
+                    <StyledTableCell
+                      align="left"
+                      className="cursor-pointer"
+                      onClick={() => handleDelete(row.id)}
+                    >
                       Remove
                     </StyledTableCell>
                   </StyledTableRow>

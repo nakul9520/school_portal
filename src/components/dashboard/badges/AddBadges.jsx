@@ -39,8 +39,9 @@ const AddBadge = () => {
     const data = {
       ...values,
       id: badgeData.id ? badgeData.id : "",
-      image: typeof values.image === "object" ? values.image[0] : "",
+      image: typeof values.image[0] === "object" ? values.image[0] : "",
     };
+    console.log(data);
     dispatch(addEditBadge(data))
       .unwrap()
       .then((result) => {
@@ -83,6 +84,7 @@ const AddBadge = () => {
         >
           {(props) => (
             <form onSubmit={props.handleSubmit} className="h-100">
+              {console.log(props)}
               <Box className="custom_form border">
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
                   <Typography

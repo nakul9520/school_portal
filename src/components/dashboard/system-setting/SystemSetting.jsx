@@ -16,7 +16,7 @@ const SystemSetting = () => {
             sx={{ backgroundColor: "mint.main" }}
             onClick={() => navigate("/dashboard/system-settings/edit")}
           >
-            Edit
+            Profil Düzenleme
           </Box>
         </Grid>
         {/* <Grid item xs={10} sm={5} md={4} lg={2}>
@@ -33,7 +33,7 @@ const SystemSetting = () => {
             sx={{ backgroundColor: "success.main" }}
             onClick={() => navigate("/dashboard/system-settings/sub-admin")}
           >
-            New Super Admin
+            Yeni Süper Yönetici
           </Box>
         </Grid>
         {/* <Grid item xs={10} sm={5} md={4} lg={2}>

@@ -76,7 +76,7 @@ const StudentDataTable = (props) => {
                 Seviye
               </StyledTableCell>
               <StyledTableCell align="left" style={{ minWidth: 150 }}>
-                Öğretmen Adı
+                Sınıf Adı
               </StyledTableCell>
               <StyledTableCell align="left" style={{ minWidth: 150 }}>
                 Öğrenci Adı
@@ -100,13 +100,13 @@ const StudentDataTable = (props) => {
           <TableBody>
             {loading ? (
               <StyledTableRow>
-                <StyledTableCell align="left" colSpan={10}>
+                <StyledTableCell align="left" colSpan={11}>
                   <LinearProgress />
                 </StyledTableCell>
               </StyledTableRow>
             ) : isEmpty(usersList) ? (
               <StyledTableRow>
-                <StyledTableCell align="center" colSpan={10}>
+                <StyledTableCell align="center" colSpan={11}>
                   <Typography variant="subtitle1" color="text.primary">
                     Mevcut Veri Yok
                   </Typography>
@@ -120,7 +120,7 @@ const StudentDataTable = (props) => {
                     {row.school_name}
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.branch_id}
+                    {row.branch_name}
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {row.class_name}

@@ -4,7 +4,6 @@ import {
   Button,
   CircularProgress,
   FormControl,
-  FormControlLabel,
   Grid,
   IconButton,
   InputAdornment,
@@ -488,18 +487,15 @@ const LevelingUp = () => {
                         <StyledTableCell align="left">
                           <Box className="d-flex align-items-center justify-content-between">
                             Seç
-                            <FormControlLabel
-                              labelPlacement="start"
-                              control={
-                                <CMCheckBox
-                                  checked={isSelectAll}
-                                  onChange={(e) =>
-                                    handleAllSelect(e, setFieldValue)
-                                  }
-                                />
-                              }
-                              label="Tümünü Seç"
-                            />
+                            <Stack direction="row" alignItems="center">
+                              Tümünü Seç
+                              <CMCheckBox
+                                checked={isSelectAll}
+                                onChange={(e) =>
+                                  handleAllSelect(e, setFieldValue)
+                                }
+                              />
+                            </Stack>
                           </Box>
                         </StyledTableCell>
                       </TableRow>

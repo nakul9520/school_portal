@@ -176,6 +176,7 @@ const AddBookTopic = () => {
               setFieldValue,
               errors,
               touched,
+              isSubmitting,
             }) => (
               <form onSubmit={handleSubmit}>
                 <Box

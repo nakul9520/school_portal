@@ -72,7 +72,7 @@ const SubAdminTable = () => {
               <StyledTableCell className="" color="text.primary">
                 Sıra
               </StyledTableCell>
-              <StyledTableCell align="left">Name</StyledTableCell>
+              <StyledTableCell align="left">İsim</StyledTableCell>
               <StyledTableCell align="left">E-mail</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>

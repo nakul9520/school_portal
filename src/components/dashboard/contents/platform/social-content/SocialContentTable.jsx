@@ -100,7 +100,7 @@ const SocialContentTable = () => {
                   <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">{row.title}</StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.visibility}
+                    {row.visibility_name}
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     <Box sx={{ width: 80, height: 80 }}>

@@ -193,35 +193,41 @@ const TicketDetails = () => {
 
             <Typography
               variant="body2"
-              color={ticketstatus === "1" ? "warning.light" : "success.light"}
+              color={ticketstatus === "1" ? "success.light" : "warning.light"}
               className="fw-medium"
               onClick={(e) => setAnchorEl(e.currentTarget)}
             >
-              {ticketstatus === "1" ? "Pending" : "Completed"}
+              {ticketstatus === "1" ? "Completed" : "Pending"}
             </Typography>
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={() => setAnchorEl(null)}
             >
-              <MenuItem onClick={() => handleSelectOption(1)}>Pending</MenuItem>
-              <MenuItem onClick={() => handleSelectOption(2)}>
+              <MenuItem onClick={() => handleSelectOption("2")}>
+                Pending
+              </MenuItem>
+              <MenuItem onClick={() => handleSelectOption("1")}>
                 Completed
               </MenuItem>
             </Menu>
           </Stack>
+          <Typography variant="subtitle2" color="text.secondary">
+            {state.discription}
+          </Typography>
 
           <Box
             sx={{ height: "65vh", overflowY: "scroll", padding: 2 }}
             className="w-100"
           >
-            {map(supportTicketMessage, (item, index) => (
-              <MessageInfo
-                key={index}
-                data={item}
-                messageOwner="senderDetails"
-              />
-            ))}
+            {!isEmpty(supportTicketMessage) &&
+              map(supportTicketMessage.slice(1), (item, index) => (
+                <MessageInfo
+                  key={index}
+                  data={item}
+                  messageOwner="senderDetails"
+                />
+              ))}
           </Box>
           {state.status === "1" ? (
             <Box sx={{ p: 2 }}>

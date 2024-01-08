@@ -349,6 +349,7 @@ const AddTeacherForm = () => {
                     onChange={(newValue) =>
                       setFieldValue("activation_date", newValue)
                     }
+                    format="YYYY-MM-DD"
                   />
                 </Box>
 
@@ -368,6 +369,7 @@ const AddTeacherForm = () => {
                     onChange={(newValue) => {
                       setFieldValue("expired_at", newValue);
                     }}
+                    format="YYYY-MM-DD"
                   />
                 </Box>
               </Box>

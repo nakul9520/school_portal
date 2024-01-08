@@ -89,9 +89,9 @@ const AddClassForm = () => {
           initialValues={{
             school_id: get(classData, "school_id", ""),
             school_name: get(classData, "school_name", ""),
-            branch_id: get(classData, "branch_id", ""),
+            branch_id: get(classData, "branch_id", 1),
             class_name: get(classData, "class_name", ""),
-            class_code: get(classData, "class_code", ""),
+            // class_code: get(classData, "class_code", ""),
             teacher_name1: get(classData, "teacher_name1", ""),
             teacher_email1: get(classData, "teacher_email1", ""),
             teacher_password1: get(classData, "teacher_password1", ""),

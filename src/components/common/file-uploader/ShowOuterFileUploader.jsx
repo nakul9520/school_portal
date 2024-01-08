@@ -62,6 +62,7 @@ const ShowOuterFileUploader = (props) => {
           });
         }
       }
+      
     }
     setImageList([...imageList, ...fileArray]);
   };

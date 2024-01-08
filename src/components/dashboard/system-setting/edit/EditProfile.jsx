@@ -54,6 +54,7 @@ const EditProfile = () => {
         console.log("Error: ", err);
       });
   };
+
   const onImageChange = (event, formikProp) => {
     const file = event.target.files[0];
     setImageList({
@@ -80,7 +81,7 @@ const EditProfile = () => {
             color="secondary.disabled"
             className="mb-4"
           >
-            Profile Edit
+            Profil Düzenleme
           </Typography>
 
           <Formik
@@ -152,7 +153,7 @@ const EditProfile = () => {
                       color="secondary.disabled"
                       className="ms-4 w-25"
                     >
-                      Name
+                      İsim
                     </Typography>
                     <TextField
                       name="name"
@@ -177,7 +178,7 @@ const EditProfile = () => {
                       color="secondary.disabled"
                       className="ms-4 w-25"
                     >
-                      Password
+                      Şifre
                     </Typography>
                     <TextField
                       name="password"

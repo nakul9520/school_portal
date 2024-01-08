@@ -6,7 +6,6 @@ import {
   Button,
   CircularProgress,
   FormControl,
-  FormControlLabel,
   Grid,
   IconButton,
   InputAdornment,
@@ -30,7 +29,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import Iconify from "components/common/iconify/Iconify";
-import { getSchoolReport } from "redux/store/slice/dashboard/reportSlice";
+import { toast } from "react-toastify";
+import {
+  getSchoolReport,
+  getSpecificSchoolReportCSVFile,
+} from "redux/store/slice/dashboard/reportSlice";
 import {
   getClassesBySchool,
   getSchoolList,
@@ -41,8 +44,6 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import { getSpecificSchoolReportCSVFile } from "redux/store/slice/dashboard/reportSlice";
-import { toast } from "react-toastify";
 
 const SchoolReports = () => {
   const theme = useTheme();
@@ -214,7 +215,7 @@ const SchoolReports = () => {
                 onClick={handleDownloadCSV}
                 disabled={isEmpty(selectedSchool)}
               >
-                Toplu Formu İndir
+                Rapor İndir
               </Button>
             </Stack>
           </Grid>
@@ -325,7 +326,7 @@ const SchoolReports = () => {
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
-                        {params.InputProps.endadornment}
+                        {params.InputProps.endAdornment}
                       </React.Fragment>
                     ),
                   }}
@@ -420,17 +421,12 @@ const SchoolReports = () => {
                   Tamamlanan Etkinlik Sayısı
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  <FormControlLabel
-                    labelPlacement="start"
-                    control={
-                      <CMCheckBox
-                        checked={isSelectAll && !isEmpty(selectedSchool)}
-                        onChange={(e) => {
-                          handleAllSelect(e);
-                        }}
-                      />
-                    }
-                    label="Tümünü Seç"
+                  Tümünü Seç
+                  <CMCheckBox
+                    checked={isSelectAll && !isEmpty(selectedSchool)}
+                    onChange={(e) => {
+                      handleAllSelect(e);
+                    }}
                   />
                 </StyledTableCell>
               </TableRow>

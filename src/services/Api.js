@@ -53,7 +53,8 @@ const Api = {
   // Reports
   GET_BOOK_REPORTS: "GetBookReports",
   GET_SCHOOL_REPORTS: "GetSchoolReports",
-  GET_SPECIFIC_BOOK_REPORT_CSV_FILE: "getSelectedReportsDownload",
+  GET_SPECIFIC_SCHOOL_REPORT_CSV_FILE: "getSelectedReportsDownload",
+  GET_BOOK_REPORT_CSV_FILE: "GetBookReportscsv",
 
   // Book
   ADD_BOOK_TITLE: "addEditBook",
@@ -83,6 +84,7 @@ const Api = {
   // filter
   GET_FILTER_LIST: "getfilterlist",
   ADD_EDIT_FILTER: "addEditFilter",
+  DELETE_FILTER: "filterDelete",
 
   // PlateForm Content
   ADD_EDIT_CONTENT_FILE: "addEditVideoContent",

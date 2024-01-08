@@ -95,9 +95,6 @@ const ClassDataTable = (props) => {
               <StyledTableCell align="left" style={{ minWidth: 120 }}>
                 Ö2 Şifre
               </StyledTableCell>
-              <StyledTableCell align="left" style={{ minWidth: 120 }}>
-                Öğrenci Sayısı
-              </StyledTableCell>
               <StyledTableCell align="left" style={{ minWidth: 80 }}>
                 Durumu
               </StyledTableCell>
@@ -109,13 +106,13 @@ const ClassDataTable = (props) => {
           <TableBody>
             {loading ? (
               <StyledTableRow>
-                <StyledTableCell align="left" colSpan={12}>
+                <StyledTableCell align="left" colSpan={13}>
                   <LinearProgress />
                 </StyledTableCell>
               </StyledTableRow>
             ) : isEmpty(classList) ? (
               <StyledTableRow>
-                <StyledTableCell align="center" colSpan={12}>
+                <StyledTableCell align="center" colSpan={13}>
                   <Typography variant="subtitle1" color="text.primary">
                     Mevcut Veri Yok
                   </Typography>
@@ -128,7 +125,7 @@ const ClassDataTable = (props) => {
                   <StyledTableCell scope="row">
                     {row.school_name}
                   </StyledTableCell>
-                  <StyledTableCell scope="row">{row.branch_id}</StyledTableCell>
+                  <StyledTableCell scope="row">{row.branch_name}</StyledTableCell>
                   <StyledTableCell align="left">
                     {row.class_name}
                   </StyledTableCell>
@@ -150,10 +147,6 @@ const ClassDataTable = (props) => {
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {row.teacher_code2 ?? ""}
-                  </StyledTableCell>
-
-                  <StyledTableCell align="left">
-                    {row.no_of_student}
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     <Typography

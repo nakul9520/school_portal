@@ -98,7 +98,9 @@ const DownloadableContentTable = () => {
                 <StyledTableRow key={index}>
                   <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">{row.title}</StyledTableCell>
-                  <StyledTableCell align="left">{row.visibility}</StyledTableCell>
+                  <StyledTableCell align="left">
+                    {row.visibility_name}
+                  </StyledTableCell>
                   <StyledTableCell align="left">
                     <Box sx={{ width: 80, height: 80 }}>
                       <Box

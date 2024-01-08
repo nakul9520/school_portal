@@ -3,12 +3,10 @@ import PropTypes from "prop-types";
 import {
   AppBar,
   Avatar,
-  Badge,
   Box,
   IconButton,
   MenuItem,
   Stack,
-  TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -19,15 +17,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 // components
 import Iconify from "../../../components/common/iconify/Iconify";
-import NotificationsPopover from "./NotificationsPopover";
-import InputAdornment from "@mui/material/InputAdornment";
-import SubHeader from "./SubHeader";
+// import NotificationsPopover from "./NotificationsPopover";
+// import InputAdornment from "@mui/material/InputAdornment";
 import MenuPopover from "components/common/MenuPopover";
 import { get, map } from "lodash";
 import { useState } from "react";
-import { postLogout } from "redux/store/slice/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-import { logout } from "redux/store/slice/auth/authSlice";
+import { logout, postLogout } from "redux/store/slice/auth/authSlice";
+import SubHeader from "./SubHeader";
 
 // ----------------------------------------------------------------------
 
@@ -86,7 +83,7 @@ export default function Header({ onOpenNav }) {
     <StyledRoot>
       <StyledToolbar>
         <Box sx={{ flexGrow: 1 }}>
-          <TextField
+          {/* <TextField
             placeholder="Arama…"
             className="header_search"
             size="small"
@@ -97,18 +94,18 @@ export default function Header({ onOpenNav }) {
                 </InputAdornment>
               ),
             }}
-          />
+          /> */}
         </Box>
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" className="gap-2">
-          <Stack direction="row" alignItems="center" className="gap-2">
+          {/* <Stack direction="row" alignItems="center" className="gap-2">
             <Badge variant="dot" overlap="circular" color="slateblue">
               <Iconify icon="clarity:email-solid" color="text.secondary" />
             </Badge>
 
             <NotificationsPopover />
-          </Stack>
+          </Stack> */}
           <Stack direction="row" alignItems="center" className="gap-2">
             <Avatar
               sx={{
