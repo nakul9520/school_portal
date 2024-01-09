@@ -575,7 +575,26 @@ export const postAddChatForAdmin = createAsyncThunk(
         method: "POST",
         url: Api.POST_ADD_CHAT_MESSAGE,
         data: data,
-        // contentType: "multipart/form-data",
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const postUpdateSupportStatus = createAsyncThunk(
+  "content/postUpdateSupportStatus",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.POST_UPDATE_STATUS,
+        data: data,
       });
       return response.data;
     } catch (err) {
