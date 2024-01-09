@@ -128,8 +128,8 @@ const AddVideoContent = () => {
                       value={props.values.visibility}
                       onChange={props.handleChange}
                     >
-                      <MenuItem value={1}>Kaymaklar</MenuItem>
-                      <MenuItem value={2}>Academic</MenuItem>
+                      <MenuItem value={1}>Kaynaklar</MenuItem>
+                      <MenuItem value={2}>Akademi</MenuItem>
                       <MenuItem value={3}>Benim Dünyam</MenuItem>
                       <MenuItem value={4}>Blog</MenuItem>
                     </Select>

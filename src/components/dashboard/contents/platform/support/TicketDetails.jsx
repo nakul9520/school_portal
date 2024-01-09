@@ -34,13 +34,14 @@ import {
 } from "redux/store/slice/dashboard/contentSlice";
 import { imageObj } from "services/images";
 import BackButton from "components/common/BackButton";
+import { postUpdateSupportStatus } from "redux/store/slice/dashboard/contentSlice";
 
 const MessageInfo = ({ data, messageOwner }) => {
   return (
     <Box className="mb-4">
       <Stack direction="row" className="gap-2 align-items-center mb-2">
         <Avatar
-          src={data[messageOwner].user_profile}
+          src={data[messageOwner].profile_img}
           alt="user-avatar"
           sx={{ width: 35, height: 35 }}
         />
@@ -116,7 +117,7 @@ const TicketDetails = () => {
   const theme = useTheme();
   const size = 80;
   const { state } = useLocation();
-
+  console.log("state", state);
   const [mediaFileList, setMediaFileList] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [ticketstatus, setTicketstatus] = useState(state.status);
@@ -128,12 +129,21 @@ const TicketDetails = () => {
   const handleSelectOption = (statusType) => {
     setTicketstatus(statusType);
     dispatch(
-      postAddChatForAdmin({
-        discription: "",
+      postUpdateSupportStatus({
         ticket_id: state.id,
-        mark_complete: statusType,
+        status: statusType,
       })
-    );
+    )
+      .unwrap()
+      .then((result) => {
+        setAnchorEl(null);
+        if (result.success) {
+          toast.success(result.message);
+        } else {
+          toast.success(result.message);
+        }
+      })
+      .catch((err) => {});
   };
 
   useEffect(() => {
@@ -154,6 +164,7 @@ const TicketDetails = () => {
           action.resetForm();
           action.setSubmitting(false);
           setMediaFileList([]);
+          fileInputRef.current.value = "";
           dispatch(getSupportTicketChat({ ticket_id: state.id }));
         }
       })
@@ -170,6 +181,7 @@ const TicketDetails = () => {
     );
     setMediaFileList(updatedFiles);
     formikProp.setFieldValue("file", updatedFiles);
+    fileInputRef.current.value = "";
   };
   return (
     <>
@@ -225,11 +237,11 @@ const TicketDetails = () => {
                 <MessageInfo
                   key={index}
                   data={item}
-                  messageOwner="senderDetails"
+                  messageOwner="senderInfo"
                 />
               ))}
           </Box>
-          {state.status === "1" ? (
+          {state.status === "2" ? (
             <Box sx={{ p: 2 }}>
               <Formik
                 initialValues={{ description: "", images: [] }}
@@ -350,23 +362,23 @@ const TicketDetails = () => {
                         props.setFieldValue("description", e.target.value)
                       }
                       onBlur={props.handleBlur}
-                      // startAdornment={
-                      //   <InputAdornment position="start">
-                      //     <IconButton
-                      //       color="primary"
-                      //       onClick={() => fileInputRef.current.click()}
-                      //     >
-                      //       <Iconify icon="eva:attach-2-fill" />
-                      //     </IconButton>
-                      //   </InputAdornment>
-                      // }
-                      endadornment={
-                        <InputAdornment position="end">
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <IconButton
+                            color="primary"
+                            onClick={() => fileInputRef.current.click()}
+                          >
+                            <Iconify icon="eva:attach-2-fill" />
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      endAdornment={
+                        <InputAdornment position="start">
                           <IconButton
                             color="primary"
                             type="submit"
                             disabled={
-                              isEmpty(props.values.description) &&
+                              isEmpty(props.values.description) ||
                               isEmpty(props.values.file)
                             }
                           >

@@ -94,6 +94,7 @@ const Api = {
   GET_SUPPORT_MESSAGE_LIST: "getMsgforadmin",
   POST_ADD_CHAT_MESSAGE: "addChatforadmin",
   GET_SUPPORT_TICKET_LIST: "userTicketlist",
+  POST_UPDATE_STATUS: "clickAction",
   ADD_EDIT_GUIDE_LINES: "addQuidelines",
   GET_GUIDE_LINES: "guidelines",
   DELETE_FAQ: "faqdelete",

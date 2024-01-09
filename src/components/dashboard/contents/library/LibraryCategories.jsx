@@ -79,7 +79,7 @@ const LibraryCategories = () => {
         if (result.success) {
           toast.success(result.message);
           getFilterListData({
-            category_id: 1,
+            category_id: categoryId,
           });
         }
       })
