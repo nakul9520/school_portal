@@ -45,6 +45,7 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
+import { MobileDatePicker } from "@mui/x-date-pickers";
 
 const Assignment = () => {
   const theme = useTheme();
@@ -71,6 +72,8 @@ const Assignment = () => {
   const [subCategoryData, setSubCategoryData] = useState({});
   const [page, setPage] = useState(1);
   const [perPageData, setperPageData] = useState(10);
+  const [isDatePickerOpen, setDatePickerOpen] = useState(false);
+  const [filedId, setFiledId] = useState("");
 
   const { filterList } = useSelector((state) => state.content);
   const filterListData = filterList.data ?? [];
@@ -582,6 +585,8 @@ const Assignment = () => {
                                 const listening_assignment = `data[${index}].listening_assignment`;
                                 const activities_assignment = `data[${index}].activities_assignment`;
                                 const is_general = `data[${index}].is_general`;
+                                const start_date = `data[${index}].start_date`;
+                                const end_date = `data[${index}].end_date`;
 
                                 return (
                                   <StyledTableRow key={index}>
@@ -634,10 +639,74 @@ const Assignment = () => {
                                       />
                                     </StyledTableCell>
                                     <StyledTableCell align="center">
-                                      {item.start_date}
+                                      <Typography
+                                        variant="subtitle2"
+                                        onClick={() => {
+                                          setFiledId(item.id);
+                                          setDatePickerOpen(true);
+                                        }}
+                                      >
+                                        {item.start_date}
+                                      </Typography>
+                                      <MobileDatePicker
+                                        open={
+                                          filedId === item.id &&
+                                          isDatePickerOpen
+                                        }
+                                        onClose={() => {
+                                          setFiledId("");
+                                          setDatePickerOpen(false);
+                                        }}
+                                        name={start_date}
+                                        className="w-100"
+                                        value={values.start_date}
+                                        label=""
+                                        onChange={(newExpireDate) => {
+                                          console.log(
+                                            "Start date",
+                                            newExpireDate
+                                          );
+                                          setFieldValue(
+                                            start_date,
+                                            newExpireDate
+                                          );
+                                        }}
+                                        format="YYYY-MM-DD"
+                                        sx={{ display: "none" }}
+                                      />
                                     </StyledTableCell>
                                     <StyledTableCell align="center">
-                                      {item.end_date}
+                                      <Typography
+                                        variant="subtitle2"
+                                        onClick={() => {
+                                          setFiledId(item.id);
+                                          setDatePickerOpen(true);
+                                        }}
+                                      >
+                                        {item.end_date}
+                                      </Typography>
+                                      <MobileDatePicker
+                                        open={
+                                          filedId === item.id &&
+                                          isDatePickerOpen
+                                        }
+                                        onClose={() => {
+                                          setFiledId("");
+                                          setDatePickerOpen(false);
+                                        }}
+                                        name={end_date}
+                                        className="w-100"
+                                        value={values.end_date}
+                                        label=""
+                                        onChange={(newExpireDate) => {
+                                          setFieldValue(
+                                            end_date,
+                                            newExpireDate
+                                          );
+                                        }}
+                                        format="YYYY-MM-DD"
+                                        sx={{ display: "none" }}
+                                      />
                                     </StyledTableCell>
                                     <StyledTableCell align="center">
                                       <CMCheckBox

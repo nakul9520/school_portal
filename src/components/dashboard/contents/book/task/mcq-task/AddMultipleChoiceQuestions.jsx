@@ -33,6 +33,7 @@ import {
   addEditMCQTask,
   getMCQTaskList,
 } from "redux/store/slice/dashboard/contentSlice";
+import { QuizType } from "services/constant";
 
 const AddMultipleChoiceQuestions = (props) => {
   const { data, open, onClose } = props;
@@ -40,7 +41,9 @@ const AddMultipleChoiceQuestions = (props) => {
   const book_id = localStorage.getItem("bookId");
 
   const [fileList, setFileList] = useState([]);
+  const [questionfileList, setQuestionFileList] = useState([]);
   const mediaInputRef = useRef(null);
+  const questionMediaInputRef = useRef(null);
   const theme = useTheme();
 
   const handleRemoveFile = (formikProp, index) => {
@@ -48,7 +51,15 @@ const AddMultipleChoiceQuestions = (props) => {
       (file, fileIndex) => fileIndex !== index
     );
     setFileList(updatedFiles);
-    formikProp.setFieldValue("file", updatedFiles);
+    formikProp.setFieldValue("options", updatedFiles);
+  };
+
+  const handleRemoveQuestionFile = (formikProp, index) => {
+    const updatedFiles = questionfileList.filter(
+      (file, fileIndex) => fileIndex !== index
+    );
+    setQuestionFileList(updatedFiles);
+    formikProp.setFieldValue("question", updatedFiles);
   };
 
   const handleAddEdit = (values, action) => {
@@ -82,6 +93,25 @@ const AddMultipleChoiceQuestions = (props) => {
       toast.error("Please Select One ANswer");
     }
   };
+
+  const onQuestionFileChange = (event, formikProp) => {
+    const file = event.target.files[0];
+    setQuestionFileList({
+      type: "image",
+      url: URL.createObjectURL(file),
+    });
+    formikProp.setFieldValue("image", file);
+  };
+
+  const onOptionFileChange = (event, formikProp) => {
+    const file = event.target.files[0];
+    setQuestionFileList({
+      type: "image",
+      url: URL.createObjectURL(file),
+    });
+    formikProp.setFieldValue("image", file);
+  };
+
   return (
     <>
       <CMDialog
@@ -123,8 +153,11 @@ const AddMultipleChoiceQuestions = (props) => {
                         onChange={props.handleChange}
                         size="small"
                       >
-                        <MenuItem value={1}>Text</MenuItem>
-                        <MenuItem value={2}>File</MenuItem>
+                        {map(QuizType, (item, index) => (
+                          <MenuItem value={item.value} key={index}>
+                            {item.label}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Grid>
@@ -136,24 +169,102 @@ const AddMultipleChoiceQuestions = (props) => {
                     >
                       Add Question
                     </Typography>
-                    <TextField
-                      name="question"
-                      value={props.values.question}
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      fullWidth
-                      size="small"
-                      error={
-                        props.errors.question && props.touched.question
-                          ? true
-                          : false
-                      }
-                      helperText={
-                        props.errors.question && props.touched.question
-                          ? props.errors.question
-                          : null
-                      }
-                    />
+                    {props.values.question_type === 1 ? (
+                      <TextField
+                        name="question"
+                        value={props.values.question}
+                        onChange={props.handleChange}
+                        onBlur={props.handleBlur}
+                        fullWidth
+                        size="small"
+                        error={
+                          props.errors.question && props.touched.question
+                            ? true
+                            : false
+                        }
+                        helperText={
+                          props.errors.question && props.touched.question
+                            ? props.errors.question
+                            : null
+                        }
+                      />
+                    ) : (
+                      <>
+                        <Box
+                          className="border p-2 d-flex align-items-center justify-content-center"
+                          sx={{ width: 100, height: 100 }}
+                          onClick={() => questionMediaInputRef.current.click()}
+                        >
+                          <Iconify
+                            icon="ic:round-upload-file"
+                            width={35}
+                            color="text.secondary"
+                          />
+                          <input
+                            ref={questionMediaInputRef}
+                            hidden
+                            accept="image/*,audio/*,video/*"
+                            onChange={(e) => onQuestionFileChange(e, props)}
+                            name="question"
+                            type="file"
+                          />
+                        </Box>
+                        <Stack
+                          direction="row"
+                          className="gap-2 flex-wrap p-2 mb-1"
+                        >
+                          {questionfileList.length > 0
+                            ? map(questionfileList, (item, index) => (
+                                <Box
+                                  key={index}
+                                  sx={{
+                                    width: 100,
+                                    height: 100,
+                                    p: 1,
+                                    boxShadow: theme.shadows[3],
+                                  }}
+                                  className="rounded position-relative d-flex flex-column gap-1 align-items-center justify-content-center cursor-pointer"
+                                >
+                                  <Box>
+                                    <Iconify
+                                      icon="flat-color-icons:audio-file"
+                                      width={30}
+                                    />
+                                  </Box>
+                                  <Typography variant="caption" key={index}>
+                                    {truncate(item.name, {
+                                      length: 10,
+                                    })}
+                                  </Typography>
+
+                                  <IconButton
+                                    size="small"
+                                    sx={{
+                                      background: theme.palette.grey[300],
+                                      color: "text.primary",
+                                      position: "absolute",
+                                      top: "8%",
+                                      right: "5%",
+                                      transform: "translate(-8%, -5%)",
+                                      zIndex: "2",
+                                      boxShadow: theme.shadows[2],
+                                      "&:hover": {
+                                        background: theme.palette.grey[300],
+                                        color: "text.primary",
+                                      },
+                                    }}
+                                    onClick={() =>
+                                      handleRemoveQuestionFile(props, index)
+                                    }
+                                  >
+                                    <Iconify icon="iconoir:cancel" width={18} />
+                                  </IconButton>
+                                </Box>
+                              ))
+                            : null}
+                        </Stack>
+                      </>
+                    )}
                   </Grid>
                   <Grid item xs={12} className="mb-2">
                     <Typography
@@ -172,8 +283,11 @@ const AddMultipleChoiceQuestions = (props) => {
                         onChange={props.handleChange}
                         size="small"
                       >
-                        <MenuItem value={1}>Text</MenuItem>
-                        <MenuItem value={2}>File</MenuItem>
+                        {map(QuizType, (item, index) => (
+                          <MenuItem value={item.value} key={index}>
+                            {item.label}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Grid>
@@ -265,6 +379,16 @@ const AddMultipleChoiceQuestions = (props) => {
                                           icon="ic:round-upload-file"
                                           width={35}
                                           color="text.secondary"
+                                        />
+                                        <input
+                                          ref={mediaInputRef}
+                                          hidden
+                                          accept="image/*,audio/*,video/*"
+                                          onChange={(e) =>
+                                            onOptionFileChange(e, props)
+                                          }
+                                          name="question"
+                                          type="file"
                                         />
                                       </Box>
                                       <Stack
