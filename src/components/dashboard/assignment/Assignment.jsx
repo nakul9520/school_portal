@@ -46,6 +46,7 @@ import {
   StyledTableRow,
 } from "styles/ComponentStyle";
 import { MobileDatePicker } from "@mui/x-date-pickers";
+import moment from "moment";
 
 const Assignment = () => {
   const theme = useTheme();
@@ -73,7 +74,7 @@ const Assignment = () => {
   const [page, setPage] = useState(1);
   const [perPageData, setperPageData] = useState(10);
   const [isDatePickerOpen, setDatePickerOpen] = useState(false);
-  const [filedId, setFiledId] = useState("");
+  const [filedId, setFiledId] = useState({ id: "", type: "" });
 
   const { filterList } = useSelector((state) => state.content);
   const filterListData = filterList.data ?? [];
@@ -489,6 +490,7 @@ const Assignment = () => {
           >
             {({ values, handleSubmit, setFieldValue }) => (
               <form onSubmit={handleSubmit} className="h-100">
+              {console.log("value: " , values)}
                 <FieldArray
                   name="data"
                   render={(arrayHelpers) => (
@@ -639,36 +641,44 @@ const Assignment = () => {
                                       />
                                     </StyledTableCell>
                                     <StyledTableCell align="center">
-                                      <Typography
-                                        variant="subtitle2"
+                                      <Button
+                                        sx={{
+                                          color: "text.secondary",
+                                          fontWeight: 500,
+                                        }}
+                                        disableElevation
+                                        disableRipple
+                                        variant="text"
                                         onClick={() => {
-                                          setFiledId(item.id);
+                                          setFiledId({
+                                            id: item.id,
+                                            type: "start_date",
+                                          });
                                           setDatePickerOpen(true);
                                         }}
                                       >
-                                        {item.start_date}
-                                      </Typography>
+                                        {moment(get(values, start_date)).format(
+                                          "DD-MM-YYYY"
+                                        )}
+                                      </Button>
                                       <MobileDatePicker
                                         open={
-                                          filedId === item.id &&
+                                          filedId.id === item.id &&
+                                          filedId.type === "start_date" &&
                                           isDatePickerOpen
                                         }
                                         onClose={() => {
-                                          setFiledId("");
+                                          setFiledId({ id: "", type: "" });
                                           setDatePickerOpen(false);
                                         }}
                                         name={start_date}
                                         className="w-100"
-                                        value={values.start_date}
+                                        value={moment(get(values, start_date))}
                                         label=""
-                                        onChange={(newExpireDate) => {
-                                          console.log(
-                                            "Start date",
-                                            newExpireDate
-                                          );
+                                        onChange={(newStartDate) => {
                                           setFieldValue(
                                             start_date,
-                                            newExpireDate
+                                            newStartDate
                                           );
                                         }}
                                         format="YYYY-MM-DD"
@@ -676,27 +686,39 @@ const Assignment = () => {
                                       />
                                     </StyledTableCell>
                                     <StyledTableCell align="center">
-                                      <Typography
-                                        variant="subtitle2"
+                                      <Button
+                                        sx={{
+                                          color: "text.secondary",
+                                          fontWeight: 500,
+                                        }}
+                                        disableElevation
+                                        disableRipple
+                                        variant="text"
                                         onClick={() => {
-                                          setFiledId(item.id);
+                                          setFiledId({
+                                            id: item.id,
+                                            type: "end_date",
+                                          });
                                           setDatePickerOpen(true);
                                         }}
                                       >
-                                        {item.end_date}
-                                      </Typography>
+                                        {moment(get(values, end_date)).format(
+                                          "DD-MM-YYYY"
+                                        )}
+                                      </Button>
                                       <MobileDatePicker
                                         open={
-                                          filedId === item.id &&
+                                          filedId.id === item.id &&
+                                          filedId.type === "end_date" &&
                                           isDatePickerOpen
                                         }
                                         onClose={() => {
-                                          setFiledId("");
+                                          setFiledId({ id: "", type: "" });
                                           setDatePickerOpen(false);
                                         }}
                                         name={end_date}
                                         className="w-100"
-                                        value={values.end_date}
+                                        value={moment(get(values, end_date))}
                                         label=""
                                         onChange={(newExpireDate) => {
                                           setFieldValue(
