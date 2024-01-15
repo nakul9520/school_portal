@@ -45,6 +45,8 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
+import { MobileDatePicker } from "@mui/x-date-pickers";
+import moment from "moment";
 
 const Assignment = () => {
   const theme = useTheme();
@@ -71,6 +73,8 @@ const Assignment = () => {
   const [subCategoryData, setSubCategoryData] = useState({});
   const [page, setPage] = useState(1);
   const [perPageData, setperPageData] = useState(10);
+  const [isDatePickerOpen, setDatePickerOpen] = useState(false);
+  const [filedId, setFiledId] = useState({ id: "", type: "" });
 
   const { filterList } = useSelector((state) => state.content);
   const filterListData = filterList.data ?? [];
@@ -486,6 +490,7 @@ const Assignment = () => {
           >
             {({ values, handleSubmit, setFieldValue }) => (
               <form onSubmit={handleSubmit} className="h-100">
+              {console.log("value: " , values)}
                 <FieldArray
                   name="data"
                   render={(arrayHelpers) => (
@@ -582,6 +587,8 @@ const Assignment = () => {
                                 const listening_assignment = `data[${index}].listening_assignment`;
                                 const activities_assignment = `data[${index}].activities_assignment`;
                                 const is_general = `data[${index}].is_general`;
+                                const start_date = `data[${index}].start_date`;
+                                const end_date = `data[${index}].end_date`;
 
                                 return (
                                   <StyledTableRow key={index}>
@@ -634,10 +641,94 @@ const Assignment = () => {
                                       />
                                     </StyledTableCell>
                                     <StyledTableCell align="center">
-                                      {item.start_date}
+                                      <Button
+                                        sx={{
+                                          color: "text.secondary",
+                                          fontWeight: 500,
+                                        }}
+                                        disableElevation
+                                        disableRipple
+                                        variant="text"
+                                        onClick={() => {
+                                          setFiledId({
+                                            id: item.id,
+                                            type: "start_date",
+                                          });
+                                          setDatePickerOpen(true);
+                                        }}
+                                      >
+                                        {moment(get(values, start_date)).format(
+                                          "DD-MM-YYYY"
+                                        )}
+                                      </Button>
+                                      <MobileDatePicker
+                                        open={
+                                          filedId.id === item.id &&
+                                          filedId.type === "start_date" &&
+                                          isDatePickerOpen
+                                        }
+                                        onClose={() => {
+                                          setFiledId({ id: "", type: "" });
+                                          setDatePickerOpen(false);
+                                        }}
+                                        name={start_date}
+                                        className="w-100"
+                                        value={moment(get(values, start_date))}
+                                        label=""
+                                        onChange={(newStartDate) => {
+                                          setFieldValue(
+                                            start_date,
+                                            newStartDate
+                                          );
+                                        }}
+                                        format="YYYY-MM-DD"
+                                        sx={{ display: "none" }}
+                                      />
                                     </StyledTableCell>
                                     <StyledTableCell align="center">
-                                      {item.end_date}
+                                      <Button
+                                        sx={{
+                                          color: "text.secondary",
+                                          fontWeight: 500,
+                                        }}
+                                        disableElevation
+                                        disableRipple
+                                        variant="text"
+                                        onClick={() => {
+                                          setFiledId({
+                                            id: item.id,
+                                            type: "end_date",
+                                          });
+                                          setDatePickerOpen(true);
+                                        }}
+                                      >
+                                        {moment(get(values, end_date)).format(
+                                          "DD-MM-YYYY"
+                                        )}
+                                      </Button>
+                                      <MobileDatePicker
+                                        open={
+                                          filedId.id === item.id &&
+                                          filedId.type === "end_date" &&
+                                          isDatePickerOpen
+                                        }
+                                        onClose={() => {
+                                          setFiledId({ id: "", type: "" });
+                                          setDatePickerOpen(false);
+                                        }}
+                                        name={end_date}
+                                        className="w-100"
+                                        value={moment(get(values, end_date))}
+                                        label=""
+                                        onChange={(newExpireDate) => {
+                                          setFieldValue(
+                                            end_date,
+                                            newExpireDate
+                                          );
+                                        }}
+                                        format="YYYY-MM-DD"
+                                        sx={{ display: "none" }}
+                                      />
                                     </StyledTableCell>
                                     <StyledTableCell align="center">
                                       <CMCheckBox

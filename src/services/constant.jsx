@@ -45,3 +45,31 @@ export const gradeList = [
   { title: "YIL3", id: 5 },
   { title: "YIL4", id: 6 },
 ];
+
+export const QuizType = [
+  {
+    label: "Text",
+    value: 1,
+  },
+  {
+    label: "Image",
+    value: 2,
+  },
+  {
+    label: "Audio",
+    value: 3,
+  },
+  {
+    label: "Video",
+    value: 4,
+  },
+];
+
+export const allowedTypes = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "video/mp4",
+  "audio/mpeg",
+  "audio/mp3",
+];
