@@ -199,6 +199,27 @@ export const addEditMCQTask = createAsyncThunk(
         method: "POST",
         url: Api.ADD_MCQ_TASK,
         data: data,
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const editMCQTask = createAsyncThunk(
+  "content/editMCQTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.EDIT_MCQ_TASK,
+        data: data,
+        contentType: "multipart/form-data",
       });
       return response.data;
     } catch (err) {
@@ -721,6 +742,15 @@ const contentSlice = createSlice({
         state.loading = false;
       })
       .addCase(addEditMCQTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(editMCQTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editMCQTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(editMCQTask.rejected, (state) => {
         state.loading = false;
       })
       .addCase(getMCQTaskList.pending, (state) => {

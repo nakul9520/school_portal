@@ -71,6 +71,7 @@ const Api = {
   DELETE_VOICE_TASK: "deleteVoiceTask",
 
   ADD_MCQ_TASK: "addMcqTask",
+  EDIT_MCQ_TASK: "editMcqTask",
   MCQ_TASK_DETAIL: "getMcqTaskDetails",
   DELETE_MCQ_TASK: "deleteMcqTask",
 

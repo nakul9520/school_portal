@@ -15,25 +15,28 @@ import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import CMDialog from "components/common/dialog/CMDialog";
 import Iconify from "components/common/iconify";
 import { FieldArray, Formik, getIn } from "formik";
-import { get, includes, isEmpty, map, size, without } from "lodash";
+import { get, isEmpty, map } from "lodash";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { editMCQTask } from "redux/store/slice/dashboard/contentSlice";
 import {
   addEditMCQTask,
   getMCQTaskList,
 } from "redux/store/slice/dashboard/contentSlice";
+import { FILE_TYPE } from "services/constant";
 import { QuizType } from "services/constant";
 
 const AddMultipleChoiceQuestions = (props) => {
   const { data, open, onClose } = props;
   const dispatch = useDispatch();
   const book_id = localStorage.getItem("bookId");
+  console.log("data for edit", data);
+  const handleAddEdit = (values) => {
+    let payload;
 
-  const handleAddEdit = (values, action) => {
-    if (size(values.answer) > 0) {
-      const payload = {
+    if (isEmpty(data)) {
+      payload = {
         ...values,
-        id: data ? data.id : "",
         book_id: book_id,
       };
       dispatch(addEditMCQTask(payload))
@@ -57,7 +60,47 @@ const AddMultipleChoiceQuestions = (props) => {
           console.log("Error: ", err);
         });
     } else {
-      toast.error("Please Select One ANswer");
+      payload = {
+        ...values,
+        id: data ? data.id : "",
+        book_id: book_id,
+        is_edit:
+          values.question_type !== FILE_TYPE.text
+            ? values.question && values.question instanceof File
+              ? 1
+              : 0
+            : 1,
+        data: values.data.map((item) => ({
+          ...item,
+          is_edit:
+            values.options_type !== FILE_TYPE.text
+              ? item.option && item.option instanceof File
+                ? 1
+                : 0
+              : 1, // Check if there's any file in options
+        })),
+      };
+      console.log("payload", payload);
+      dispatch(editMCQTask(payload))
+        .unwrap()
+        .then((result) => {
+          if (result.success) {
+            toast.success(result.message);
+            const param = {
+              book_id: book_id,
+              page: 1,
+            };
+
+            dispatch(getMCQTaskList(param));
+            onClose();
+          } else {
+            toast.error(result.message);
+          }
+        })
+        .catch((err) => {
+          toast.error(err.message);
+          console.log("Error: ", err);
+        });
     }
   };
 
@@ -72,11 +115,27 @@ const AddMultipleChoiceQuestions = (props) => {
         <DialogContent>
           <Formik
             initialValues={{
-              question_type: data.question_type ?? 1,
+              question_type: data.question_type ?? "1",
               question: data.question ?? [],
-              option_type: data.option_type ?? 1,
-              options: data.options ?? ["", "", "", ""],
-              answer: data.answer ?? [],
+              options_type: data.options_type ?? "1",
+              data: data.data ?? [
+                {
+                  option: "",
+                  status: "0",
+                },
+                {
+                  option: "",
+                  status: "0",
+                },
+                {
+                  option: "",
+                  status: "0",
+                },
+                {
+                  option: "",
+                  status: "0",
+                },
+              ],
             }}
             onSubmit={(value, action) => {
               handleAddEdit(value, action);
@@ -102,7 +161,7 @@ const AddMultipleChoiceQuestions = (props) => {
                         value={props.values.question_type}
                         onChange={(e) => {
                           props.setFieldValue("question_type", e.target.value);
-                          props.setFieldValue("question", [""]);
+                          props.setFieldValue("question", "");
                         }}
                         size="small"
                       >
@@ -122,7 +181,7 @@ const AddMultipleChoiceQuestions = (props) => {
                     >
                       Add Question
                     </Typography>
-                    {props.values.question_type === 1 ? (
+                    {props.values.question_type === "1" ? (
                       <TextField
                         name="question"
                         value={props.values.question}
@@ -156,26 +215,33 @@ const AddMultipleChoiceQuestions = (props) => {
                           />
                           <input
                             hidden
-                            accept="image/*,audio/*,video/*"
+                            accept={
+                              props.values.question_type === FILE_TYPE.image
+                                ? "image/*"
+                                : props.values.question_type === FILE_TYPE.audio
+                                ? "audio/*"
+                                : "video/*"
+                            }
                             type="file"
                             id={`questionfile`}
                             onChange={(e) => {
-                              props.setFieldValue("question", [
-                                e.currentTarget.files[0],
-                              ]);
+                              props.setFieldValue(
+                                "question",
+                                e.currentTarget.files[0]
+                              );
                             }}
                           />
                         </Box>
-                        {!isEmpty(props.values.question[0]) && (
+                        {props.values.question !== "" && (
                           <Stack direction="row" alignItems="center">
                             <Typography variant="body2">
-                              {props.values.question[0].name}
+                              {props.values.question?.name}
                             </Typography>
                             <IconButton
                               type="button"
                               color="error"
                               onClick={() => {
-                                props.setFieldValue("questions", [""]);
+                                props.setFieldValue("questions", "");
                               }}
                             >
                               <Iconify icon="mdi:remove" />
@@ -197,12 +263,28 @@ const AddMultipleChoiceQuestions = (props) => {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        name="option_type"
-                        value={props.values.option_type}
+                        name="options_type"
+                        value={props.values.options_type}
                         onChange={(e) => {
-                          props.setFieldValue("option_type", e.target.value);
-                          props.setFieldValue("options", ["", "", "", ""]);
-                          props.setFieldValue("answer", []);
+                          props.setFieldValue("options_type", e.target.value);
+                          props.setFieldValue("data", [
+                            {
+                              option: "",
+                              status: "0",
+                            },
+                            {
+                              option: "",
+                              status: "0",
+                            },
+                            {
+                              option: "",
+                              status: "0",
+                            },
+                            {
+                              option: "",
+                              status: "0",
+                            },
+                          ]);
                         }}
                         size="small"
                       >
@@ -216,19 +298,28 @@ const AddMultipleChoiceQuestions = (props) => {
                   </Grid>
                   <Grid item xs={12} sx={{ paddingBottom: 5 }}>
                     <FieldArray
-                      name="options"
+                      name="data"
                       render={({ push, remove }) => (
                         <>
-                          {props.values.options &&
-                          props.values.options.length > 0
-                            ? props.values.options.map((item, index) => {
-                                const option = `options[${index}]`;
-                                const optionError = getIn(props.errors, option);
+                          {props.values.data && props.values.data.length > 0
+                            ? props.values.data.map((item, index) => {
+                                const optionName = `data[${index}].option`;
+
+                                const status = `data[${index}].status`;
+                                const statusContent = get(props.values, status);
+
+                                const optionError = getIn(
+                                  props.errors,
+                                  optionName
+                                );
                                 const optionTouched = getIn(
                                   props.touched,
-                                  option
+                                  optionName
                                 );
-                                const optionContent = get(props.values, option);
+                                const optionContent = get(
+                                  props.values,
+                                  optionName
+                                );
 
                                 return (
                                   <Stack
@@ -237,39 +328,29 @@ const AddMultipleChoiceQuestions = (props) => {
                                     alignItems="center"
                                     className="gap-2 mb-2"
                                   >
-                                    {console.log("option", optionContent)}
                                     <CMCheckBox
                                       disabled={
-                                        props.values.option_type === 1
+                                        props.values.options_type === "1"
                                           ? isEmpty(optionContent)
                                           : typeof optionContent !== "object"
                                       }
-                                      checked={includes(
-                                        props.values.answer,
-                                        optionContent
-                                      )}
+                                      checked={
+                                        statusContent === "0" ? false : true
+                                      }
                                       onChange={(e) => {
-                                        const { answer } = props.values;
-                                        const updatedAnswer = includes(
-                                          answer,
-                                          optionContent
-                                        )
-                                          ? without(answer, optionContent) // Remove if already exists
-                                          : [optionContent]; // Add if not exists or replace existing with the current value
-
                                         props.setFieldValue(
-                                          "answer",
-                                          updatedAnswer
+                                          status,
+                                          e.target.checked ? "1" : "0"
                                         );
                                       }}
                                     />
-                                    {props.values.option_type === 1 ? (
+                                    {props.values.options_type === "1" ? (
                                       <TextField
-                                        name={option}
+                                        name={optionName}
                                         value={optionContent}
                                         onChange={(e) =>
                                           props.setFieldValue(
-                                            option,
+                                            optionName,
                                             e.target.value
                                           )
                                         }
@@ -303,10 +384,18 @@ const AddMultipleChoiceQuestions = (props) => {
                                           <input
                                             id={`fileInput-${index}`}
                                             hidden
-                                            accept="image/*,audio/*,video/*"
+                                            accept={
+                                              props.values.options_type ===
+                                              FILE_TYPE.image
+                                                ? "image/*"
+                                                : props.values.options_type ===
+                                                  FILE_TYPE.audio
+                                                ? "audio/*"
+                                                : "video/*"
+                                            }
                                             onChange={(e) => {
                                               props.setFieldValue(
-                                                option,
+                                                optionName,
                                                 e.currentTarget.files[0]
                                               );
                                             }}
@@ -315,12 +404,14 @@ const AddMultipleChoiceQuestions = (props) => {
                                         </Box>
                                       </>
                                     )}
+
                                     <IconButton
                                       type="button"
                                       onClick={() => remove(index)}
                                     >
                                       <Iconify icon="ic:round-minus" />
                                     </IconButton>
+
                                     {optionContent && (
                                       <Stack
                                         direction="row"
@@ -333,7 +424,7 @@ const AddMultipleChoiceQuestions = (props) => {
                                           type="button"
                                           color="error"
                                           onClick={() => {
-                                            props.setFieldValue(option, "");
+                                            props.setFieldValue(optionName, "");
                                           }}
                                         >
                                           <Iconify icon="mdi:remove" />
@@ -349,7 +440,6 @@ const AddMultipleChoiceQuestions = (props) => {
                             alignItems="center"
                             justifyContent="space-between"
                             className="gap-2"
-                            onClick={() => push("")}
                             sx={{
                               position: "absolute",
                               bottom: 0,
@@ -359,7 +449,11 @@ const AddMultipleChoiceQuestions = (props) => {
                               background: "#fff",
                             }}
                           >
-                            <Button variant="contained" color="secondary">
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => push({ option: "", status: "0" })}
+                            >
                               Satır Ekle
                             </Button>
                             <Button

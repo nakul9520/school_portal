@@ -11,10 +11,30 @@ export const USER_TYPE = {
 };
 
 export const FILE_TYPE = {
-  image: 1,
-  audio: 2,
-  document: 3,
+  text: "1",
+  image: "2",
+  audio: "3",
+  video: "4",
 };
+
+export const QuizType = [
+  {
+    label: "Text",
+    value: "1",
+  },
+  {
+    label: "Image",
+    value: "2",
+  },
+  {
+    label: "Audio",
+    value: "3",
+  },
+  {
+    label: "Video",
+    value: "4",
+  },
+];
 
 export const CONTENT_TYPE = {
   videoTutorial: 1,
@@ -44,25 +64,6 @@ export const gradeList = [
   { title: "YIL2", id: 4 },
   { title: "YIL3", id: 5 },
   { title: "YIL4", id: 6 },
-];
-
-export const QuizType = [
-  {
-    label: "Text",
-    value: 1,
-  },
-  {
-    label: "Image",
-    value: 2,
-  },
-  {
-    label: "Audio",
-    value: 3,
-  },
-  {
-    label: "Video",
-    value: 4,
-  },
 ];
 
 export const allowedTypes = [
