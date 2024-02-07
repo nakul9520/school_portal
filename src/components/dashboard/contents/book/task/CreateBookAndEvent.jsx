@@ -1,19 +1,9 @@
-import { useState } from "react";
-
 import { Box, Grid } from "@mui/material";
-
-import { useNavigate } from "react-router-dom";
-import AddPuzzel from "./model/AddPuzzel";
 import BackButton from "components/common/BackButton";
+import { useNavigate } from "react-router-dom";
 
 const CreateBookAndEvent = () => {
   const navigate = useNavigate();
-
-  const [open5, setOpen5] = useState(false);
-
-  const handleClose5 = () => {
-    setOpen5(false);
-  };
 
   return (
     <>
@@ -67,14 +57,14 @@ const CreateBookAndEvent = () => {
           <Box
             className="common_multi_box"
             sx={{ backgroundColor: "warning.main" }}
-            onClick={() => setOpen5(true)}
+            onClick={() =>
+              navigate("/dashboard/contents/create-book-event/puzzel-task")
+            }
           >
-            Bulmaca Ekle
+            Uyarı
           </Box>
         </Grid>
       </Grid>
-
-      <AddPuzzel open={open5} onClose={handleClose5} />
     </>
   );
 };

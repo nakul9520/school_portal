@@ -75,6 +75,7 @@ const AddBadge = () => {
           initialValues={{
             title: badgeData.title ?? "",
             image: badgeData.image ?? [],
+            alert: badgeData.alert ?? "",
             description: badgeData.description ?? "",
             profile: badgeData.profile ?? "",
           }}
@@ -211,6 +212,30 @@ const AddBadge = () => {
                     helperText={
                       props.errors.description && props.touched.description
                         ? props.errors.description
+                        : null
+                    }
+                  />
+                </Box>
+                <Box className="custom_form_row d-flex align-items-center border-bottom">
+                  <Typography
+                    variant="body2"
+                    color="secondary.disabled"
+                    className="ms-4 w-25"
+                  >
+                    Uyarı
+                  </Typography>
+                  <TextField
+                    name="alert"
+                    value={props.values.alert}
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    fullWidth
+                    error={
+                      props.errors.alert && props.touched.alert ? true : false
+                    }
+                    helperText={
+                      props.errors.alert && props.touched.alert
+                        ? props.errors.alert
                         : null
                     }
                   />

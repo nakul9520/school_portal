@@ -29,7 +29,7 @@ import {
   addBookTitle,
   getFilterList,
 } from "redux/store/slice/dashboard/contentSlice";
-import { FILE_TYPE, categoryName } from "services/constant";
+import { BOOK_FILE_TYPE, categoryName } from "services/constant";
 
 import {
   addAudioFileValidation,
@@ -596,7 +596,7 @@ const AddBookTopic = () => {
             }}
             validationSchema={addAudioFileValidation}
             onSubmit={(value) => {
-              handleAddBookFile(value, FILE_TYPE.audio);
+              handleAddBookFile(value, BOOK_FILE_TYPE.audio);
             }}
           >
             {({ values, handleSubmit, handleBlur, setFieldValue, errors }) => (
@@ -792,7 +792,7 @@ const AddBookTopic = () => {
             }}
             validationSchema={addAudioFileValidation}
             onSubmit={(value) => {
-              handleAddBookFile(value, FILE_TYPE.image);
+              handleAddBookFile(value, BOOK_FILE_TYPE.image);
             }}
           >
             {({ values, handleSubmit, handleBlur, setFieldValue, errors }) => (
@@ -969,7 +969,7 @@ const AddBookTopic = () => {
             }}
             validationSchema={addAudioFileValidation}
             onSubmit={(value) => {
-              handleAddBookFile(value, FILE_TYPE.document);
+              handleAddBookFile(value, BOOK_FILE_TYPE.document);
             }}
           >
             {({ values, handleSubmit, handleBlur, setFieldValue, errors }) => (

@@ -11,9 +11,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+
 import CMCheckBox from "components/common/checkbox/CMCheckBox";
 import CMDialog from "components/common/dialog/CMDialog";
 import Iconify from "components/common/iconify";
+import ImageThumbnail from "components/common/thumbnail/ImageThumbnail";
+import VedioThumbnail from "components/common/thumbnail/VedioThumbnail";
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty, map } from "lodash";
 import { useDispatch } from "react-redux";
@@ -25,12 +29,13 @@ import {
 } from "redux/store/slice/dashboard/contentSlice";
 import { FILE_TYPE } from "services/constant";
 import { QuizType } from "services/constant";
+import { imageObj } from "services/images";
 
 const AddMultipleChoiceQuestions = (props) => {
   const { data, open, onClose } = props;
   const dispatch = useDispatch();
+  const theme = useTheme();
   const book_id = localStorage.getItem("bookId");
-  console.log("data for edit", data);
   const handleAddEdit = (values) => {
     let payload;
 
@@ -181,75 +186,121 @@ const AddMultipleChoiceQuestions = (props) => {
                     >
                       Add Question
                     </Typography>
-                    {props.values.question_type === "1" ? (
-                      <TextField
-                        name="question"
-                        value={props.values.question}
-                        onChange={props.handleChange}
-                        onBlur={props.handleBlur}
-                        fullWidth
-                        size="small"
-                        error={
-                          props.errors.question && props.touched.question
-                            ? true
-                            : false
-                        }
-                        helperText={
-                          props.errors.question && props.touched.question
-                            ? props.errors.question
-                            : null
-                        }
-                      />
-                    ) : (
-                      <>
-                        <Box
-                          className="border p-2 d-flex align-items-center justify-content-center"
-                          sx={{ width: 100, height: 100 }}
-                          component="label"
-                          htmlFor={`questionfile`}
-                        >
-                          <Iconify
-                            icon="ic:round-upload-file"
-                            width={35}
-                            color="text.secondary"
-                          />
-                          <input
-                            hidden
-                            accept={
-                              props.values.question_type === FILE_TYPE.image
-                                ? "image/*"
-                                : props.values.question_type === FILE_TYPE.audio
-                                ? "audio/*"
-                                : "video/*"
-                            }
-                            type="file"
-                            id={`questionfile`}
-                            onChange={(e) => {
-                              props.setFieldValue(
-                                "question",
-                                e.currentTarget.files[0]
-                              );
-                            }}
-                          />
-                        </Box>
-                        {props.values.question !== "" && (
-                          <Stack direction="row" alignItems="center">
-                            <Typography variant="body2">
-                              {props.values.question?.name}
-                            </Typography>
-                            <IconButton
-                              type="button"
-                              color="error"
-                              onClick={() => {
-                                props.setFieldValue("questions", "");
+                    <Stack direction="row" className="gap-2">
+                      {props.values.question_type === "1" ? (
+                        <TextField
+                          name="question"
+                          value={props.values.question}
+                          onChange={props.handleChange}
+                          onBlur={props.handleBlur}
+                          fullWidth
+                          size="small"
+                          error={
+                            props.errors.question && props.touched.question
+                              ? true
+                              : false
+                          }
+                          helperText={
+                            props.errors.question && props.touched.question
+                              ? props.errors.question
+                              : null
+                          }
+                        />
+                      ) : (
+                        <>
+                          <Box
+                            className="border p-2 d-flex align-items-center justify-content-center"
+                            sx={{ width: 100, height: 100 }}
+                            component="label"
+                            htmlFor={`questionfile`}
+                          >
+                            <Iconify
+                              icon="ic:round-upload-file"
+                              width={35}
+                              color="text.secondary"
+                            />
+                            <input
+                              hidden
+                              accept={
+                                props.values.question_type === FILE_TYPE.image
+                                  ? "image/*"
+                                  : props.values.question_type ===
+                                    FILE_TYPE.audio
+                                  ? "audio/*"
+                                  : "video/*"
+                              }
+                              type="file"
+                              id={`questionfile`}
+                              onChange={(e) => {
+                                props.setFieldValue(
+                                  "question",
+                                  e.currentTarget.files[0]
+                                );
                               }}
-                            >
-                              <Iconify icon="mdi:remove" />
-                            </IconButton>
-                          </Stack>
-                        )}
-                      </>
-                    )}
+                            />
+                          </Box>
+                          {!(props.values.question instanceof File) &&
+                          !isEmpty(props.values.question) ? (
+                            props.values.question_type === FILE_TYPE.image ? (
+                              <ImageThumbnail
+                                key={1}
+                                size={100}
+                                imagePath={props.values.question}
+                              />
+                            ) : props.values.question_type ===
+                              FILE_TYPE.video ? (
+                              <VedioThumbnail
+                                key={1}
+                                videoPath={props.values.question}
+                                size={100}
+                              />
+                            ) : props.values.question_type ===
+                              FILE_TYPE.audio ? (
+                              <Box
+                                sx={{
+                                  width: 100,
+                                  height: 100,
+                                  p: 1,
+                                  boxShadow: theme.shadows[3],
+                                  backgroundColor:
+                                    theme.palette.background.paper,
+                                }}
+                                className="rounded position-relative d-flex flex-column gap-3 align-items-center justify-content-center cursor-pointer"
+                              >
+                                <Box
+                                  component="img"
+                                  src={imageObj.audioIcon}
+                                  sx={{ width: 40 }}
+                                  onClick={() => {
+                                    window.open(
+                                      props.values.question,
+                                      "_blank"
+                                    );
+                                  }}
+                                />
+                              </Box>
+                            ) : null
+                          ) : null}
+
+                          {props.values.question instanceof File && (
+                            <Stack direction="row" alignItems="center">
+                              <Typography variant="body2">
+                                {props.values.question?.name}
+                              </Typography>
+                              <IconButton
+                                type="button"
+                                color="error"
+                                onClick={() => {
+                                  props.setFieldValue("questions", "");
+                                }}
+                              >
+                                <Iconify icon="mdi:remove" />
+                              </IconButton>
+                            </Stack>
+                          )}
+                        </>
+                      )}
+                    </Stack>
                   </Grid>
                   <Grid item xs={12} className="mb-2">
                     <Typography
@@ -304,10 +355,6 @@ const AddMultipleChoiceQuestions = (props) => {
                           {props.values.data && props.values.data.length > 0
                             ? props.values.data.map((item, index) => {
                                 const optionName = `data[${index}].option`;
-
-                                const status = `data[${index}].status`;
-                                const statusContent = get(props.values, status);
-
                                 const optionError = getIn(
                                   props.errors,
                                   optionName
@@ -321,6 +368,9 @@ const AddMultipleChoiceQuestions = (props) => {
                                   optionName
                                 );
 
+                                const status = `data[${index}].status`;
+                                const statusContent = get(props.values, status);
+
                                 return (
                                   <Stack
                                     key={index}
@@ -329,11 +379,6 @@ const AddMultipleChoiceQuestions = (props) => {
                                     className="gap-2 mb-2"
                                   >
                                     <CMCheckBox
-                                      disabled={
-                                        props.values.options_type === "1"
-                                          ? isEmpty(optionContent)
-                                          : typeof optionContent !== "object"
-                                      }
                                       checked={
                                         statusContent === "0" ? false : true
                                       }
@@ -402,6 +447,50 @@ const AddMultipleChoiceQuestions = (props) => {
                                             type="file"
                                           />
                                         </Box>
+                                        {!(optionContent instanceof File) &&
+                                        !isEmpty(optionContent) ? (
+                                          props.values.options_type ===
+                                          FILE_TYPE.image ? (
+                                            <ImageThumbnail
+                                              key={1}
+                                              size={100}
+                                              imagePath={optionContent}
+                                            />
+                                          ) : props.values.options_type ===
+                                            FILE_TYPE.video ? (
+                                            <VedioThumbnail
+                                              key={index}
+                                              videoPath={optionContent}
+                                              size={100}
+                                            />
+                                          ) : props.values.options_type ===
+                                            FILE_TYPE.audio ? (
+                                            <Box
+                                              sx={{
+                                                width: 100,
+                                                height: 100,
+                                                p: 1,
+                                                boxShadow: theme.shadows[3],
+                                                backgroundColor:
+                                                  theme.palette.background
+                                                    .paper,
+                                              }}
+                                              className="rounded position-relative d-flex flex-column gap-3 align-items-center justify-content-center cursor-pointer"
+                                            >
+                                              <Box
+                                                component="img"
+                                                src={imageObj.audioIcon}
+                                                sx={{ width: 40 }}
+                                                onClick={() => {
+                                                  window.open(
+                                                    optionContent,
+                                                    "_blank"
+                                                  );
+                                                }}
+                                              />
+                                            </Box>
+                                          ) : null
+                                        ) : null}
                                       </>
                                     )}
 
@@ -412,7 +501,7 @@ const AddMultipleChoiceQuestions = (props) => {
                                       <Iconify icon="ic:round-minus" />
                                     </IconButton>
 
-                                    {optionContent && (
+                                    {optionContent instanceof File && (
                                       <Stack
                                         direction="row"
                                         alignItems="center"
@@ -452,7 +541,9 @@ const AddMultipleChoiceQuestions = (props) => {
                             <Button
                               variant="contained"
                               color="secondary"
-                              onClick={() => push({ option: "", status: "0" })}
+                              onClick={() =>
+                                push({ id: "", option: "", status: "0" })
+                              }
                             >
                               Satır Ekle
                             </Button>

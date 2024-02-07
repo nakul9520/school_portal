@@ -99,7 +99,7 @@ const MCQTaskTable = () => {
               </StyledTableCell>
               <StyledTableCell align="left">Question</StyledTableCell>
               <StyledTableCell align="left">Options</StyledTableCell>
-              <StyledTableCell align="left">Answers</StyledTableCell>
+              {/* <StyledTableCell align="left">Answers</StyledTableCell> */}
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -124,7 +124,9 @@ const MCQTaskTable = () => {
                   <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">
                     {row.question_type === FILE_TYPE.text ? (
-                      row.question
+                      <Typography variant="subtitle2">
+                        {row.question}
+                      </Typography>
                     ) : row.question_type === FILE_TYPE.image ? (
                       <ImageThumbnail
                         key={1}
@@ -144,34 +146,37 @@ const MCQTaskTable = () => {
                           height: 80,
                           p: 1,
                           boxShadow: theme.shadows[3],
+                          backgroundColor: theme.palette.background.paper,
                         }}
                         className="rounded position-relative d-flex flex-column gap-3 align-items-center justify-content-center cursor-pointer"
                       >
                         <Box
                           component="img"
-                          src={imageObj.documentIcon}
+                          src={imageObj.audioIcon}
                           sx={{ width: 40 }}
+                          onClick={() => {
+                            window.open(row.question, "_blank");
+                          }}
                         />
-                        <Typography variant="subtitle2" key={index}>
-                          {row.question}
-                        </Typography>
                       </Box>
                     )}
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    {map(row.data, (item, optionIndex) => (
-                      <Typography variant="body2" key={optionIndex}>
-                        {item.options_type === FILE_TYPE.text ? (
-                          item.option
+                    <Stack direction="column" className="gap-2">
+                      {map(row.data, (item, optionIndex) =>
+                        item.options_type === FILE_TYPE.text ? (
+                          <Typography variant="subtitle2">
+                            {item.option}
+                          </Typography>
                         ) : item.options_type === FILE_TYPE.image ? (
                           <ImageThumbnail
-                            key={1}
+                            key={optionIndex}
                             size={40}
                             imagePath={item.option}
                           />
                         ) : item.options_type === FILE_TYPE.video ? (
                           <VedioThumbnail
-                            key={index}
+                            key={optionIndex}
                             videoPath={item.option}
                             size={40}
                           />
@@ -182,29 +187,30 @@ const MCQTaskTable = () => {
                               height: 40,
                               p: 1,
                               boxShadow: theme.shadows[3],
+                              backgroundColor: theme.palette.background.paper,
                             }}
                             className="rounded position-relative d-flex flex-column gap-3 align-items-center justify-content-center cursor-pointer"
                           >
                             <Box
                               component="img"
-                              src={imageObj.documentIcon}
+                              src={imageObj.audioIcon}
                               sx={{ width: 40 }}
+                              onClick={() => {
+                                window.open(row.option, "_blank");
+                              }}
                             />
-                            <Typography variant="subtitle2" key={index}>
-                              {item.option}
-                            </Typography>
                           </Box>
-                        )}
-                      </Typography>
-                    ))}
+                        )
+                      )}
+                    </Stack>
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  {/* <StyledTableCell align="left">
                     {map(row.answer, (item, optionIndex) => (
                       <Typography variant="body2" key={optionIndex}>
                         {item}
                       </Typography>
                     ))}
-                  </StyledTableCell>
+                  </StyledTableCell> */}
                   <StyledTableCell
                     align="left"
                     className="d-flex align-items-center"

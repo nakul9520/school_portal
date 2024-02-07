@@ -78,10 +78,17 @@ const Api = {
   ADD_DRAG_DROP_TASK: "addDragDropTask",
   DRAG_DROP_TASK_DETAIL: "getDragDropTaskDetails",
   DELETE_DRAG_DROP_TASK: "deleteDragDropTask",
+  EDIT_DRAG_DROP_TASK: "editDragDropTask",
 
   ADD_MATCHING_TASK: "addMatchingTask",
+  EDIT_MATCHING_TASK: "editMatchingTask",
   MATCHING_TASK_DETAIL: "getMatchingTaskDetails",
   DELETE_MATCHING_TASK: "deleteMatchingTask",
+
+  ADD_EDIT_PUZZEL_TASK: "addPuzzleTask",
+  GET_PUZZEL_TASK_LIST: "getPuzzleTaskDetails",
+  DELETE_PUZZEL_TASK: "deletePuzzleTask",
+
   // filter
   GET_FILTER_LIST: "getfilterlist",
   ADD_EDIT_FILTER: "addEditFilter",

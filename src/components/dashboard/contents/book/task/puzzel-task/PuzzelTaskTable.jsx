@@ -1,5 +1,8 @@
+import { useState } from "react";
+
 import {
   Box,
+  Button,
   LinearProgress,
   Stack,
   TableBody,
@@ -10,43 +13,53 @@ import {
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { isEmpty } from "lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
+import CMIconButton from "components/common/CMIconButton";
 import Iconify from "components/common/iconify/Iconify";
+import {
+  deletePuzzelTask,
+  getPuzzelTaskList,
+} from "redux/store/slice/dashboard/contentSlice";
 import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
-import CMIconButton from "components/common/CMIconButton";
-import { deleteBadge } from "redux/store/slice/dashboard/badgeSlice";
-import { getBadgeList } from "redux/store/slice/dashboard/badgeSlice";
+import AddEditPuzzelTask from "./AddEditPuzzelTask";
+import createMarkup from "components/hooks/createMarkup";
+// import AddVoiceRecording from "./AddVoiceRecording";
 
-const BadgesTable = () => {
+const PuzzelTaskTable = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const book_id = localStorage.getItem("bookId");
 
-  const { badgeListInfo, loading } = useSelector((state) => state.badge);
-  const badgeList = badgeListInfo.data ?? [];
+  const [open, setOpen] = useState(false);
+  const [editContent, setEditContent] = useState({});
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const { puzzelTaskInfo, loading } = useSelector((state) => state.content);
+  const puzzelTaskList = puzzelTaskInfo.data ?? [];
 
   const handleDelete = (id) => {
-    dispatch(deleteBadge({ id: id }))
+    dispatch(deletePuzzelTask({ id: id }))
       .unwrap()
       .then((result) => {
         if (result.success) {
           toast.success(result.message);
-          dispatch(
-            getBadgeList({
-              payload: {
-                search: "",
-                per_page: 10,
-              },
-              page: 1,
-            })
-          );
+          const param = {
+            book_id: book_id,
+            page: 1,
+          };
+
+          dispatch(getPuzzelTaskList(param));
+        } else {
+          toast.error(result.message);
         }
       })
       .catch((err) => {
@@ -56,6 +69,18 @@ const BadgesTable = () => {
   };
   return (
     <>
+      <Box className="text-right">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            setEditContent({});
+            setOpen(true);
+          }}
+        >
+          Add Task
+        </Button>
+      </Box>
       <TableContainer
         component={Paper}
         className="rounded-0 mt-3 scrollbar-none"
@@ -67,49 +92,39 @@ const BadgesTable = () => {
               <StyledTableCell className="" color="text.primary">
                 Sıra
               </StyledTableCell>
-              <StyledTableCell align="left">
-                Rozetler / Profil resimleri
-              </StyledTableCell>
-              <StyledTableCell align="left">Tamamlama Kriteri</StyledTableCell>
-
-              <StyledTableCell align="left">Rozet görseli</StyledTableCell>
-              <StyledTableCell align="left">Uyarı</StyledTableCell>
+              <StyledTableCell align="left">Title</StyledTableCell>
+              <StyledTableCell align="left">Data</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
               <StyledTableRow>
-                <StyledTableCell align="left" colSpan={9}>
+                <StyledTableCell align="left" colSpan={4}>
                   <LinearProgress />
                 </StyledTableCell>
               </StyledTableRow>
-            ) : isEmpty(badgeList) ? (
+            ) : isEmpty(puzzelTaskList) ? (
               <StyledTableRow>
-                <StyledTableCell align="center" colSpan={9}>
+                <StyledTableCell align="center" colSpan={4}>
                   <Typography variant="subtitle1" color="text.primary">
                     Mevcut Veri Yok
                   </Typography>
                 </StyledTableCell>
               </StyledTableRow>
             ) : (
-              badgeList.map((row, index) => (
+              puzzelTaskList.map((row, index) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">{row.title}</StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.description}
+                    <Box
+                      className="text-break"
+                      sx={{ fontSize: 12, fontWeight: 500 }}
+                      dangerouslySetInnerHTML={createMarkup(row.data)}
+                    />
                   </StyledTableCell>
-                  <StyledTableCell align="left">
-                    <Box sx={{ width: 80, height: 80 }}>
-                      <Box
-                        component="img"
-                        src={row.image}
-                        className="img-cover w-100 h-100"
-                      />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell align="left">{row.alert}</StyledTableCell>
+
                   <StyledTableCell
                     align="left"
                     className="d-flex align-items-center"
@@ -118,12 +133,14 @@ const BadgesTable = () => {
                       direction="row"
                       className="align-items-center  gap-2"
                     >
-                      <Box
-                        onClick={() =>
-                          navigate("/dashboard/add-badges", { state: row })
-                        }
-                      >
-                        <CMIconButton color="warning">
+                      <Box>
+                        <CMIconButton
+                          color="warning"
+                          onClick={() => {
+                            setEditContent(row);
+                            setOpen(true);
+                          }}
+                        >
                           <Iconify icon="el:edit" />
                         </CMIconButton>
                       </Box>
@@ -144,8 +161,9 @@ const BadgesTable = () => {
           </TableBody>
         </StyledTable>
       </TableContainer>
+      <AddEditPuzzelTask open={open} onClose={handleClose} data={editContent} />
     </>
   );
 };
 
-export default BadgesTable;
+export default PuzzelTaskTable;

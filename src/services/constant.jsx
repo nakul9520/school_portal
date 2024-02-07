@@ -10,6 +10,12 @@ export const USER_TYPE = {
   schoolAdmin: "5",
 };
 
+export const BOOK_FILE_TYPE = { 
+  image: "1",
+  audio: "2",
+  document: "3",
+};
+
 export const FILE_TYPE = {
   text: "1",
   image: "2",

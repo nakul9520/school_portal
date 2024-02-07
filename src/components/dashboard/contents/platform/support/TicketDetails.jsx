@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Avatar,
@@ -17,7 +17,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { Formik } from "formik";
 import { isEmpty, map, truncate } from "lodash";
@@ -114,17 +114,23 @@ const MessageInfo = ({ data, messageOwner }) => {
 const TicketDetails = () => {
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const theme = useTheme();
   const size = 80;
-  const { state } = useLocation();
-  console.log("state", state);
+  const location = useLocation();
+  const state = useMemo(() => location.state ?? {}, [location.state]);
   const [mediaFileList, setMediaFileList] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [ticketstatus, setTicketstatus] = useState(state.status);
+  const [ticketstatus, setTicketstatus] = useState(state?.status);
 
   const { supportTicketMessage } = useSelector((state) => state.content);
   console.log("state", state);
   console.log("supportTicketMessage", supportTicketMessage);
+  useEffect(() => {
+    if (state === null || state === undefined) {
+      navigate("/dashboard");
+    }
+  }, [navigate, state]);
 
   const handleSelectOption = (statusType) => {
     setTicketstatus(statusType);
@@ -148,7 +154,7 @@ const TicketDetails = () => {
 
   useEffect(() => {
     dispatch(getSupportTicketChat({ ticket_id: state.id }));
-  }, [dispatch, state.id]);
+  }, [dispatch, state?.id]);
 
   const handleSupportChat = (data, action) => {
     dispatch(
@@ -200,7 +206,7 @@ const TicketDetails = () => {
           >
             <Stack direction="row" className="align-items-center gap-1">
               <Typography variant="subtitle1">Ticket Id. :</Typography>
-              <Typography variant="subtitle1">{state.ticket_id}</Typography>
+              <Typography variant="subtitle1">{state?.ticket_id}</Typography>
             </Stack>
 
             <Typography
@@ -378,7 +384,7 @@ const TicketDetails = () => {
                             color="primary"
                             type="submit"
                             disabled={
-                              isEmpty(props.values.description) ||
+                              isEmpty(props.values.description) &&
                               isEmpty(props.values.file)
                             }
                           >
