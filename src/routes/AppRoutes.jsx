@@ -77,6 +77,7 @@ import DragDropTask from "components/dashboard/contents/book/task/drag-drop/Drag
 import MatchingTask from "components/dashboard/contents/book/task/matching-task/MatchingTask";
 import SchoolAdmin from "components/dashboard/username-and-groups/school-admin/SchoolAdmin";
 import AddSchoolAdminForm from "components/dashboard/username-and-groups/school-admin/AddSchoolAdminForm";
+import PuzzelTask from "components/dashboard/contents/book/task/puzzel-task/PuzzelTask";
 
 // private
 // const DashboardLayout = Loadable(
@@ -287,6 +288,7 @@ const AppRoutes = () => {
                 <Route path="mcq-task" element={<MCQTask />} />
                 <Route path="drag-drop-task" element={<DragDropTask />} />
                 <Route path="matching-task" element={<MatchingTask />} />
+                <Route path="puzzel-task" element={<PuzzelTask />} />
               </Route>
             </Route>
             {/* System Setting */}

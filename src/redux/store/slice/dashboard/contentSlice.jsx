@@ -12,6 +12,7 @@ const initialState = {
   MCQTaskInfo: {},
   dragDropTaskInfo: {},
   matchingTaskInfo: {},
+  puzzelTaskInfo: {},
 
   contentListInfo: {},
   guideLinesData: {},
@@ -199,6 +200,27 @@ export const addEditMCQTask = createAsyncThunk(
         method: "POST",
         url: Api.ADD_MCQ_TASK,
         data: data,
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const editMCQTask = createAsyncThunk(
+  "content/editMCQTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.EDIT_MCQ_TASK,
+        data: data,
+        contentType: "multipart/form-data",
       });
       return response.data;
     } catch (err) {
@@ -255,6 +277,27 @@ export const addEditDragDropTask = createAsyncThunk(
         method: "POST",
         url: Api.ADD_DRAG_DROP_TASK,
         data: data,
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const editDragDropTask = createAsyncThunk(
+  "content/editDragDropTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.EDIT_DRAG_DROP_TASK,
+        data: data,
+        contentType: "multipart/form-data",
       });
       return response.data;
     } catch (err) {
@@ -311,6 +354,27 @@ export const addEditMatchingTask = createAsyncThunk(
         method: "POST",
         url: Api.ADD_MATCHING_TASK,
         data: data,
+        contentType: "multipart/form-data",
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const editMatchingTask = createAsyncThunk(
+  "content/editMatchingTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.EDIT_MATCHING_TASK,
+        data: data,
+        contentType: "multipart/form-data",
       });
       return response.data;
     } catch (err) {
@@ -329,6 +393,62 @@ export const getMatchingTaskList = createAsyncThunk(
       const response = await AxiosDefault({
         method: "POST",
         url: `${Api.MATCHING_TASK_DETAIL}/${data.book_id}/?page=${data.page}`,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const getPuzzelTaskList = createAsyncThunk(
+  "content/getPuzzelTaskList",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: `${Api.GET_PUZZEL_TASK_LIST}/${data.book_id}/?page=${data.page}`,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const deletePuzzelTask = createAsyncThunk(
+  "content/deletePuzzelTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.DELETE_PUZZEL_TASK,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
+export const addEditPuzzelTask = createAsyncThunk(
+  "content/addEditPuzzelTask",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.ADD_EDIT_PUZZEL_TASK,
+        data: data,
       });
       return response.data;
     } catch (err) {
@@ -723,6 +843,15 @@ const contentSlice = createSlice({
       .addCase(addEditMCQTask.rejected, (state) => {
         state.loading = false;
       })
+      .addCase(editMCQTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editMCQTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(editMCQTask.rejected, (state) => {
+        state.loading = false;
+      })
       .addCase(getMCQTaskList.pending, (state) => {
         state.loading = true;
       })
@@ -749,6 +878,15 @@ const contentSlice = createSlice({
         state.loading = false;
       })
       .addCase(addEditDragDropTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(editDragDropTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editDragDropTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(editDragDropTask.rejected, (state) => {
         state.loading = false;
       })
       .addCase(getDragDropTaskList.pending, (state) => {
@@ -779,6 +917,15 @@ const contentSlice = createSlice({
       .addCase(addEditMatchingTask.rejected, (state) => {
         state.loading = false;
       })
+      .addCase(editMatchingTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editMatchingTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(editMatchingTask.rejected, (state) => {
+        state.loading = false;
+      })
       .addCase(getMatchingTaskList.pending, (state) => {
         state.loading = true;
       })
@@ -796,6 +943,25 @@ const contentSlice = createSlice({
         state.loading = false;
       })
       .addCase(deleteMatchingTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(addEditPuzzelTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addEditPuzzelTask.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(addEditPuzzelTask.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getPuzzelTaskList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getPuzzelTaskList.fulfilled, (state, { payload }) => {
+        state.puzzelTaskInfo = payload ?? {};
+        state.loading = false;
+      })
+      .addCase(getPuzzelTaskList.rejected, (state) => {
         state.loading = false;
       })
       .addCase(addEditContentFile.pending, (state) => {
