@@ -72,7 +72,7 @@ const CreatingPageTable = () => {
               </StyledTableCell>
               <StyledTableCell align="left">Başlık</StyledTableCell>
               <StyledTableCell align="left">Resim</StyledTableCell>
-              <StyledTableCell align="left">Tanım</StyledTableCell>
+              <StyledTableCell align="left">Mesa</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>

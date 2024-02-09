@@ -63,7 +63,7 @@ const MCQTask = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              MCQ Task
+              Sorular Ekle
             </Typography>
           </Grid>
         </Grid>

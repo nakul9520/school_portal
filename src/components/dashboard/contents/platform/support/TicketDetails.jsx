@@ -215,7 +215,7 @@ const TicketDetails = () => {
               className="fw-medium"
               onClick={(e) => setAnchorEl(e.currentTarget)}
             >
-              {ticketstatus === "1" ? "Completed" : "Pending"}
+              {ticketstatus === "1" ? "Tamamlandı" : "Beklemede"}
             </Typography>
             <Menu
               anchorEl={anchorEl}
@@ -223,10 +223,10 @@ const TicketDetails = () => {
               onClose={() => setAnchorEl(null)}
             >
               <MenuItem onClick={() => handleSelectOption("2")}>
-                Pending
+                Beklemede
               </MenuItem>
               <MenuItem onClick={() => handleSelectOption("1")}>
-                Completed
+                Tamamlandı
               </MenuItem>
             </Menu>
           </Stack>
