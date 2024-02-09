@@ -42,13 +42,13 @@ const SupportDataTable = () => {
               <StyledTableCell className="" color="text.primary">
                 Sıra
               </StyledTableCell>
-              <StyledTableCell align="left">ticket Id</StyledTableCell>
-              <StyledTableCell align="left">Subject</StyledTableCell>
-              <StyledTableCell align="left">discription</StyledTableCell>
-              <StyledTableCell align="left">User Name</StyledTableCell>
+              <StyledTableCell align="left">Bilet Kimliği</StyledTableCell>
+              <StyledTableCell align="left">ders</StyledTableCell>
+              <StyledTableCell align="left">açıklama</StyledTableCell>
+              <StyledTableCell align="left">Kullanıcı adı</StyledTableCell>
               <StyledTableCell align="left">Email</StyledTableCell>
               <StyledTableCell align="left">status</StyledTableCell>
-              <StyledTableCell align="left">Time</StyledTableCell>
+              <StyledTableCell align="left">Zaman</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -89,7 +89,7 @@ const SupportDataTable = () => {
                         row.status === "1" ? "success.main" : "warning.main"
                       }
                     >
-                      {row.status === "1" ? "Completed" : "Pending"}
+                      {row.status === "1" ? "Tamamlandı" : "Beklemede"}
                     </Typography>
                   </StyledTableCell>
                   <StyledTableCell align="left">{row.time}</StyledTableCell>

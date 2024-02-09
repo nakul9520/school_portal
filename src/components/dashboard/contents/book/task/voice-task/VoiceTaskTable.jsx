@@ -73,7 +73,7 @@ const VoiceTaskTable = () => {
             setOpen(true);
           }}
         >
-          Add Task
+          Etkinlik Ekle
         </Button>
       </Box>
       <TableContainer

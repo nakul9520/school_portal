@@ -76,16 +76,14 @@ const AddEditPuzzelTask = (props) => {
                   <Grid item xs={12}>
                     <TextField
                       name="title"
-                      placeholder="Bulmaca başlığı"
+                      placeholder="Oyun Adı"
                       value={props.values.title}
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
                       fullWidth
                       size="small"
                       error={
-                        props.errors.title && props.touched.title
-                          ? true
-                          : false
+                        props.errors.title && props.touched.title ? true : false
                       }
                       helperText={
                         props.errors.title && props.touched.title
@@ -129,7 +127,7 @@ const AddEditPuzzelTask = (props) => {
                   </Grid>
                   <Grid item xs={12} className="text-right">
                     <Button type="submit" variant="contained" color="warning">
-                      Bulmacayı Oluştur
+                      Oyun ekle
                     </Button>
                   </Grid>
                 </Grid>{" "}

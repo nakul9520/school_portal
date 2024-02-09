@@ -78,7 +78,7 @@ const PuzzelTaskTable = () => {
             setOpen(true);
           }}
         >
-          Add Task
+          Etkinlik Ekle
         </Button>
       </Box>
       <TableContainer
@@ -92,8 +92,8 @@ const PuzzelTaskTable = () => {
               <StyledTableCell className="" color="text.primary">
                 Sıra
               </StyledTableCell>
-              <StyledTableCell align="left">Title</StyledTableCell>
-              <StyledTableCell align="left">Data</StyledTableCell>
+              <StyledTableCell align="left">Başlık</StyledTableCell>
+              <StyledTableCell align="left">İçerik</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>

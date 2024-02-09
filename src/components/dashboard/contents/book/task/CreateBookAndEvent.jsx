@@ -17,7 +17,7 @@ const CreateBookAndEvent = () => {
               navigate("/dashboard/contents/create-book-event/voice-task")
             }
           >
-            Ses Kaydetme Görevi
+            Ses Kaydetme
           </Box>
         </Grid>
         <Grid item xs={10} sm={4} md={1} lg={2}>
@@ -28,7 +28,7 @@ const CreateBookAndEvent = () => {
               navigate("/dashboard/contents/create-book-event/mcq-task")
             }
           >
-            Quiz Ekle
+            Sorular
           </Box>
         </Grid>
         <Grid item xs={10} sm={4} md={3} lg={2}>
@@ -39,7 +39,7 @@ const CreateBookAndEvent = () => {
               navigate("/dashboard/contents/create-book-event/matching-task")
             }
           >
-            Eşleştirme Ekle
+            Eşleştirme
           </Box>
         </Grid>
         <Grid item xs={10} sm={4} md={3} lg={2}>
@@ -50,7 +50,7 @@ const CreateBookAndEvent = () => {
               navigate("/dashboard/contents/create-book-event/drag-drop-task")
             }
           >
-            Sürükle Bırak Etkinlik Ekle
+            Sürükle Bırak
           </Box>
         </Grid>
         <Grid item xs={10} sm={4} md={3} lg={2}>
@@ -61,7 +61,7 @@ const CreateBookAndEvent = () => {
               navigate("/dashboard/contents/create-book-event/puzzel-task")
             }
           >
-            Uyarı
+            Oyun
           </Box>
         </Grid>
       </Grid>

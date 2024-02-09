@@ -63,7 +63,7 @@ const PuzzelTask = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              Puzzel Task
+            Oyun Ekle
             </Typography>
           </Grid>
         </Grid>

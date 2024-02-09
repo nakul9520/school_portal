@@ -357,7 +357,7 @@ const AddDownloadableContent = () => {
                     color="secondary.disabled"
                     className="ms-4 w-25"
                   >
-                    Tanım
+                    Mesa
                   </Typography>
                   <TextField
                     name="description"

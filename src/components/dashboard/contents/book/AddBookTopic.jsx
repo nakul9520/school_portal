@@ -218,7 +218,7 @@ const AddBookTopic = () => {
                       color="text.primary"
                       className="mb-2"
                     >
-                      kitap konusu ekle
+                      kitap Başlık ekle
                     </Typography>
                     <TextField
                       name="book_description"
@@ -229,7 +229,7 @@ const AddBookTopic = () => {
                       multiline
                       rows={4}
                       size="small"
-                      placeholder="kitap konusu ekle"
+                      placeholder="kitap Başlık ekle"
                       error={
                         errors.book_description && touched.book_description
                           ? true
@@ -986,7 +986,7 @@ const AddBookTopic = () => {
                     color="text.primary"
                     className="mb-3"
                   >
-                    İndirilebilir Materyaller Ekle
+                    İndirilebilir PDFler YARDIM Ekle
                   </Typography>
                   <FieldArray
                     name="data"

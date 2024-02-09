@@ -27,6 +27,7 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "styles/ComponentStyle";
+import ImageThumbnail from "components/common/thumbnail/ImageThumbnail";
 
 const DownloadableContentTable = () => {
   const dispatch = useDispatch();
@@ -74,7 +75,9 @@ const DownloadableContentTable = () => {
               <StyledTableCell align="left">Başlık</StyledTableCell>
               <StyledTableCell align="left">Visibility</StyledTableCell>
               <StyledTableCell align="left">Resim</StyledTableCell>
-              <StyledTableCell align="left">Tanım</StyledTableCell>
+              <StyledTableCell align="left">
+                Mesa
+              </StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -101,14 +104,12 @@ const DownloadableContentTable = () => {
                   <StyledTableCell align="left">
                     {row.visibility_name}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
-                    <Box sx={{ width: 80, height: 80 }}>
-                      <Box
-                        component="img"
-                        src={row.file}
-                        className="img-cover w-100 h-100"
-                      />
-                    </Box>
+                  <StyledTableCell align="left" style={{ width: 120 }} >
+                    <ImageThumbnail
+                      key={index}
+                      size={80}
+                      imagePath={row.file}
+                    />
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {row.description}

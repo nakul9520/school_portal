@@ -24,6 +24,7 @@ import {
 import CMIconButton from "components/common/CMIconButton";
 import { deleteBadge } from "redux/store/slice/dashboard/badgeSlice";
 import { getBadgeList } from "redux/store/slice/dashboard/badgeSlice";
+import ImageThumbnail from "components/common/thumbnail/ImageThumbnail";
 
 const BadgesTable = () => {
   const dispatch = useDispatch();
@@ -73,7 +74,7 @@ const BadgesTable = () => {
               <StyledTableCell align="left">Tamamlama Kriteri</StyledTableCell>
 
               <StyledTableCell align="left">Rozet görseli</StyledTableCell>
-              <StyledTableCell align="left">Uyarı</StyledTableCell>
+              <StyledTableCell align="left">Oyunlar</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -101,13 +102,11 @@ const BadgesTable = () => {
                     {row.description}
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    <Box sx={{ width: 80, height: 80 }}>
-                      <Box
-                        component="img"
-                        src={row.image}
-                        className="img-cover w-100 h-100"
-                      />
-                    </Box>
+                    <ImageThumbnail
+                      key={index}
+                      size={80}
+                      imagePath={row.image}
+                    />
                   </StyledTableCell>
                   <StyledTableCell align="left">{row.alert}</StyledTableCell>
                   <StyledTableCell

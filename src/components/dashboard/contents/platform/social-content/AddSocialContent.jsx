@@ -218,7 +218,7 @@ const AddSocialContent = () => {
                     color="secondary.disabled"
                     className="ms-4 w-25"
                   >
-                    Tanım
+                    Mesa
                   </Typography>
                   <RichTextEditor
                     name="description"

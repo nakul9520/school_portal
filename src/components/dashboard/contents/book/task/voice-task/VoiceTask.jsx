@@ -63,7 +63,7 @@ const VoiceTask = () => {
         >
           <Grid item sm={6} xs={12}>
             <Typography variant="subtitle2" color="text.secondary">
-              Video Görevi
+              Ses Kaydetme
             </Typography>
           </Grid>
         </Grid>
