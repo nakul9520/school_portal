@@ -29,7 +29,6 @@ import {
   StyledTableRow,
 } from "styles/ComponentStyle";
 import AddEditPuzzelTask from "./AddEditPuzzelTask";
-import createMarkup from "components/hooks/createMarkup";
 // import AddVoiceRecording from "./AddVoiceRecording";
 
 const PuzzelTaskTable = () => {
@@ -67,6 +66,7 @@ const PuzzelTaskTable = () => {
         console.log("Error: ", err);
       });
   };
+
   return (
     <>
       <Box className="text-right">
@@ -118,11 +118,7 @@ const PuzzelTaskTable = () => {
                   <StyledTableCell scope="row">{index + 1}</StyledTableCell>
                   <StyledTableCell align="left">{row.title}</StyledTableCell>
                   <StyledTableCell align="left">
-                    <Box
-                      className="text-break"
-                      sx={{ fontSize: 12, fontWeight: 500 }}
-                      dangerouslySetInnerHTML={createMarkup(row.data)}
-                    />
+                    <div dangerouslySetInnerHTML={{ __html: row.data }} />
                   </StyledTableCell>
 
                   <StyledTableCell

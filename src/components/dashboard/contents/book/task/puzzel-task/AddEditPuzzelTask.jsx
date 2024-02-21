@@ -6,23 +6,27 @@ import {
   Typography,
 } from "@mui/material";
 import CMDialog from "components/common/dialog/CMDialog";
-import RichTextEditor from "components/common/editor/RichTextEditor";
 import { Formik } from "formik";
 import { isEmpty } from "lodash";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { getPuzzelTaskList } from "redux/store/slice/dashboard/contentSlice";
-import { addEditPuzzelTask } from "redux/store/slice/dashboard/contentSlice";
+import {
+  addEditPuzzelTask,
+  getPuzzelTaskList,
+} from "redux/store/slice/dashboard/contentSlice";
 
 const AddEditPuzzelTask = (props) => {
   const { open, onClose, data } = props;
   const dispatch = useDispatch();
   const book_id = localStorage.getItem("bookId");
   const handleAddEdit = (values) => {
+    const htmlContent = `<iframe width="100%" height="100%" src=${values.data} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
     const payload = {
       ...values,
       id: isEmpty(data) ? "" : data.id,
       book_id: book_id,
+      data: htmlContent,
+      puzzel_link: values.data,
     };
     dispatch(addEditPuzzelTask(payload))
       .unwrap()
@@ -57,7 +61,8 @@ const AddEditPuzzelTask = (props) => {
           <Formik
             initialValues={{
               title: data.title ?? "",
-              data: data.data ?? "",
+              data: data.puzzel_link ?? "",
+              puzzel_link: data.puzzel_link ?? "",
             }}
             onSubmit={(value, action) => {
               handleAddEdit(value, action);
@@ -109,12 +114,29 @@ const AddEditPuzzelTask = (props) => {
               />
             </Grid> */}
                   <Grid item xs={12}>
-                    <RichTextEditor
+                    {/* <RichTextEditor
                       name="data"
                       value={props.values.data}
                       setFieldValue={props.setFieldValue}
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
+                      error={
+                        props.errors.data && props.touched.data ? true : false
+                      }
+                      helperText={
+                        props.errors.data && props.touched.data
+                          ? props.errors.data
+                          : null
+                      }
+                    /> */}
+                    <TextField
+                      name="data"
+                      value={props.values.data}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      fullWidth
+                      placeholder="Gömülü Bağlantıyı Buraya GirinF"
+                      size="small"
                       error={
                         props.errors.data && props.touched.data ? true : false
                       }

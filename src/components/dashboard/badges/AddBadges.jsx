@@ -125,13 +125,15 @@ const AddBadge = () => {
                         type="file"
                         id="image-uploader"
                         onChange={(e) => {
-                          props.setFieldValue(
-                            "image",
-                            e.currentTarget.files[0]
-                          );
-                          setImageList(
-                            URL.createObjectURL(e.currentTarget.files[0])
-                          );
+                          if (e.currentTarget.files[0]) {
+                            props.setFieldValue(
+                              "image",
+                              e.currentTarget.files[0]
+                            );
+                            setImageList(
+                              URL.createObjectURL(e.currentTarget.files[0])
+                            );
+                          }
                         }}
                       />
                     </Box>
@@ -189,7 +191,7 @@ const AddBadge = () => {
                     color="secondary.disabled"
                     className="ms-4 w-25"
                   >
-                    Mesa
+                    Mesaj
                   </Typography>
                   <TextField
                     name="description"
