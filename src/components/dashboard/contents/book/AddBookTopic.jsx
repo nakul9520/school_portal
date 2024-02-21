@@ -17,6 +17,7 @@ import TableRow from "@mui/material/TableRow";
 
 import { useTheme } from "@mui/material/styles";
 import BackButton from "components/common/BackButton";
+import ConfirmationDialog from "components/common/ConfirmationDialog";
 import Iconify from "components/common/iconify";
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty, omit } from "lodash";
@@ -24,6 +25,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { deleteBookFiles } from "redux/store/slice/dashboard/contentSlice";
 import {
   addBookFiles,
   addBookTitle,
@@ -52,6 +54,8 @@ const AddBookTopic = () => {
   const bookData = state ?? {};
   const { filterList, loading } = useSelector((state) => state.content);
   const filterListData = filterList.data ?? [];
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const handleCategoryChange = (data) => {
     setCategoryData(data);
@@ -143,6 +147,37 @@ const AddBookTopic = () => {
     }
   };
 
+  const handleDeleteItem = () => {
+    try {
+      handleCloseModal();
+      dispatch(deleteBookFiles({ id: selectedItem?.id }))
+        .unwrap()
+        .then((result) => {
+          if (result.success) {
+            toast.success(result.message);
+            setSelectedItem(null);
+            window.history.back();
+          } else {
+            toast.error(result.message);
+          }
+        })
+        .catch((err) => {
+          toast.error(err.message);
+          console.log("Error: ", err);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleOpenDeleteModal = (data) => {
+    setDeleteModal(true);
+    setSelectedItem(data);
+  };
+
+  const handleCloseModal = () => {
+    setDeleteModal(false);
+  };
   return (
     <>
       <BackButton />
@@ -717,7 +752,12 @@ const AddBookTopic = () => {
                                             variant="subtitle2"
                                             className="cursor-pointer"
                                             onClick={() =>
-                                              arrayHelpers.remove(index)
+                                              item?.id
+                                                ? handleOpenDeleteModal(
+                                                    item,
+                                                    "audio"
+                                                  )
+                                                : arrayHelpers.remove(index)
                                             }
                                           >
                                             Delete
@@ -913,7 +953,12 @@ const AddBookTopic = () => {
                                             variant="subtitle2"
                                             className="cursor-pointer"
                                             onClick={() =>
-                                              arrayHelpers.remove(index)
+                                              item?.id
+                                                ? handleOpenDeleteModal(
+                                                    item,
+                                                    "image"
+                                                  )
+                                                : arrayHelpers.remove(index)
                                             }
                                           >
                                             Delete
@@ -1091,7 +1136,12 @@ const AddBookTopic = () => {
                                             variant="subtitle2"
                                             className="cursor-pointer"
                                             onClick={() =>
-                                              arrayHelpers.remove(index)
+                                              item?.id
+                                                ? handleOpenDeleteModal(
+                                                    item,
+                                                    "download"
+                                                  )
+                                                : arrayHelpers.remove(index)
                                             }
                                           >
                                             Delete
@@ -1139,7 +1189,13 @@ const AddBookTopic = () => {
             )}
           </Formik>
         </Grid>
-      </Grid>
+      </Grid>{" "}
+      {/* modals */}
+      <ConfirmationDialog
+        dialogOpen={deleteModal}
+        dialogClose={() => handleCloseModal()}
+        action={() => handleDeleteItem()}
+      />
     </>
   );
 };

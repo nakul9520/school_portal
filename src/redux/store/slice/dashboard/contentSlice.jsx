@@ -22,6 +22,25 @@ const initialState = {
 };
 
 // School
+export const deleteBookFiles = createAsyncThunk(
+  "content/deleteBookFile",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.DELETE_BOOK_FILE,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
+
 export const addBookTitle = createAsyncThunk(
   "content/addBookTitle",
   async (data) => {

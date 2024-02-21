@@ -63,7 +63,8 @@ const Api = {
   GET_BOOK_DETAIL: "getBookDetails",
   BOOK_ADD_TO_LIBRARY: "addToLibray",
   BOOK_DELETE_TO_LIBRARY: "deleteToLibray",
-
+  DELETE_BOOK_FILE: "deleteBookFile",
+  
   // Content
   // Book
   ADD_VOICE_TASK: "addVoiceTask",
