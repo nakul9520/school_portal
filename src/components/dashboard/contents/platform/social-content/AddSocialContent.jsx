@@ -5,45 +5,37 @@ import {
   IconButton,
   MenuItem,
   Select,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import BackButton from "components/common/BackButton";
 import RichTextEditor from "components/common/editor/RichTextEditor";
-import ShowOuterFileUploader from "components/common/file-uploader/ShowOuterFileUploader";
 import Iconify from "components/common/iconify";
+import ImageThumbnail from "components/common/thumbnail/ImageThumbnail";
 
 import { Formik } from "formik";
-import { map } from "lodash";
-import { useRef, useState } from "react";
+import { isEmpty } from "lodash";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { addEditContentFile } from "redux/store/slice/dashboard/contentSlice";
-import { CONTENT_TYPE } from "services/constant";
+import { CONTENT_TYPE, DOC_TYPE } from "services/constant";
 
 const AddSocialContent = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [imageList, setImageList] = useState([]);
-  const mediaInputRef = useRef(null);
-  const handleRemoveFile = (formikProp, index) => {
-    const updatedFiles = imageList.filter(
-      (_file, fileIndex) => fileIndex !== index
-    );
-    setImageList(updatedFiles);
-    formikProp.setFieldValue("file", updatedFiles);
-  };
+  const [imageList, setImageList] = useState(null);
+
   const { state } = useLocation();
   const contentData = state ?? {};
 
   const handleAddEdit = (values, action) => {
     const data = {
       ...values,
-      file: typeof values.file === "object" ? values.file[0] : "",
+      file: values.file instanceof File ? values.file : "",
       id: contentData.id ? contentData.id : "",
       filetype: CONTENT_TYPE.socialContent,
     };
@@ -82,6 +74,7 @@ const AddSocialContent = () => {
             visibility: contentData.visibility ?? "",
             description: contentData.description ?? "",
             file: contentData.file ?? "",
+            docType: DOC_TYPE.image,
           }}
           onSubmit={(value, action) => {
             handleAddEdit(value, action);
@@ -148,68 +141,82 @@ const AddSocialContent = () => {
                     sx={{
                       height: 70,
                     }}
-                    className="cursor-pointer w-100"
+                    className="cursor-pointer w-100 d-flex align-items-center"
                   >
-                    {imageList.length <= 0 ? (
+                    <Box
+                      className="flex-grow-1 h-100 d-flex align-items-center"
+                      component="label"
+                      htmlFor="image-uploader"
+                    >
+                      <Typography variant="body2" className="px-3">
+                        Resim eklemek için tıklayın
+                      </Typography>
+                      <input
+                        hidden
+                        accept="image/*"
+                        type="file"
+                        id="image-uploader"
+                        onChange={(e) => {
+                          if (e.currentTarget.files[0]) {
+                            props.setFieldValue(
+                              "file",
+                              e.currentTarget.files[0]
+                            );
+                            setImageList(
+                              URL.createObjectURL(e.currentTarget.files[0])
+                            );
+                          }
+                        }}
+                      />
+                    </Box>
+                    {props.values.file instanceof File ? (
                       <Box
-                        onClick={() => mediaInputRef.current.click()}
-                        className="w-100 h-100 d-flex align-items-center"
+                        key={1}
+                        className="d-flex align-item-center rounded position-relative cursor-pointer overflow-hidden"
+                        sx={{
+                          width: 70,
+                          height: 70,
+                          backgroundColor: "primary.contrastText",
+                        }}
                       >
-                        <Typography variant="body2" className="px-3">
-                          Resim eklemek için tıklayın
-                        </Typography>
+                        <ImageThumbnail
+                          key={1}
+                          size={70}
+                          imagePath={imageList}
+                        />
+
+                        <IconButton
+                          size="small"
+                          sx={{
+                            background: "rgba(0,0,0,.8)",
+                            color: "primary.contrastText",
+                            position: "absolute",
+                            top: "8%",
+                            right: "5%",
+                            transform: "translate(-8%, -5%)",
+                            zIndex: "2",
+                            "&:hover": {
+                              background: "rgba(0,0,0,.8)",
+                              color: "primary.contrastText",
+                            },
+                          }}
+                          onClick={() => {
+                            props.setFieldValue("file", "");
+                            setImageList("");
+                          }}
+                        >
+                          <Iconify icon="iconoir:cancel" width={18} />
+                        </IconButton>
                       </Box>
-                    ) : (
-                      <Stack direction="row" className="gap-2 flex-wrap p-2">
-                        {map(imageList, (item, index) => (
-                          <Box
-                            key={index}
-                            className="rounded position-relative cursor-pointer overflow-hidden"
-                            sx={{
-                              "&::after": {
-                                content: '""',
-                                position: "absolute",
-                                backgroundColor: "rgba(0,0,0,0.3)",
-                                top: 0,
-                                left: 0,
-                                width: "100%",
-                                height: "100%",
-                              },
-                            }}
-                          >
-                            <Box
-                              component="img"
-                              src={item.url}
-                              alt={`${item.type}_${index}`}
-                              className="img-cover rounded position-relative"
-                              sx={{
-                                width: 60,
-                                height: 60,
-                              }}
-                            />
-                            <IconButton
-                              size="small"
-                              sx={{
-                                background: "rgba(255,255,255,.3)",
-                                color: "primary.contrastText",
-                                position: "absolute",
-                                top: "8%",
-                                right: "5%",
-                                transform: "translate(-8%, -5%)",
-                                zIndex: "2",
-                                "&:hover": {
-                                  background: "rgba(255,255,255,.3)",
-                                  color: "primary.contrastText",
-                                },
-                              }}
-                              onClick={() => handleRemoveFile(props, index)}
-                            >
-                              <Iconify icon="iconoir:cancel" width={18} />
-                            </IconButton>
-                          </Box>
-                        ))}
-                      </Stack>
-                    )}
+                    ) : null}
+                    {!(props.values.file instanceof File) &&
+                    !isEmpty(props.values.file) ? (
+                      <ImageThumbnail
+                        key={1}
+                        size={70}
+                        imagePath={props.values.file}
+                      />
+                    ) : null}
                   </Box>
                 </Box>
                 <Box className="custom_form_row d-flex align-items-center border-bottom">
@@ -249,15 +256,6 @@ const AddSocialContent = () => {
                   Kaydet
                 </Button>
               </Box>
-              <ShowOuterFileUploader
-                name="file"
-                formikProp={props}
-                maxFileUpload={3}
-                acceptType="image/*"
-                fileRef={mediaInputRef}
-                imageList={imageList}
-                setImageList={setImageList}
-              />
             </form>
           )}
         </Formik>

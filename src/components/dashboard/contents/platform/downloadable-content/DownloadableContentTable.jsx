@@ -28,6 +28,9 @@ import {
   StyledTableRow,
 } from "styles/ComponentStyle";
 import ImageThumbnail from "components/common/thumbnail/ImageThumbnail";
+import { DOC_TYPE } from "services/constant";
+import VedioThumbnail from "components/common/thumbnail/VedioThumbnail";
+import { imageObj } from "services/images";
 
 const DownloadableContentTable = () => {
   const dispatch = useDispatch();
@@ -75,9 +78,7 @@ const DownloadableContentTable = () => {
               <StyledTableCell align="left">Başlık</StyledTableCell>
               <StyledTableCell align="left">Visibility</StyledTableCell>
               <StyledTableCell align="left">Resim</StyledTableCell>
-              <StyledTableCell align="left">
-                Mesa
-              </StyledTableCell>
+              <StyledTableCell align="left">Mesa</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -104,12 +105,39 @@ const DownloadableContentTable = () => {
                   <StyledTableCell align="left">
                     {row.visibility_name}
                   </StyledTableCell>
-                  <StyledTableCell align="left" style={{ width: 120 }} >
-                    <ImageThumbnail
-                      key={index}
-                      size={80}
-                      imagePath={row.file}
-                    />
+                  <StyledTableCell align="left" style={{ width: 120 }}>
+                    {DOC_TYPE.image === row.docType ? (
+                      <ImageThumbnail key={1} size={100} imagePath={row.file} />
+                    ) : DOC_TYPE.video === row.docType ? (
+                      <VedioThumbnail key={1} videoPath={row.file} size={100} />
+                    ) : DOC_TYPE.pdf === row.docType ? (
+                      <Box
+                        component="img"
+                        src={imageObj.pdfIcon}
+                        sx={{ width: 40 }}
+                        onClick={() => {
+                          window.open(row.file, "_blank");
+                        }}
+                      />
+                    ) : DOC_TYPE.word === row.docType ? (
+                      <Box
+                        component="img"
+                        src={imageObj.documentIcon}
+                        sx={{ width: 40 }}
+                        onClick={() => {
+                          window.open(row.file, "_blank");
+                        }}
+                      />
+                    ) : (
+                      <Box
+                        component="img"
+                        src={imageObj.csvIcon}
+                        sx={{ width: 40 }}
+                        onClick={() => {
+                          window.open(row.file, "_blank");
+                        }}
+                      />
+                    )}
                   </StyledTableCell>
                   <StyledTableCell align="left">
                     {row.description}

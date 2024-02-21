@@ -74,7 +74,7 @@ const BadgesTable = () => {
               <StyledTableCell align="left">Tamamlama Kriteri</StyledTableCell>
 
               <StyledTableCell align="left">Rozet görseli</StyledTableCell>
-              <StyledTableCell align="left">Oyunlar</StyledTableCell>
+              <StyledTableCell align="left">Uyarı</StyledTableCell>
               <StyledTableCell align="left">İşlemler</StyledTableCell>
             </TableRow>
           </TableHead>
