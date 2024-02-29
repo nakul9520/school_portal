@@ -19,11 +19,7 @@ import { debounce, get, size } from "lodash";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import {
-  getBookDetail,
-  getBookList,
-} from "redux/store/slice/dashboard/contentSlice";
+import { getBookList } from "redux/store/slice/dashboard/contentSlice";
 import BookListTable from "./BookListTable";
 
 const BookDesign = () => {
@@ -32,8 +28,6 @@ const BookDesign = () => {
   const theme = useTheme();
 
   const { bookListInfo } = useSelector((state) => state.content);
-  // console.log("BookList:", bookListInfo);
-  const [bookId, setBookId] = useState(null);
 
   const [filterOptions, setFilterOptions] = useState({
     search: "",
@@ -89,22 +83,6 @@ const BookDesign = () => {
       },
       page
     );
-  };
-
-  const handleBookEdit = () => {
-    dispatch(getBookDetail(bookId))
-      .unwrap()
-      .then((result) => {
-        if (result.success) {
-          localStorage.setItem("bookId", result.data.id);
-          navigate("/dashboard/contents/add-book-topic", {
-            state: result.data,
-          });
-        } else {
-          toast.error(result.message);
-        }
-      })
-      .catch((err) => {});
   };
 
   return (
@@ -198,7 +176,7 @@ const BookDesign = () => {
             />
           </Grid>
         </Grid>
-        <BookListTable bookId={bookId} setBookId={setBookId} />
+        <BookListTable />
 
         <Stack
           direction={{ md: "row", xs: "column" }}
@@ -218,23 +196,6 @@ const BookDesign = () => {
               onChange={handlePageChange}
             />
           )}
-        </Stack>
-
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="end"
-          className="gap-2 mt-3"
-        >
-          {bookId ? (
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleBookEdit}
-            >
-              Düzenlemek
-            </Button>
-          ) : null}
         </Stack>
       </Box>
     </>

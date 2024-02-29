@@ -67,6 +67,7 @@ const Api = {
   // Content
   // Book
   ADD_VOICE_TASK: "addVoiceTask",
+  DELETE_BOOK: "deleteBook",
   VOICE_TASK_DETAIL: "getVoiceTaskDetails",
   DELETE_VOICE_TASK: "deleteVoiceTask",
 

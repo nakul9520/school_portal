@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import ThemeProvider from "./theme";
 import { Provider } from "react-redux";
 import store from "redux/store/Store";
+import { baseName } from "services/constant";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -14,7 +15,7 @@ root.render(
   <>
     <Provider store={store}>
       <ThemeProvider>
-        <BrowserRouter basename="/okouio/admin-portal">
+        <BrowserRouter basename={baseName}>
           <App />
         </BrowserRouter>
       </ThemeProvider>

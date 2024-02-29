@@ -40,6 +40,24 @@ export const addBookTitle = createAsyncThunk(
     }
   }
 );
+export const deleteBook = createAsyncThunk(
+  "content/deleteBook",
+  async (data) => {
+    try {
+      const response = await AxiosDefault({
+        method: "POST",
+        url: Api.DELETE_BOOK,
+        data: data,
+      });
+      return response.data;
+    } catch (err) {
+      return {
+        status: err.response.data.status,
+        message: err.response.data.message,
+      };
+    }
+  }
+);
 
 export const addBookFiles = createAsyncThunk(
   "content/addBookFiles",
