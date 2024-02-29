@@ -1,6 +1,6 @@
 {
-  "homepage": "https://mshaadinfotech.in/okouio/admin-portal",
-  "name": "my-app",
+  "homepage": "https://mshaadinfotech.in/okouio/admin-portal/",
+  "name": "okouio",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
