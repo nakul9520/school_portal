@@ -3,10 +3,9 @@ import { isEmpty } from "lodash";
 
 import { clearSession, getSession } from "./utiles";
 import { toast } from "react-toastify";
-import { REACT_APP_API_END_POINT } from "./constant";
 
 const AxiosDefault = async ({ method, data, url, contentType }) => {
-  const APIENDPOINT = REACT_APP_API_END_POINT;
+  const APIENDPOINT = process.env.REACT_APP_API_END_POINT;
 
   const AxiosDefault = axios.create({
     baseURL: APIENDPOINT,

@@ -1,7 +1,5 @@
 export const imageBasePath = "/okouio/admin-portal/assets/";
 
-export const REACT_APP_API_END_POINT = "https://mshaadinfotech.in/okouio/api/";
-
 export const baseName = "/okouio/admin-portal";
 
 export const USER_TYPE = {
